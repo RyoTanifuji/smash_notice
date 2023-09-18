@@ -31,3 +31,6 @@ SmashNoticeはゲーム「大乱闘スマッシュブラザーズ SPECIAL」(以
 * ソート機能（自分のメモと共有メモ）
 * デモログイン機能
 * ユーザーのリスト追加機能
+
+## 画面遷移図
+Figma : https://www.figma.com/file/dzvYlmbNZ8hNg06WxVxhI2/SmashNotice?type=design&node-id=0%3A1&mode=design&t=pNm5mfJvGOU3ANvW-1
