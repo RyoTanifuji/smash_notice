@@ -34,3 +34,6 @@ SmashNoticeはゲーム「大乱闘スマッシュブラザーズ SPECIAL」(以
 
 ## 画面遷移図
 Figma : https://www.figma.com/file/dzvYlmbNZ8hNg06WxVxhI2/SmashNotice?type=design&node-id=0%3A1&mode=design&t=pNm5mfJvGOU3ANvW-1
+
+## ER図
+[![Image from Gyazo](https://i.gyazo.com/86b80437f9bcb89243dd6d98035399c8.png)](https://gyazo.com/86b80437f9bcb89243dd6d98035399c8)
