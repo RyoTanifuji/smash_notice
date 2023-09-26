@@ -21,16 +21,19 @@ SmashNoticeはゲーム「大乱闘スマッシュブラザーズ SPECIAL」(以
 * 会員登録
 * ログイン
 * キャラ対メモ機能(一覧、作成、編集、詳細、削除)
+* 攻略メモ機能(一覧、作成、編集、詳細、削除)
 * 共有機能(一覧、詳細、公開)
 * キャラ対テンプレート作成機能
 * 検索機能(自分のメモと共有メモ)
 * 共有メモのブックマーク機能
 
 ### その後の機能
-* フリーメモ機能(一覧、作成、編集、詳細、削除)
 * ソート機能（自分のメモと共有メモ）
 * デモログイン機能
 * ユーザーのリスト追加機能
 
 ## 画面遷移図
 Figma : https://www.figma.com/file/dzvYlmbNZ8hNg06WxVxhI2/SmashNotice?type=design&node-id=0%3A1&mode=design&t=pNm5mfJvGOU3ANvW-1
+
+## ER図
+[![Image from Gyazo](https://i.gyazo.com/a865090d0df885bf2cad2bffc082116b.png)](https://gyazo.com/a865090d0df885bf2cad2bffc082116b)
