@@ -5,7 +5,8 @@ import { createApp } from "vue";
 import TurbolinksAdapter from "vue-turbolinks";
 import vuetify from "~/plugins/vuetify";
 import "vuetify/styles";
-import router from '../router'
+import router from "../router"
+import store from "../store"
 
 import App from "~/app";
 
@@ -15,6 +16,7 @@ document.addEventListener("turbo:load", () => {
   app.use(TurbolinksAdapter);
   app.use(vuetify);
   app.use(router);
+  app.use(store);
 
   app.component("App", App);
 
