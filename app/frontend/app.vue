@@ -1,7 +1,7 @@
 <template>
   <v-app id="vuetify-app">
     <v-main>
-      <p> Vuetify 3 App Running 🍾🎉</p>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>

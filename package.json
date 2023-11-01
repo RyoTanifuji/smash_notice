@@ -10,6 +10,7 @@
     "@hotwired/turbo-rails": "^7.3.0",
     "@mdi/js": "^7.3.67",
     "vue": "^3.3.7",
+    "vue-router": "^4.2.5",
     "vue-turbolinks": "^2.2.2",
     "vuetify": "^3.3.23"
   }
