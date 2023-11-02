@@ -5,8 +5,8 @@ import { createApp } from "vue";
 import TurbolinksAdapter from "vue-turbolinks";
 import vuetify from "~/plugins/vuetify";
 import "vuetify/styles";
-import router from "../router"
-import store from "../store"
+import router from "../router";
+import store from "../store";
 
 import App from "~/app";
 
