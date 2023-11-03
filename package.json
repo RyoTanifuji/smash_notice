@@ -9,6 +9,7 @@
   "dependencies": {
     "@hotwired/turbo-rails": "^7.3.0",
     "@mdi/js": "^7.3.67",
+    "@vueup/vue-quill": "^1.2.0",
     "axios": "^1.6.0",
     "vee-validate": "^4.11.8",
     "vue": "^3.3.7",
