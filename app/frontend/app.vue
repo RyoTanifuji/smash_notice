@@ -1,7 +1,7 @@
 <template>
   <v-app id="vuetify-app">
     <v-main>
-      <router-view></router-view>
+      <router-view />
     </v-main>
   </v-app>
 </template>
