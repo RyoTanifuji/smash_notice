@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import TheSidebarList from "./TheSidebarList";
+import TheSidebarList from './TheSidebarList';
 
 export default {
   name: "TheHeader",
@@ -52,7 +52,7 @@ export default {
     return {
       drawer: null,
     }
-  },
+  }
 };
 </script>
 
