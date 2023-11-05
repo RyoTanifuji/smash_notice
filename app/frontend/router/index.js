@@ -8,6 +8,11 @@ const routes = [
     name: "Home",
     component: Home
   },
+  {
+    path: "/null",
+    name: "Null",
+    component: Home
+  }
 ];
 
 const router = createRouter({
