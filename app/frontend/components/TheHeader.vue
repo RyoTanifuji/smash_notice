@@ -16,7 +16,7 @@
       </template>
 
       <v-app-bar-title v-if="!drawer">
-        <router-link :to="{ name: 'Home' }">
+        <router-link :to="{ name: 'TopIndex' }">
           <span class="text-h5 font-weight-bold">
             SmashNotice
           </span>
