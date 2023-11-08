@@ -11,6 +11,7 @@
 <script>
 import TheHeader from './components/TheHeader';
 import TheFooter from './components/TheFooter';
+import './plugins/yupSetLocale';
 
 export default {
   components: {

@@ -30,7 +30,11 @@
           </span>
         </v-btn>
 
-        <v-btn class="hidden-sm-and-down">
+        <v-btn
+          :to="{ name: 'UsersSignUp' }"
+          :active="false"
+          class="hidden-xs-and-down"
+        >
           <span class="text-body-1">
             新規登録
           </span>
