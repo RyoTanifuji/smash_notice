@@ -5,3 +5,5 @@ export const emailMessage = () => "メールアドレスの形式が正しくあ
 export const minLengthMessage = (length) => `${length}文字以上で入力してください`;
 
 export const maxLengthMessage = (length) => `${length}文字以内で入力してください`;
+
+export const sameAsMessage = (ref) => `${ref}と一致していません`;

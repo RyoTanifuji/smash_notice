@@ -14,42 +14,42 @@
         lg="6"
         xl="6"
       >
-        <form @submit.prevent="onSubmit">
+        <form>
           <v-text-field
-            v-model="name.value.value"
+            v-model="v$.user.name.$model"
+            :error-messages="v$.user.name.$errors.map(e => e.$message)"
             label="ユーザー名"
-            :error-messages="name.errorMessage.value"
             variant="underlined"
           />
 
           <v-text-field
-            v-model="email.value.value"
+            v-model="v$.user.email.$model"
+            :error-messages="v$.user.email.$errors.map(e => e.$message)"
             label="メールアドレス"
-            :error-messages="email.errorMessage.value"
             variant="underlined"
           />
 
           <v-text-field
-            v-model="password.value.value"
+            v-model="v$.user.password.$model"
+            :error-messages="v$.user.password.$errors.map(e => e.$message)"
             label="パスワード"
             type="password"
-            :error-messages="password.errorMessage.value"
             variant="underlined"
           />
 
           <v-text-field
-            v-model="password_confirmation.value.value"
+            v-model="v$.user.password_confirmation.$model"
+            :error-messages="v$.user.password_confirmation.$errors.map(e => e.$message)"
             label="パスワード（確認）"
             type="password"
-            :error-messages="password_confirmation.errorMessage.value"
             variant="underlined"
           />
 
           <v-row class="justify-center mt-5">
             <v-btn
-              type="submit"
               color="indigo-accent-4"
               class="font-weight-bold"
+              @click="handleSignUp"
             >
               登録
             </v-btn>
@@ -61,33 +61,78 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useField, useForm } from 'vee-validate';
-import { object, string, ref as yupref } from 'yup';
+import { useVuelidate } from '@vuelidate/core';
+import {
+  required,
+  email,
+  maxLength,
+  minLength,
+  sameAs,
+  helpers
+} from '@vuelidate/validators';
+import {
+  requiredMessage,
+  emailMessage,
+  maxLengthMessage,
+  minLengthMessage,
+  sameAsMessage
+} from '../../plugins/validationMessages';
 
 export default {
+  inject: ["$axios"],
   setup() {
-    const validationSchema = object().shape({
-      name: string().label("ユーザー名").required(),
-      email: string().label("メールアドレス").email().required(),
-      password: string().label("パスワード").required().min(3),
-      password_confirmation: string().label("パスワード（確認）").oneOf([yupref("password"), null], "パスワードと一致していません")
-    });
+    return {
+      v$: useVuelidate()
+    };
+  },
+  data () {
+    return {
+      user: {
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: ""
+      }
+    };
+  },
+  validations () {
+    return {
+      user: {
+        name: { 
+          required: helpers.withMessage(requiredMessage("ユーザー名"), required),
+          maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
+        },
+        email: {
+          required: helpers.withMessage(requiredMessage("メールアドレス"), required),
+          email: helpers.withMessage(emailMessage, email)
+        },
+        password: {
+          required: helpers.withMessage(requiredMessage("パスワード"), required),
+          minLength: helpers.withMessage(minLengthMessage(3), minLength(3))
+        },
+        password_confirmation: {
+          sameAs: helpers.withMessage(sameAsMessage("パスワード"), sameAs(this.user.password))
+        }
+      }
+    };
+  },
+  methods: {
+    async handleSignUp() {
+      const result = await this.v$.$validate();
 
-    const { handleSubmit, handleReset } = useForm({
-      validationSchema,
-    });
+      if (!result) return;
 
-    const name = useField("name", validationSchema);
-    const email = useField("email", validationSchema);
-    const password = useField("password", validationSchema);
-    const password_confirmation = useField("password_confirmation", validationSchema);
-
-    const onSubmit = handleSubmit(async (values) => {
-      alert(JSON.stringify(values, null, 2));
-    });
-
-    return { name, email, password, password_confirmation, onSubmit, handleReset };
+      this.createUser();
+    },
+    createUser() {
+      this.$axios.post("users", { user: this.user })
+        .then(res => {
+          this.$router.push({ name: "Null" });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 };
 </script>
