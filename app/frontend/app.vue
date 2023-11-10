@@ -2,6 +2,7 @@
   <v-app id="vuetify-app">
     <TheHeader />
     <v-main>
+      <TheAlert />
       <router-view />
     </v-main>
     <TheFooter />
@@ -11,12 +12,13 @@
 <script>
 import TheHeader from './components/TheHeader';
 import TheFooter from './components/TheFooter';
-import './plugins/validationMessages';
+import TheAlert from './components/TheAlert';
 
 export default {
   components: {
     TheHeader,
-    TheFooter
+    TheFooter,
+    TheAlert
   }
 };
 </script>

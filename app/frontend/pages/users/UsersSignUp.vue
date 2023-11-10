@@ -62,6 +62,7 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core';
+import { mapActions } from 'vuex';
 import {
   required,
   email,
@@ -92,6 +93,21 @@ export default {
         email: "",
         password: "",
         password_confirmation: ""
+      },
+      successSignUpAlertStatus: {
+        alertType: "success",
+        alertTextArray: ["ユーザーの登録が完了しました"],
+        isTransition: true
+      },
+      failSignUpAlertStatus: {
+        alertType: "error",
+        alertTextArray: [],
+        isTransition: false
+      },
+      serverErrorAlertStatus: {
+        alertType: "error",
+        alertTextArray: ["エラーが発生しました　時間を置いてもう一度お試しください"],
+        isTransition: false
       }
     };
   },
@@ -117,6 +133,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions("alert", ["displayAlert"]),
     async handleSignUp() {
       const result = await this.v$.$validate();
 
@@ -127,10 +144,16 @@ export default {
     createUser() {
       this.$axios.post("users", { user: this.user })
         .then(res => {
+          this.displayAlert(this.successSignUpAlertStatus);
           this.$router.push({ name: "Null" });
         })
         .catch(err => {
-          console.log(err);
+          if (err.response) {
+            this.failSignUpAlertStatus.alertTextArray = err.response.data;
+            this.displayAlert(this.failSignUpAlertStatus);
+          } else {
+            this.displayAlert(this.serverErrorAlertStatus);
+          }
         });
     }
   }

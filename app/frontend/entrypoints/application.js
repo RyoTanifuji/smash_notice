@@ -23,5 +23,10 @@ document.addEventListener("turbo:load", () => {
 
   app.provide('$axios', axios);
 
+  axios.interceptors.request.use(request => {
+    store.dispatch("alert/closeAlert");
+    return request;
+  })
+
   app.mount("#app");
 });
