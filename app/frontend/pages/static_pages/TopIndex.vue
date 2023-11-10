@@ -41,7 +41,9 @@
       <v-btn class="mx-8">
         ログイン
       </v-btn>
-      <v-btn>新規登録</v-btn>
+      <v-btn :to="{ name: 'UsersSignUp' }">
+        新規登録
+      </v-btn>
     </div>
   </div>
 </template>

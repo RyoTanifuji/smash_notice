@@ -8,7 +8,7 @@
   <v-list>
     <router-link
       v-slot="{ isActive }"
-      :to="{ name: 'Home' }"
+      :to="{ name: 'TopIndex' }"
     >
       <v-list-item
         link
@@ -126,7 +126,7 @@ export default {
           icon: mdiShieldLockOutline
         }
       }
-    }
+    };
   }
 };
 </script>

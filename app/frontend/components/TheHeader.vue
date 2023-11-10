@@ -16,7 +16,7 @@
       </template>
 
       <v-app-bar-title v-if="!drawer">
-        <router-link :to="{ name: 'Home' }">
+        <router-link :to="{ name: 'TopIndex' }">
           <span class="text-h5 font-weight-bold">
             SmashNotice
           </span>
@@ -30,7 +30,11 @@
           </span>
         </v-btn>
 
-        <v-btn class="hidden-sm-and-down">
+        <v-btn
+          :to="{ name: 'UsersSignUp' }"
+          :active="false"
+          class="hidden-xs-and-down"
+        >
           <span class="text-body-1">
             新規登録
           </span>
@@ -50,11 +54,8 @@ export default {
   },
   data() {
     return {
-      drawer: null,
-    }
+      drawer: null
+    };
   }
 };
 </script>
-
-<style>
-</style>

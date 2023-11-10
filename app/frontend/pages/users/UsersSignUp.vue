@@ -1,0 +1,161 @@
+<template>
+  <div class="mx-10 mt-6">
+    <div class="text-h3 font-weight-bold">
+      新規登録
+    </div>
+
+    <div class="my-10" />
+
+    <v-row>
+      <v-col 
+        cols="12"
+        sm="8"
+        md="6"
+        lg="6"
+        xl="6"
+      >
+        <form>
+          <v-text-field
+            v-model="v$.user.name.$model"
+            :error-messages="v$.user.name.$errors.map(e => e.$message)"
+            label="ユーザー名"
+            variant="underlined"
+          />
+
+          <v-text-field
+            v-model="v$.user.email.$model"
+            :error-messages="v$.user.email.$errors.map(e => e.$message)"
+            label="メールアドレス"
+            variant="underlined"
+          />
+
+          <v-text-field
+            v-model="v$.user.password.$model"
+            :error-messages="v$.user.password.$errors.map(e => e.$message)"
+            label="パスワード"
+            type="password"
+            variant="underlined"
+          />
+
+          <v-text-field
+            v-model="v$.user.password_confirmation.$model"
+            :error-messages="v$.user.password_confirmation.$errors.map(e => e.$message)"
+            label="パスワード（確認）"
+            type="password"
+            variant="underlined"
+          />
+
+          <v-row class="justify-center mt-5">
+            <v-btn
+              color="indigo-accent-4"
+              class="font-weight-bold"
+              @click="handleSignUp"
+            >
+              登録
+            </v-btn>
+          </v-row>
+        </form>
+      </v-col>
+    </v-row>
+  </div>
+</template>
+
+<script>
+import { useVuelidate } from '@vuelidate/core';
+import { mapActions } from 'vuex';
+import {
+  required,
+  email,
+  maxLength,
+  minLength,
+  sameAs,
+  helpers
+} from '@vuelidate/validators';
+import {
+  requiredMessage,
+  emailMessage,
+  maxLengthMessage,
+  minLengthMessage,
+  sameAsMessage
+} from '../../plugins/validationMessages';
+
+export default {
+  inject: ["$axios"],
+  setup() {
+    return {
+      v$: useVuelidate()
+    };
+  },
+  data () {
+    return {
+      user: {
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: ""
+      },
+      successSignUpAlertStatus: {
+        alertType: "success",
+        alertTextArray: ["ユーザーの登録が完了しました"],
+        isTransition: true
+      },
+      failSignUpAlertStatus: {
+        alertType: "error",
+        alertTextArray: [],
+        isTransition: false
+      },
+      serverErrorAlertStatus: {
+        alertType: "error",
+        alertTextArray: ["エラーが発生しました　時間を置いてもう一度お試しください"],
+        isTransition: false
+      }
+    };
+  },
+  validations () {
+    return {
+      user: {
+        name: { 
+          required: helpers.withMessage(requiredMessage("ユーザー名"), required),
+          maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
+        },
+        email: {
+          required: helpers.withMessage(requiredMessage("メールアドレス"), required),
+          email: helpers.withMessage(emailMessage, email)
+        },
+        password: {
+          required: helpers.withMessage(requiredMessage("パスワード"), required),
+          minLength: helpers.withMessage(minLengthMessage(3), minLength(3))
+        },
+        password_confirmation: {
+          sameAs: helpers.withMessage(sameAsMessage("パスワード"), sameAs(this.user.password))
+        }
+      }
+    };
+  },
+  methods: {
+    ...mapActions("alert", ["displayAlert"]),
+    async handleSignUp() {
+      const result = await this.v$.$validate();
+
+      if (!result) return;
+
+      this.createUser();
+    },
+    createUser() {
+      this.$axios.post("users", { user: this.user })
+        .then(res => {
+          this.displayAlert(this.successSignUpAlertStatus);
+          this.$router.push({ name: "Null" });
+        })
+        .catch(err => {
+          if (err.response) {
+            this.failSignUpAlertStatus.alertTextArray = err.response.data;
+            this.displayAlert(this.failSignUpAlertStatus);
+          } else {
+            this.displayAlert(this.serverErrorAlertStatus);
+          }
+        });
+    }
+  }
+};
+</script>

@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  root 'home#index'
+  root 'top#index'
+  namespace :api do
+    resources :users
+  end
 
-  get '*path', to: 'home#index'
+  get '*path', to: 'top#index'
 end

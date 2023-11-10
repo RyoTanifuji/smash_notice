@@ -6,6 +6,7 @@ import TurbolinksAdapter from 'vue-turbolinks';
 import vuetify from '~/plugins/vuetify';
 import 'vuetify/styles';
 import router from '../router';
+import axios from '~/plugins/axios';
 import store from '../store';
 
 import App from '~/app';
@@ -19,6 +20,13 @@ document.addEventListener("turbo:load", () => {
   app.use(store);
 
   app.component("App", App);
+
+  app.provide('$axios', axios);
+
+  axios.interceptors.request.use(request => {
+    store.dispatch("alert/closeAlert");
+    return request;
+  })
 
   app.mount("#app");
 });
