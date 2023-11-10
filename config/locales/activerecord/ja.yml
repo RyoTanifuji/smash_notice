@@ -1,0 +1,16 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        name: ユーザー名
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード（確認）
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              format: "%{message}"
+              blank: "%{attribute}を入力してください"
+              taken: "この%{attribute}はすでに使われています"
