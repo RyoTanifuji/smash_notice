@@ -12,7 +12,7 @@ class Api::UsersController < ApplicationController
   end
 
   def me
-    render json: current_user, methods: [:avatar_url]
+    render json: current_user
   end
 
   private

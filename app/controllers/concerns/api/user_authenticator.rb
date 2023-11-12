@@ -12,7 +12,9 @@ module Api::UserAuthenticator
   end
 
   def authenticate!
-    raise AuthenticationError unless current_user
+    return if current_user
+
+    head :unauthorized
   end
 
   def bearer_token
