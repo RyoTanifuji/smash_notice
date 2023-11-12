@@ -3,7 +3,9 @@
     <TheHeader />
     <v-main>
       <TheAlert />
-      <router-view />
+      <div class="mx-10 mt-6 h-screen">
+        <router-view />
+      </div>
     </v-main>
     <TheFooter />
   </v-app>

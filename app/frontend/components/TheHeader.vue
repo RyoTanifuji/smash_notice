@@ -24,21 +24,36 @@
       </v-app-bar-title>
 
       <template #append>
-        <v-btn>
-          <span class="text-body-1">
-            ログイン
-          </span>
-        </v-btn>
+        <template v-if="!authUser">
+          <v-btn
+            :to="{ name: 'UsersSignIn' }"
+            :active="false"
+          >
+            <span class="text-body-1">
+              ログイン
+            </span>
+          </v-btn>
 
-        <v-btn
-          :to="{ name: 'UsersSignUp' }"
-          :active="false"
-          class="hidden-xs-and-down"
-        >
-          <span class="text-body-1">
-            新規登録
-          </span>
-        </v-btn>
+          <v-btn
+            :to="{ name: 'UsersSignUp' }"
+            :active="false"
+            class="hidden-xs"
+          >
+            <span class="text-body-1">
+              新規登録
+            </span>
+          </v-btn>
+        </template>
+        <template v-else>
+          <v-btn
+            :active="false"
+            @click="handleLogout"
+          >
+            <span class="text-body-1">
+              ログアウト
+            </span>
+          </v-btn>
+        </template>
       </template>
     </v-app-bar>
   </v-card>
@@ -46,6 +61,11 @@
 
 <script>
 import TheSidebarList from './TheSidebarList';
+import { mapGetters, mapActions } from 'vuex';
+import {
+  successLogOutAlertStatus,
+  serverErrorAlertStatus
+} from '../plugins/alertStatus';
 
 export default {
   name: "TheHeader",
@@ -56,6 +76,23 @@ export default {
     return {
       drawer: null
     };
+  },
+  computed: {
+    ...mapGetters("users", ["authUser"])
+  },
+  methods: {
+    ...mapActions("users", ["logoutUser"]),
+    ...mapActions("alert", ["displayAlert"]),
+    async handleLogout() {
+      try {
+        await this.logoutUser();
+        if (this.$route.name == 'TopIndex') successLogOutAlertStatus.isTransition = false;
+        this.displayAlert(successLogOutAlertStatus);
+        this.$router.push({ name: 'TopIndex' });
+      } catch (err) {
+        this.displayAlert(serverErrorAlertStatus);
+      }
+    }
   }
 };
 </script>
