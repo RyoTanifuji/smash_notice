@@ -72,6 +72,7 @@ import {
 } from '../../plugins/alertStatus';
 
 export default {
+  name: "UsersSignIn",
   inject: ["$axios"],
   setup() {
     return {

@@ -91,6 +91,7 @@ import {
 } from '../../plugins/alertStatus';
 
 export default {
+  name: "UsersSignUp",
   inject: ["$axios"],
   setup() {
     return {
@@ -144,6 +145,7 @@ export default {
           this.login();
         })
         .catch(err => {
+          // responseが帰ってきたときは格納されているエラーを、返ってこないときはサーバーエラーを表示
           if (err.response) {
             failSignUpAlertStatus.alertTextArray = err.response.data;
             this.displayAlert(failSignUpAlertStatus);

@@ -86,6 +86,7 @@ export default {
     async handleLogout() {
       try {
         await this.logoutUser();
+        // すでにトップページにいるときは、routerのbeforeEachが行われないためisTransitionをfalseに
         if (this.$route.name == 'TopIndex') successLogOutAlertStatus.isTransition = false;
         this.displayAlert(successLogOutAlertStatus);
         this.$router.push({ name: 'TopIndex' });

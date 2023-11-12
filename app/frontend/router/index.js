@@ -38,8 +38,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  // ページ遷移のたびに、アラートを初期化
   store.dispatch("alert/closeAlert");
 
+  // ログインしているかをチェック
   store.dispatch("users/fetchAuthUser").then((authUser) => {
     if (to.matched.some(record => record.meta.requiredAuth) && !authUser) {
       next({ name: 'UsersSignIn' });

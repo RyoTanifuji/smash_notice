@@ -17,9 +17,8 @@
           </template>
         </ul>
         <v-btn
-          ripple
-          variant="plain"
           icon
+          variant="plain"
           size="x-small"
           class="ml-auto"
           @click="closeAlert"
@@ -35,6 +34,7 @@
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
+  name: "TheAlert",
   computed: {
     ...mapGetters("alert", [
       "isVisibleAlert",

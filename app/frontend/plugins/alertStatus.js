@@ -1,3 +1,5 @@
+// 処理の成功やエラーの表示をユーザーに知らせるアラートのためのステータス
+
 export const successSignUpAlertStatus = {
   alertType: "success",
   alertTextArray: ["ユーザーの登録が完了しました"],
