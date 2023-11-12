@@ -23,10 +23,11 @@ document.addEventListener("turbo:load", () => {
 
   app.provide('$axios', axios);
 
+  // axiosでリクエストを送るたびに、アラートを初期化
   axios.interceptors.request.use(request => {
     store.dispatch("alert/closeAlert");
     return request;
-  })
+  });
 
   app.mount("#app");
 });

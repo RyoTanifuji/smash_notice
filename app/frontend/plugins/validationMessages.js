@@ -1,3 +1,5 @@
+// バリデーションのエラーメッセージ
+
 export const requiredMessage = (value) => `${value}は必須項目です`;
 
 export const emailMessage = () => "メールアドレスの形式が正しくありません";

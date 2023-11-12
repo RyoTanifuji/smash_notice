@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   root 'top#index'
   namespace :api do
-    resources :users
+    resources :users, only: %i[create] do
+      collection do
+        get 'me'
+      end
+    end
+    resources :sessions, only: %i[create]
   end
 
   get '*path', to: 'top#index'

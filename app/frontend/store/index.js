@@ -1,9 +1,11 @@
 import { createStore } from 'vuex';
 import alert from './modules/alert';
+import users from './modules/users';
 
 const store = createStore({
   modules: {
-    alert
+    alert,
+    users
   }
 });
 

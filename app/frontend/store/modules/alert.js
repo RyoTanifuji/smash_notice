@@ -1,3 +1,6 @@
+// アラートの表示に関するステータス
+
+// アラートの表示の有無、種類、テキスト、表示時にページの遷移が行われるかのステータス
 const state = {
   isVisibleAlert: false,
   alertType: "",

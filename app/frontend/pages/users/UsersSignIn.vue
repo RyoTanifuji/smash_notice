@@ -1,6 +1,6 @@
 <template>
   <div class="text-h3 font-weight-bold">
-    新規登録
+    ログイン
   </div>
 
   <div class="my-10" />
@@ -14,13 +14,6 @@
       xl="6"
     >
       <form>
-        <v-text-field
-          v-model="v$.user.name.$model"
-          :error-messages="v$.user.name.$errors.map(e => e.$message)"
-          label="ユーザー名"
-          variant="underlined"
-        />
-
         <v-text-field
           v-model="v$.user.email.$model"
           :error-messages="v$.user.email.$errors.map(e => e.$message)"
@@ -36,29 +29,21 @@
           variant="underlined"
         />
 
-        <v-text-field
-          v-model="v$.user.password_confirmation.$model"
-          :error-messages="v$.user.password_confirmation.$errors.map(e => e.$message)"
-          label="パスワード（確認）"
-          type="password"
-          variant="underlined"
-        />
-
         <v-row class="justify-center mt-5">
           <v-btn
             color="indigo-accent-4"
             class="font-weight-bold"
-            @click="handleSignUp"
+            @click="handleSignIn"
           >
-            登録
+            ログイン
           </v-btn>
         </v-row>
         <div class="mt-10 d-flex flex-row justify-center">
           <router-link
-            :to="{ name: 'UsersSignIn' }"
+            :to="{ name: 'UsersSignUp' }"
             class="text-decoration-underline text-body-2"
           >
-            登録済みの方はこちら
+            新規登録はこちら
           </router-link>
         </div>
       </form>
@@ -72,26 +57,22 @@ import { mapActions } from 'vuex';
 import {
   required,
   email,
-  maxLength,
   minLength,
-  sameAs,
   helpers
 } from '@vuelidate/validators';
 import {
   requiredMessage,
   emailMessage,
-  maxLengthMessage,
   minLengthMessage,
-  sameAsMessage
 } from '../../plugins/validationMessages';
 import {
-  successSignUpAlertStatus,
-  failSignUpAlertStatus,
+  successSignInAlertStatus,
+  failSignInAlertStatus,
   serverErrorAlertStatus
 } from '../../plugins/alertStatus';
 
 export default {
-  name: "UsersSignUp",
+  name: "UsersSignIn",
   inject: ["$axios"],
   setup() {
     return {
@@ -101,20 +82,14 @@ export default {
   data () {
     return {
       user: {
-        name: "",
         email: "",
         password: "",
-        password_confirmation: ""
       }
     };
   },
   validations () {
     return {
       user: {
-        name: { 
-          required: helpers.withMessage(requiredMessage("ユーザー名"), required),
-          maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
-        },
         email: {
           required: helpers.withMessage(requiredMessage("メールアドレス"), required),
           email: helpers.withMessage(emailMessage, email)
@@ -122,9 +97,6 @@ export default {
         password: {
           required: helpers.withMessage(requiredMessage("パスワード"), required),
           minLength: helpers.withMessage(minLengthMessage(3), minLength(3))
-        },
-        password_confirmation: {
-          sameAs: helpers.withMessage(sameAsMessage("パスワード"), sameAs(this.user.password))
         }
       }
     };
@@ -132,35 +104,24 @@ export default {
   methods: {
     ...mapActions("users", ["loginUser"]),
     ...mapActions("alert", ["displayAlert"]),
-    async handleSignUp() {
+    async handleSignIn() {
       const result = await this.v$.$validate();
 
       if (!result) return;
 
-      this.createUser();
-    },
-    createUser() {
-      this.$axios.post("users", { user: this.user })
-        .then(res => {
-          this.login();
-        })
-        .catch(err => {
-          // responseが帰ってきたときは格納されているエラーを、返ってこないときはサーバーエラーを表示
-          if (err.response) {
-            failSignUpAlertStatus.alertTextArray = err.response.data;
-            this.displayAlert(failSignUpAlertStatus);
-          } else {
-            this.displayAlert(serverErrorAlertStatus);
-          }
-        });
+      this.login();
     },
     async login() {
       try {
         await this.loginUser(this.user);
-        this.displayAlert(successSignUpAlertStatus);
+        this.displayAlert(successSignInAlertStatus);
         this.$router.push({ name: 'TopIndex' });
       } catch(err) {
-        this.displayAlert(serverErrorAlertStatus);
+        if (err.response) {
+          this.displayAlert(failSignInAlertStatus);
+        } else {
+          this.displayAlert(serverErrorAlertStatus);
+        }
       }
     }
   }

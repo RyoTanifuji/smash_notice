@@ -3,22 +3,32 @@ import store from '../store';
 
 import TopIndex from '../pages/static_pages/TopIndex';
 import UsersSignUp from '../pages/users/UsersSignUp';
+import UsersSignIn from '../pages/users/UsersSignIn';
 
 const routes = [
   {
     path: "/",
     name: "TopIndex",
-    component: TopIndex
+    component: TopIndex,
+    meta: { requiredAuth: false }
   },
   {
     path: "/signup",
     name: "UsersSignUp",
-    component: UsersSignUp
+    component: UsersSignUp,
+    meta: { requiredAuth: false }
+  },
+  {
+    path: "/signin",
+    name: "UsersSignIn",
+    component: UsersSignIn,
+    meta: { requiredAuth: false }
   },
   {
     path: "/null",
     name: "Null",
-    component: TopIndex
+    component: TopIndex,
+    meta: { requiredAuth: false }
   }
 ];
 
@@ -28,8 +38,17 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  // ページ遷移のたびに、アラートを初期化
   store.dispatch("alert/closeAlert");
-  next();
+
+  // ログインしているかをチェック
+  store.dispatch("users/fetchAuthUser").then((authUser) => {
+    if (to.matched.some(record => record.meta.requiredAuth) && !authUser) {
+      next({ name: 'UsersSignIn' });
+    } else {
+      next();
+    }
+  });
 });
 
 export default router;
