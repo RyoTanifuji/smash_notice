@@ -48,14 +48,14 @@
           <v-btn
             color="indigo-accent-4"
             class="font-weight-bold"
-            @click="handleSignUp"
+            @click="handleRegister"
           >
             登録
           </v-btn>
         </v-row>
         <div class="mt-10 d-flex flex-row justify-center">
           <router-link
-            :to="{ name: 'UsersSignIn' }"
+            :to="{ name: 'UsersLogin' }"
             class="text-decoration-underline text-body-2"
           >
             登録済みの方はこちら
@@ -85,13 +85,13 @@ import {
   sameAsMessage
 } from '../../plugins/validationMessages';
 import {
-  successSignUpAlertStatus,
-  failSignUpAlertStatus,
+  successRegisterAlertStatus,
+  failLoginAlertStatus,
   serverErrorAlertStatus
 } from '../../plugins/alertStatus';
 
 export default {
-  name: "UsersSignUp",
+  name: "UsersRegister",
   inject: ["$axios"],
   setup() {
     return {
@@ -132,7 +132,7 @@ export default {
   methods: {
     ...mapActions("users", ["loginUser"]),
     ...mapActions("alert", ["displayAlert"]),
-    async handleSignUp() {
+    async handleRegister() {
       const result = await this.v$.$validate();
 
       if (!result) return;
@@ -147,8 +147,8 @@ export default {
         .catch(err => {
           // responseが帰ってきたときは格納されているエラーを、返ってこないときはサーバーエラーを表示
           if (err.response) {
-            failSignUpAlertStatus.alertTextArray = err.response.data;
-            this.displayAlert(failSignUpAlertStatus);
+            failRegisterAlertStatus.alertTextArray = err.response.data;
+            this.displayAlert(failRegisterAlertStatus);
           } else {
             this.displayAlert(serverErrorAlertStatus);
           }
@@ -157,7 +157,7 @@ export default {
     async login() {
       try {
         await this.loginUser(this.user);
-        this.displayAlert(successSignUpAlertStatus);
+        this.displayAlert(successRegisterAlertStatus);
         this.$router.push({ name: 'TopIndex' });
       } catch(err) {
         this.displayAlert(serverErrorAlertStatus);
