@@ -26,7 +26,7 @@
       <template #append>
         <template v-if="!authUser">
           <v-btn
-            :to="{ name: 'UsersSignIn' }"
+            :to="{ name: 'UsersLogin' }"
             :active="false"
           >
             <span class="text-body-1">
@@ -35,7 +35,7 @@
           </v-btn>
 
           <v-btn
-            :to="{ name: 'UsersSignUp' }"
+            :to="{ name: 'UsersRegister' }"
             :active="false"
             class="hidden-xs"
           >

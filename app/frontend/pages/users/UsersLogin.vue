@@ -13,10 +13,11 @@
       lg="6"
       xl="6"
     >
-      <form>
+      <form id="login-form">
         <v-text-field
           v-model="v$.user.email.$model"
           :error-messages="v$.user.email.$errors.map(e => e.$message)"
+          name="メールアドレス"
           label="メールアドレス"
           variant="underlined"
         />
@@ -24,6 +25,7 @@
         <v-text-field
           v-model="v$.user.password.$model"
           :error-messages="v$.user.password.$errors.map(e => e.$message)"
+          name="パスワード"
           label="パスワード"
           type="password"
           variant="underlined"
@@ -33,14 +35,14 @@
           <v-btn
             color="indigo-accent-4"
             class="font-weight-bold"
-            @click="handleSignIn"
+            @click="handleLogin"
           >
             ログイン
           </v-btn>
         </v-row>
         <div class="mt-10 d-flex flex-row justify-center">
           <router-link
-            :to="{ name: 'UsersSignUp' }"
+            :to="{ name: 'UsersRegister' }"
             class="text-decoration-underline text-body-2"
           >
             新規登録はこちら
@@ -66,13 +68,13 @@ import {
   minLengthMessage,
 } from '../../plugins/validationMessages';
 import {
-  successSignInAlertStatus,
-  failSignInAlertStatus,
+  successLoginAlertStatus,
+  failLoginAlertStatus,
   serverErrorAlertStatus
 } from '../../plugins/alertStatus';
 
 export default {
-  name: "UsersSignIn",
+  name: "UsersLogin",
   inject: ["$axios"],
   setup() {
     return {
@@ -104,7 +106,7 @@ export default {
   methods: {
     ...mapActions("users", ["loginUser"]),
     ...mapActions("alert", ["displayAlert"]),
-    async handleSignIn() {
+    async handleLogin() {
       const result = await this.v$.$validate();
 
       if (!result) return;
@@ -114,11 +116,11 @@ export default {
     async login() {
       try {
         await this.loginUser(this.user);
-        this.displayAlert(successSignInAlertStatus);
+        this.displayAlert(successLoginAlertStatus);
         this.$router.push({ name: 'TopIndex' });
       } catch(err) {
         if (err.response) {
-          this.displayAlert(failSignInAlertStatus);
+          this.displayAlert(failLoginAlertStatus);
         } else {
           this.displayAlert(serverErrorAlertStatus);
         }

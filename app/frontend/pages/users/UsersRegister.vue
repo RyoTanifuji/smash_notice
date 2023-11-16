@@ -13,10 +13,12 @@
       lg="6"
       xl="6"
     >
-      <form>
+      <form id="register-form">
         <v-text-field
           v-model="v$.user.name.$model"
           :error-messages="v$.user.name.$errors.map(e => e.$message)"
+          :counter="20"
+          name="ユーザー名"
           label="ユーザー名"
           variant="underlined"
         />
@@ -24,6 +26,7 @@
         <v-text-field
           v-model="v$.user.email.$model"
           :error-messages="v$.user.email.$errors.map(e => e.$message)"
+          name="メールアドレス"
           label="メールアドレス"
           variant="underlined"
         />
@@ -31,6 +34,7 @@
         <v-text-field
           v-model="v$.user.password.$model"
           :error-messages="v$.user.password.$errors.map(e => e.$message)"
+          name="パスワード"
           label="パスワード"
           type="password"
           variant="underlined"
@@ -39,6 +43,7 @@
         <v-text-field
           v-model="v$.user.password_confirmation.$model"
           :error-messages="v$.user.password_confirmation.$errors.map(e => e.$message)"
+          name="パスワード（確認）"
           label="パスワード（確認）"
           type="password"
           variant="underlined"
@@ -48,14 +53,14 @@
           <v-btn
             color="indigo-accent-4"
             class="font-weight-bold"
-            @click="handleSignUp"
+            @click="handleRegister"
           >
             登録
           </v-btn>
         </v-row>
         <div class="mt-10 d-flex flex-row justify-center">
           <router-link
-            :to="{ name: 'UsersSignIn' }"
+            :to="{ name: 'UsersLogin' }"
             class="text-decoration-underline text-body-2"
           >
             登録済みの方はこちら
@@ -85,13 +90,13 @@ import {
   sameAsMessage
 } from '../../plugins/validationMessages';
 import {
-  successSignUpAlertStatus,
-  failSignUpAlertStatus,
+  successRegisterAlertStatus,
+  failRegisterAlertStatus,
   serverErrorAlertStatus
 } from '../../plugins/alertStatus';
 
 export default {
-  name: "UsersSignUp",
+  name: "UsersRegister",
   inject: ["$axios"],
   setup() {
     return {
@@ -132,7 +137,7 @@ export default {
   methods: {
     ...mapActions("users", ["loginUser"]),
     ...mapActions("alert", ["displayAlert"]),
-    async handleSignUp() {
+    async handleRegister() {
       const result = await this.v$.$validate();
 
       if (!result) return;
@@ -147,8 +152,8 @@ export default {
         .catch(err => {
           // responseが帰ってきたときは格納されているエラーを、返ってこないときはサーバーエラーを表示
           if (err.response) {
-            failSignUpAlertStatus.alertTextArray = err.response.data;
-            this.displayAlert(failSignUpAlertStatus);
+            failRegisterAlertStatus.alertTextArray = err.response.data;
+            this.displayAlert(failRegisterAlertStatus);
           } else {
             this.displayAlert(serverErrorAlertStatus);
           }
@@ -157,7 +162,7 @@ export default {
     async login() {
       try {
         await this.loginUser(this.user);
-        this.displayAlert(successSignUpAlertStatus);
+        this.displayAlert(successRegisterAlertStatus);
         this.$router.push({ name: 'TopIndex' });
       } catch(err) {
         this.displayAlert(serverErrorAlertStatus);

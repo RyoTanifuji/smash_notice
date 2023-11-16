@@ -38,12 +38,12 @@
 
   <div>
     <v-btn
-      :to="{ name: 'UsersSignIn' }"
+      :to="{ name: 'UsersLogin' }"
       class="mx-8"
     >
       ログイン
     </v-btn>
-    <v-btn :to="{ name: 'UsersSignUp' }">
+    <v-btn :to="{ name: 'UsersRegister' }">
       新規登録
     </v-btn>
   </div>

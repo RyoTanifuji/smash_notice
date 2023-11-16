@@ -1,24 +1,24 @@
 // 処理の成功やエラーの表示をユーザーに知らせるアラートのためのステータス
 
-export const successSignUpAlertStatus = {
+export const successRegisterAlertStatus = {
   alertType: "success",
   alertTextArray: ["ユーザーの登録が完了しました"],
   isTransition: true
 };
 
-export const failSignUpAlertStatus = {
+export const failRegisterAlertStatus = {
   alertType: "error",
   alertTextArray: [],
   isTransition: false
 };
 
-export const successSignInAlertStatus = {
+export const successLoginAlertStatus = {
   alertType: "success",
   alertTextArray: ["ログインに成功しました"],
   isTransition: true
 };
 
-export const failSignInAlertStatus = {
+export const failLoginAlertStatus = {
   alertType: "error",
   alertTextArray: ["メールアドレス・パスワードに誤りがあるか、登録されていません"],
   isTransition: false

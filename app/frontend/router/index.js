@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import store from '../store';
 
 import TopIndex from '../pages/static_pages/TopIndex';
-import UsersSignUp from '../pages/users/UsersSignUp';
-import UsersSignIn from '../pages/users/UsersSignIn';
+import UsersRegister from '../pages/users/UsersRegister';
+import UsersLogin from '../pages/users/UsersLogin';
 
 const routes = [
   {
@@ -13,15 +13,15 @@ const routes = [
     meta: { requiredAuth: false }
   },
   {
-    path: "/signup",
-    name: "UsersSignUp",
-    component: UsersSignUp,
+    path: "/register",
+    name: "UsersRegister",
+    component: UsersRegister,
     meta: { requiredAuth: false }
   },
   {
-    path: "/signin",
-    name: "UsersSignIn",
-    component: UsersSignIn,
+    path: "/login",
+    name: "UsersLogin",
+    component: UsersLogin,
     meta: { requiredAuth: false }
   },
   {
@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
   // ログインしているかをチェック
   store.dispatch("users/fetchAuthUser").then((authUser) => {
     if (to.matched.some(record => record.meta.requiredAuth) && !authUser) {
-      next({ name: 'UsersSignIn' });
+      next({ name: 'UsersLogin' });
     } else {
       next();
     }
