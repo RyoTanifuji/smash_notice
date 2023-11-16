@@ -1,0 +1,2 @@
+class StrategyFolder < Folder
+end

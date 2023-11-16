@@ -8,4 +8,6 @@ class User < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 20 }
   validates :email, uniqueness: true, presence: true
+
+  has_many :folders, dependent: :destroy
 end
