@@ -13,10 +13,12 @@
       lg="6"
       xl="6"
     >
-      <form>
+      <form id="register-form">
         <v-text-field
           v-model="v$.user.name.$model"
           :error-messages="v$.user.name.$errors.map(e => e.$message)"
+          :counter="20"
+          name="ユーザー名"
           label="ユーザー名"
           variant="underlined"
         />
@@ -24,6 +26,7 @@
         <v-text-field
           v-model="v$.user.email.$model"
           :error-messages="v$.user.email.$errors.map(e => e.$message)"
+          name="メールアドレス"
           label="メールアドレス"
           variant="underlined"
         />
@@ -31,6 +34,7 @@
         <v-text-field
           v-model="v$.user.password.$model"
           :error-messages="v$.user.password.$errors.map(e => e.$message)"
+          name="パスワード"
           label="パスワード"
           type="password"
           variant="underlined"
@@ -39,6 +43,7 @@
         <v-text-field
           v-model="v$.user.password_confirmation.$model"
           :error-messages="v$.user.password_confirmation.$errors.map(e => e.$message)"
+          name="パスワード（確認）"
           label="パスワード（確認）"
           type="password"
           variant="underlined"
@@ -86,7 +91,7 @@ import {
 } from '../../plugins/validationMessages';
 import {
   successRegisterAlertStatus,
-  failLoginAlertStatus,
+  failRegisterAlertStatus,
   serverErrorAlertStatus
 } from '../../plugins/alertStatus';
 

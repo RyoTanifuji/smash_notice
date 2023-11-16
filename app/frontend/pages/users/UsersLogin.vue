@@ -13,10 +13,11 @@
       lg="6"
       xl="6"
     >
-      <form>
+      <form id="login-form">
         <v-text-field
           v-model="v$.user.email.$model"
           :error-messages="v$.user.email.$errors.map(e => e.$message)"
+          name="メールアドレス"
           label="メールアドレス"
           variant="underlined"
         />
@@ -24,6 +25,7 @@
         <v-text-field
           v-model="v$.user.password.$model"
           :error-messages="v$.user.password.$errors.map(e => e.$message)"
+          name="パスワード"
           label="パスワード"
           type="password"
           variant="underlined"
