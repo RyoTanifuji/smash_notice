@@ -9,5 +9,6 @@ class User < ApplicationRecord
   validates :name, presence: true, length: { maximum: 20 }
   validates :email, uniqueness: true, presence: true
 
-  has_many :folders, dependent: :destroy
+  has_many :matchup_folders, dependent: :destroy
+  has_many :strategy_folders, dependent: :destroy
 end
