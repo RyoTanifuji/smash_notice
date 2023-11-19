@@ -1,6 +1,7 @@
 class Api::FoldersController < ApplicationController
   def create
     folder = current_user.folders.build(folder_params)
+    folder.name = Fighter.find(folder.fighter_id).name if folder.name.blank?
 
     if folder.save
       render json: folder
