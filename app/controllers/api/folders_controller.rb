@@ -1,6 +1,6 @@
-class Api::MatchupFoldersController < ApplicationController
+class Api::FoldersController < ApplicationController
   def create
-    folder = current_user.matchup_folders.build(folder_params)
+    folder = current_user.folders.build(folder_params)
 
     if folder.save
       render json: folder
@@ -12,6 +12,6 @@ class Api::MatchupFoldersController < ApplicationController
   private
 
   def folder_params
-    params.require(:folder).permit(:name, :fighter_id)
+    params.require(:folder).permit(:name, :type, :fighter_id)
   end
 end
