@@ -7,7 +7,12 @@ Rails.application.routes.draw do
       end
     end
     resources :sessions, only: %i[create]
-    resources :folders, only: %i[create]
+    resources :folders, only: %i[create] do
+      collection do
+        get 'matchup'
+        get 'strategy'
+      end
+    end
   end
 
   get '*path', to: 'top#index'

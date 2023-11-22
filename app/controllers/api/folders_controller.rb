@@ -10,6 +10,16 @@ class Api::FoldersController < ApplicationController
     end
   end
 
+  def matchup
+    folders = current_user.matchup_folders.all
+    render json: folders.to_json(except: [:user_id])
+  end
+
+  def strategy
+    folders = current_user.strategy_folders.all
+    render json: folders.to_json(except: [:user_id])
+  end
+
   private
 
   def folder_params

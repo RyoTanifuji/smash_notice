@@ -96,7 +96,7 @@ export default {
         matchup: {
           id: 2,
           title: "キャラ対メモ",
-          route: "MatchupMemosIndex",
+          route: "MatchupFoldersIndex",
           icon: mdiSwordCross
         },
         shared: {

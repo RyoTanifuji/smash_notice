@@ -4,7 +4,7 @@ import store from '../store';
 import TopIndex from '../pages/static_pages/TopIndex';
 import UsersRegister from '../pages/users/UsersRegister';
 import UsersLogin from '../pages/users/UsersLogin';
-import MatchupMemosIndex from '../pages/memos/matchup/MatchupMemosIndex';
+import MatchupFoldersIndex from '../pages/memos/matchup/MatchupFoldersIndex';
 
 const routes = [
   {
@@ -27,8 +27,8 @@ const routes = [
   },
   {
     path: "/matchups",
-    name: "MatchupMemosIndex",
-    component: MatchupMemosIndex,
+    name: "MatchupFoldersIndex",
+    component: MatchupFoldersIndex,
     meta: { requiredAuth: true }
   },
   {
