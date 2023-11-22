@@ -24,11 +24,17 @@ export const failLoginAlertStatus = {
   isTransition: false
 };
 
-export const successLogOutAlertStatus = {
+export const successLogoutAlertStatus = {
   alertType: "success",
   alertTextArray: ["ログアウトしました"],
   isTransition: true
 };
+
+export const requireLoginAlertStatus = {
+  alertType: "warning",
+  alertTextArray: ["このページにアクセスするにはログインが必要です"],
+  isTransition: true
+}
 
 export const serverErrorAlertStatus = {
   alertType: "error",

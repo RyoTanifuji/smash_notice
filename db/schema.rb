@@ -10,9 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_05_093023) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_16_100340) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "fighters", force: :cascade do |t|
+    t.string "number"
+    t.string "name"
+  end
+
+  create_table "folders", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "type"
+    t.bigint "user_id", null: false
+    t.bigint "fighter_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fighter_id"], name: "index_folders_on_fighter_id"
+    t.index ["user_id"], name: "index_folders_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
@@ -23,4 +39,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_05_093023) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
+
+  add_foreign_key "folders", "fighters"
+  add_foreign_key "folders", "users"
 end

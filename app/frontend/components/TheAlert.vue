@@ -21,7 +21,7 @@
           variant="plain"
           size="x-small"
           class="ml-auto"
-          @click="closeAlert"
+          @click="closeAlertWithCross"
         >
           <span class="text-body-1">×</span>
         </v-btn>
@@ -43,7 +43,7 @@ export default {
     ])
   },
   methods: {
-    ...mapActions("alert", ["closeAlert"])
+    ...mapActions("alert", ["closeAlertWithCross"])
   }
 };
 </script>

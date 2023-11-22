@@ -6,7 +6,7 @@
   <div class="my-10" />
 
   <v-row>
-    <v-col 
+    <v-col
       cols="12"
       sm="8"
       md="6"

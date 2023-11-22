@@ -1,0 +1,2 @@
+class MatchupFolder < Folder
+end

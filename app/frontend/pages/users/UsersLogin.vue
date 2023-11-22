@@ -65,7 +65,7 @@ import {
 import {
   requiredMessage,
   emailMessage,
-  minLengthMessage,
+  minLengthMessage
 } from '../../plugins/validationMessages';
 import {
   successLoginAlertStatus,
