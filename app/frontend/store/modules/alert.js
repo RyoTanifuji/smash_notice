@@ -21,14 +21,18 @@ const mutations = {
     state.alertTextArray = alertStatus.alertTextArray;
     state.isTransition = alertStatus.isTransition;
   },
-  resetAlert: (state) => {
-    if (state.isTransition) {
+  resetAlert: (state, forceReset) => {
+    if (forceReset || !state.isTransition) {
       state.isTransition = false;
-    } else {
       state.isVisibleAlert = false;
       state.alertType = "";
       state.alertTextArray = [];
+    } else {
+      state.isTransition = false;
     }
+  },
+  isTransitionFalse: (state) => {
+    state.isTransition = false;
   }
 };
 
@@ -37,7 +41,13 @@ const actions = {
     commit("setAlert", alertStatus);
   },
   closeAlert({ commit }) {
-    commit("resetAlert");
+    commit("resetAlert", false);
+  },
+  closeAlertWithCross({ commit }) {
+    commit("resetAlert", true);
+  },
+  cancelTransition({ commit }) {
+    commit("isTransitionFalse");
   }
 };
 

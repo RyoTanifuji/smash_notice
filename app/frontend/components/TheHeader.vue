@@ -63,7 +63,7 @@
 import TheSidebarList from './TheSidebarList';
 import { mapGetters, mapActions } from 'vuex';
 import {
-  successLogOutAlertStatus,
+  successLogoutAlertStatus,
   serverErrorAlertStatus
 } from '../plugins/alertStatus';
 
@@ -86,9 +86,7 @@ export default {
     async handleLogout() {
       try {
         await this.logoutUser();
-        // すでにトップページにいるときは、routerのbeforeEachが行われないためisTransitionをfalseに
-        if (this.$route.name == 'TopIndex') successLogOutAlertStatus.isTransition = false;
-        this.displayAlert(successLogOutAlertStatus);
+        this.displayAlert(successLogoutAlertStatus);
         this.$router.push({ name: 'TopIndex' });
       } catch (err) {
         this.displayAlert(serverErrorAlertStatus);

@@ -47,7 +47,7 @@
               >
                 <v-icon :icon="mdiInformationOutline" />
                 <v-menu activator="parent">
-                  <v-list>
+                  <v-list density="compact">
                     <v-list-item @click="handleOpenFolderEditDialog">
                       <v-list-item-title>
                         <span>

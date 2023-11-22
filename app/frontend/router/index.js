@@ -6,6 +6,8 @@ import UsersRegister from '../pages/users/UsersRegister';
 import UsersLogin from '../pages/users/UsersLogin';
 import MatchupFoldersIndex from '../pages/memos/matchup/MatchupFoldersIndex';
 
+import { requireLoginAlertStatus } from '../plugins/alertStatus';
+
 const routes = [
   {
     path: "/",
@@ -51,6 +53,8 @@ router.beforeEach((to, from, next) => {
   // ログインしているかをチェック
   store.dispatch("users/fetchAuthUser").then((authUser) => {
     if (to.matched.some(record => record.meta.requiredAuth) && !authUser) {
+      store.dispatch("alert/displayAlert", requireLoginAlertStatus);
+      if (from.name == 'UsersLogin') store.dispatch("alert/cancelTransition");
       next({ name: 'UsersLogin' });
     } else {
       next();
