@@ -34,7 +34,7 @@ export const requireLoginAlertStatus = {
   alertType: "warning",
   alertTextArray: ["このページにアクセスするにはログインが必要です"],
   isTransition: true
-}
+};
 
 export const serverErrorAlertStatus = {
   alertType: "error",
