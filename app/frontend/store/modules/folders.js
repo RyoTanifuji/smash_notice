@@ -1,5 +1,4 @@
 import axios from '../../plugins/axios';
-import humps from 'humps';
 
 const state = {
   folders: []
@@ -33,26 +32,26 @@ const actions = {
   fetchFolders({ commit }, folderType) {
     axios.get(`folders/${folderType}`)
       .then(res => {
-        commit("setFolders", humps.camelizeKeys(res.data));
+        commit("setFolders", res.data);
       })
       .catch(err => console.log(err.response));
   },
   createFolder({ commit }, folder) {
-    return axios.post('folders', humps.decamelizeKeys(folder))
+    return axios.post('folders', folder)
       .then(res => {
-        commit("addFolder", humps.camelizeKeys(res.data));
+        commit("addFolder", res.data);
       });
   },
   updateFolder({ commit }, folder) {
-    return axios.patch(`folders/${folder.id}`, humps.decamelizeKeys(folder))
+    return axios.patch(`folders/${folder.id}`, folder)
       .then(res => {
-        commit("updateFolder", humps.camelizeKeys(res.data));
+        commit("updateFolder", res.data);
       });
   },
   deleteFolder({ commit }, folder) {
     return axios.delete(`folders/${folder.id}`)
       .then(res => {
-        commit("deleteFolder", humps.camelizeKeys(res.data));
+        commit("deleteFolder", res.data);
       });
   }
 };

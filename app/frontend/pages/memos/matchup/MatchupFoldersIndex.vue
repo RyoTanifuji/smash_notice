@@ -187,12 +187,13 @@ export default {
       folderCreateDialog: false,
       folderEditDialog: false,
       folderDeleteDialog: false,
-      folder: {
+      folderInitial: {
         id: null,
         name: "",
         type: "MatchupFolder",
         fighterId: null
       },
+      folder: {},
       mdiFolder,
       mdiInformationOutline
     };
@@ -218,6 +219,7 @@ export default {
     ]),
     ...mapActions("alert", ["displayAlert"]),
     handleOpenFolderCreateDialog() {
+      this.folder = Object.assign({}, this.folderInitial);
       this.folderCreateDialog = true;
     },
     handleOpenFolderEditDialog(folder) {
@@ -225,12 +227,11 @@ export default {
       this.folderEditDialog = true;
     },
     handleOpenFolderDeleteDialog(folder) {
-      this.folder = Object.assign({}, folder);
+      this.folder = folder;
       this.folderDeleteDialog = true;
     },
     handleCloseFolderDialog() {
-      this.folder.name = "";
-      this.folder.fighterId = null;
+      this.folder = Object.assign({}, this.folderInitial);
       this.folderCreateDialog = false;
       this.folderEditDialog = false;
       this.folderDeleteDialog = false;
