@@ -36,8 +36,8 @@ const actions = {
       })
       .catch(err => console.log(err.response));
   },
-  createFolder({ commit }, folder) {
-    return axios.post('folders', folder)
+  createFolder({ commit }, { folder, folderType }) {
+    return axios.post('folders', {...folder, type: folderType})
       .then(res => {
         commit("addFolder", res.data);
       });

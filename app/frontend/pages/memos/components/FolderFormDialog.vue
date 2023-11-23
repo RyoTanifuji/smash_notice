@@ -62,9 +62,20 @@ export default {
   name: "FolderFormDialog",
   props: {
     folder: {
-      id: Number,
-      name: String,
-      fighterId: Number
+      type: Object,
+      required: true,
+      id: {
+        type: Number,
+        required: true
+      },
+      name: {
+        type: String,
+        required: true
+      },
+      fighterId: {
+        type: Number,
+        required: true
+      }
     }
   },
   emits: [

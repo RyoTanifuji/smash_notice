@@ -6,7 +6,7 @@ class Api::FoldersController < ApplicationController
     @folder.name = Fighter.find(@folder.fighter_id).name if @folder.name.blank?
 
     if @folder.save
-      render json: @folder
+      render json: @folder.to_json(except: [:user_id, :created_at])
     else
       render json: @folder.errors.full_messages, status: :bad_request
     end
@@ -17,7 +17,7 @@ class Api::FoldersController < ApplicationController
     @folder.name = Fighter.find(@folder.fighter_id).name if @folder.name.blank?
 
     if @folder.save
-      render json: @folder
+      render json: @folder.to_json(except: [:user_id, :created_at])
     else
       render json: @folder.errors.full_messages, status: :bad_request
     end
@@ -30,12 +30,12 @@ class Api::FoldersController < ApplicationController
 
   def matchup
     @folders = current_user.matchup_folders.all
-    render json: @folders.to_json(except: [:user_id])
+    render json: @folders.to_json(except: [:user_id, :created_at])
   end
 
   def strategy
     @folders = current_user.strategy_folders.all
-    render json: @folders.to_json(except: [:user_id])
+    render json: @folders.to_json(except: [:user_id, :created_at])
   end
 
   private

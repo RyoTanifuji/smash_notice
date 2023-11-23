@@ -187,10 +187,10 @@ export default {
       folderCreateDialog: false,
       folderEditDialog: false,
       folderDeleteDialog: false,
+      folderType: "MatchupFolder",
       folderInitial: {
         id: null,
         name: "",
-        type: "MatchupFolder",
         fighterId: null
       },
       folder: {},
@@ -238,7 +238,7 @@ export default {
     },
     async handleFolderCreate(folder) {
       try {
-        await this.createFolder(folder);
+        await this.createFolder({ folder: folder, folderType: this.folderType });
       } catch (error) {
         this.displayAlert(serverErrorAlertStatus);
       }

@@ -19,7 +19,6 @@ axiosInstance.interceptors.request.use((req) => {
 // レスポンスのデータの各Keyをキャメルケース化
 axiosInstance.interceptors.response.use((res) => {
   res.data = humps.camelizeKeys(res.data);
-  if (res.data) console.log(res.data);
   return res;
 });
 
