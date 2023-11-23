@@ -94,108 +94,47 @@
       </v-btn>
     </v-row>
   </template>
+
   <div class="justify-center">
     <v-dialog
       v-model="folderCreateDialog"
       width="700px"
     >
-      <v-card>
-        <v-card-title class="ma-2">
-          <span class="text-h5 font-weight-bold">フォルダの追加</span>
-        </v-card-title>
-        <v-card-text>
-          <form>
-            <v-text-field
-              v-model="v$.folder.name.$model"
-              :error-messages="v$.folder.name.$errors.map(e => e.$message)"
-              :counter="20"
-              name="フォルダ名"
-              label="フォルダ名"
-              hint="未入力の場合、下記の使用ファイター名が設定されます"
-              variant="underlined"
-            />
-            <v-autocomplete
-              v-model="v$.folder.fighterId.$model"
-              :error-messages="v$.folder.fighterId.$errors.map(e => e.$message)"
-              :items="fightersArray"
-              item-value="id"
-              item-title="name"
-              clearable
-              :menu-props="{ location: 'top', scrollStrategy: 'none' }"
-              name="使用ファイター"
-              label="使用ファイター"
-              hint="自分の使用ファイターを選択してください"
-              variant="underlined"
-            />
-          </form>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn @click="handleCloseFolderDialog">
-            キャンセル
-          </v-btn>
-          <v-btn
-            class="mr-4"
-            color="indigo-accent-4"
-            @click="handleFolderCreate"
-          >
-            作成
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+      <FolderFormDialog
+        :folder="folder"
+        @close-dialog="handleCloseFolderDialog"
+        @folder-submit="handleFolderCreate"
+      >
+        <template #title>
+          フォルダの追加
+        </template>
+        <template #submit>
+          作成
+        </template>
+      </FolderFormDialog>
     </v-dialog>
   </div>
+
   <div class="justify-center">
     <v-dialog
       v-model="folderEditDialog"
       width="700px"
     >
-      <v-card>
-        <v-card-title class="ma-2">
-          <span class="text-h5 font-weight-bold">フォルダの編集</span>
-        </v-card-title>
-        <v-card-text>
-          <form>
-            <v-text-field
-              v-model="v$.folder.name.$model"
-              :error-messages="v$.folder.name.$errors.map(e => e.$message)"
-              :counter="20"
-              name="フォルダ名"
-              label="フォルダ名"
-              hint="未入力の場合、下記の使用ファイター名が設定されます"
-              variant="underlined"
-            />
-            <v-autocomplete
-              v-model="v$.folder.fighterId.$model"
-              :error-messages="v$.folder.fighterId.$errors.map(e => e.$message)"
-              :items="fightersArray"
-              item-value="id"
-              item-title="name"
-              clearable
-              :menu-props="{ location: 'top', scrollStrategy: 'none' }"
-              name="使用ファイター"
-              label="使用ファイター"
-              hint="自分の使用ファイターを選択してください"
-              variant="underlined"
-            />
-          </form>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn @click="handleCloseFolderDialog">
-            キャンセル
-          </v-btn>
-          <v-btn
-            class="mr-4"
-            color="indigo-accent-4"
-            @click="handleFolderUpdate"
-          >
-            更新
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+      <FolderFormDialog
+        :folder="folder"
+        @close-dialog="handleCloseFolderDialog"
+        @folder-submit="handleFolderUpdate"
+      >
+        <template #title>
+          フォルダの編集
+        </template>
+        <template #submit>
+          更新
+        </template>
+      </FolderFormDialog>
     </v-dialog>
   </div>
+  
   <div class="justify-center">
     <v-dialog
       v-model="folderDeleteDialog"
@@ -227,7 +166,6 @@
 </template>
 
 <script>
-import { useVuelidate } from '@vuelidate/core';
 import { mapGetters, mapActions } from 'vuex';
 import dayjs from 'dayjs';
 import { 
@@ -235,25 +173,14 @@ import {
   mdiInformationOutline
 } from '@mdi/js';
 import {
-  required,
-  maxLength,
-  helpers
-} from '@vuelidate/validators';
-import {
-  requiredMessage,
-  maxLengthMessage
-} from '../../../plugins/validationMessages';
-import {
   serverErrorAlertStatus
 } from '../../../plugins/alertStatus';
-import { FIGHTERS_ARRAY } from '../../../plugins/fightersArray';
+import FolderFormDialog from '../components/FolderFormDialog';
 
 export default {
   name: "MatchupFoldersIndex",
-  setup() {
-    return {
-      v$: useVuelidate()
-    };
+  components: {
+    FolderFormDialog
   },
   data() {
     return {
@@ -266,21 +193,8 @@ export default {
         type: "MatchupFolder",
         fighterId: null
       },
-      fightersArray: FIGHTERS_ARRAY,
       mdiFolder,
       mdiInformationOutline
-    };
-  },
-  validations () {
-    return {
-      folder: {
-        name: { 
-          maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
-        },
-        fighterId: {
-          required: helpers.withMessage(requiredMessage("使用ファイター"), required)
-        }
-      }
     };
   },
   computed: {
@@ -303,38 +217,6 @@ export default {
       "deleteFolder"
     ]),
     ...mapActions("alert", ["displayAlert"]),
-    async handleFolderCreate() {
-      const result = await this.v$.$validate();
-
-      if (!result) return;
-
-      try {
-        await this.createFolder(this.folder);
-      } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
-      }
-      this.handleCloseFolderDialog();
-    },
-    async handleFolderUpdate() {
-      const result = await this.v$.$validate();
-
-      if (!result) return;
-
-      try {
-        await this.updateFolder(this.folder);
-      } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
-      }
-      this.handleCloseFolderDialog();
-    },
-    async handleFolderDelete() {
-      try {
-        await this.deleteFolder(this.folder);
-      } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
-      }
-      this.handleCloseFolderDialog();
-    },
     handleOpenFolderCreateDialog() {
       this.folderCreateDialog = true;
     },
@@ -349,10 +231,33 @@ export default {
     handleCloseFolderDialog() {
       this.folder.name = "";
       this.folder.fighterId = null;
-      this.v$.$reset();
       this.folderCreateDialog = false;
       this.folderEditDialog = false;
       this.folderDeleteDialog = false;
+    },
+    async handleFolderCreate(folder) {
+      try {
+        await this.createFolder(folder);
+      } catch (error) {
+        this.displayAlert(serverErrorAlertStatus);
+      }
+      this.handleCloseFolderDialog();
+    },
+    async handleFolderUpdate(folder) {
+      try {
+        await this.updateFolder(folder);
+      } catch (error) {
+        this.displayAlert(serverErrorAlertStatus);
+      }
+      this.handleCloseFolderDialog();
+    },
+    async handleFolderDelete() {
+      try {
+        await this.deleteFolder(this.folder);
+      } catch (error) {
+        this.displayAlert(serverErrorAlertStatus);
+      }
+      this.handleCloseFolderDialog();
     },
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");
