@@ -3,5 +3,6 @@ class Memo < ApplicationRecord
   belongs_to :folder
 
   validates :title, presence: true, length: { maximum: 20 }
-  enum status: { private: 1, public: 2 }
+
+  enum state: { local: 1, shared: 2 }
 end
