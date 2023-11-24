@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_16_100340) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_24_080554) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_100340) do
     t.index ["user_id"], name: "index_folders_on_user_id"
   end
 
+  create_table "memos", force: :cascade do |t|
+    t.string "title", null: false
+    t.integer "state", default: 1
+    t.string "type"
+    t.bigint "user_id", null: false
+    t.bigint "folder_id", null: false
+    t.bigint "fighter_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fighter_id"], name: "index_memos_on_fighter_id"
+    t.index ["folder_id"], name: "index_memos_on_folder_id"
+    t.index ["user_id"], name: "index_memos_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
@@ -42,4 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_100340) do
 
   add_foreign_key "folders", "fighters"
   add_foreign_key "folders", "users"
+  add_foreign_key "memos", "fighters"
+  add_foreign_key "memos", "folders"
+  add_foreign_key "memos", "users"
 end
