@@ -5,6 +5,8 @@
 
   <div class="my-10" />
 
+  {{ folders }}
+
   <template v-if="folders.length">
     <v-row>
       <v-col
@@ -209,7 +211,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("folders/fetchFolders", "matchup");
+    this.$store.dispatch("folders/fetchFolders", this.folderType);
   },
   methods: {
     ...mapActions("folders", [

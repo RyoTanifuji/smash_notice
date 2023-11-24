@@ -30,7 +30,7 @@ const mutations = {
 
 const actions = {
   fetchFolders({ commit }, folderType) {
-    axios.get(`folders/${folderType}`)
+    axios.get('folders', { params: { type: folderType } })
       .then(res => {
         commit("setFolders", res.data);
       })
