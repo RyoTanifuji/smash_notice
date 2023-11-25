@@ -36,7 +36,7 @@
               <v-list-item
                 :title="folderItem.name"
                 :subtitle="dateFormat(folderItem.updatedAt)"
-                :to="{ path: '/null' }"
+                :to="{ path: `/matchup/${folderItem.id}` }"
                 :prepend-icon="mdiFolder"
               />
               <v-btn
@@ -73,25 +73,36 @@
   </template>
 
   <template v-else>
-    <div class="text-body-1 font-weight-bold">
-      まだ、フォルダがありません<br>
-    </div>
-
-    <div class="my-8" />
-
-    <div class="text-body-1 font-weight-bold">
-      フォルダの追加から自分の使用ファイターを選択して、フォルダを追加しましょう
-    </div>
-
-    <div class="my-8" />
-
-    <v-row class="mx-16 mt-5">
-      <v-btn
-        color="indigo-accent-4"
-        @click="handleOpenFolderCreateDialog"
+    <v-row>
+      <v-col
+        cols="12"
+        sm="10"
+        md="8"
+        lg="8"
+        xl="8"
       >
-        フォルダの追加
-      </v-btn>
+        <div class="text-body-1 font-weight-bold">
+          まだ、フォルダがありません
+        </div>
+
+        <div class="my-8" />
+
+        <div class="text-body-1 font-weight-bold">
+          フォルダの追加から自分の使用ファイターを選択して、フォルダを追加しましょう
+        </div>
+
+        <div class="my-8" />
+
+        <v-layout>
+          <v-btn
+            class="mx-auto"
+            color="indigo-accent-4"
+            @click="handleOpenFolderCreateDialog"
+          >
+            フォルダの追加
+          </v-btn>
+        </v-layout>
+      </v-col>
     </v-row>
   </template>
 
@@ -209,7 +220,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("folders/fetchFolders", "matchup");
+    this.$store.dispatch("folders/fetchFolders", this.folderType);
   },
   methods: {
     ...mapActions("folders", [

@@ -1,6 +1,11 @@
 class Api::FoldersController < ApplicationController
   before_action :set_folder, only: %i[update destroy]
 
+  def index
+    @folders = current_user.folders.where(type: params[:type])
+    render json: @folders.to_json(except: [:user_id, :created_at])
+  end
+
   def create
     @folder = current_user.folders.build(folder_params)
     @folder.name = Fighter.find(@folder.fighter_id).name if @folder.name.blank?
@@ -26,16 +31,6 @@ class Api::FoldersController < ApplicationController
   def destroy
     @folder.destroy!
     render json: @folder
-  end
-
-  def matchup
-    @folders = current_user.matchup_folders.all
-    render json: @folders.to_json(except: [:user_id, :created_at])
-  end
-
-  def strategy
-    @folders = current_user.strategy_folders.all
-    render json: @folders.to_json(except: [:user_id, :created_at])
   end
 
   private

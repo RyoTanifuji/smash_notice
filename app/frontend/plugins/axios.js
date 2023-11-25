@@ -1,8 +1,9 @@
 import axios from 'axios';
+import store from '../store';
 import humps from 'humps';
 
 const axiosInstance = axios.create({
-  baseURL: 'api'
+  baseURL: import.meta.env.VITE_API_BASE_URL
 });
 
 // ユーザーログインに使われるトークンをヘッダーに含めるためのコード
@@ -10,14 +11,17 @@ if (localStorage.auth_token) {
   axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.auth_token}`;
 }
 
-// リクエストのデータの各Keyをスネークケース化
 axiosInstance.interceptors.request.use((req) => {
+  // axiosでリクエストを送るたびに、アラートを初期化
+  store.dispatch("alert/closeAlert");
+
+  // リクエストのデータの各Keyをスネークケース化
   req.data = humps.decamelizeKeys(req.data);
   return req;
 });
 
-// レスポンスのデータの各Keyをキャメルケース化
 axiosInstance.interceptors.response.use((res) => {
+  // レスポンスのデータの各Keyをキャメルケース化
   res.data = humps.camelizeKeys(res.data);
   return res;
 });
