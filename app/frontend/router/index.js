@@ -5,6 +5,7 @@ import TopIndex from '../pages/static_pages/TopIndex';
 import UsersRegister from '../pages/users/UsersRegister';
 import UsersLogin from '../pages/users/UsersLogin';
 import MatchupFoldersIndex from '../pages/memos/matchup/MatchupFoldersIndex';
+import MatchupMemosIndex from '../pages/memos/matchup/MatchupMemosIndex';
 
 import { requireLoginAlertStatus } from '../plugins/alertStatus';
 
@@ -28,9 +29,15 @@ const routes = [
     meta: { requiredAuth: false }
   },
   {
-    path: "/matchups",
+    path: "/matchup",
     name: "MatchupFoldersIndex",
     component: MatchupFoldersIndex,
+    meta: { requiredAuth: true }
+  },
+  {
+    path: "/matchup/:folderId",
+    name: "MatchupMemosIndex",
+    component: MatchupMemosIndex,
     meta: { requiredAuth: true }
   },
   {

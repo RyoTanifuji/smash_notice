@@ -1,13 +1,15 @@
 import { createStore } from 'vuex';
-import alert from './modules/alert';
-import folders from './modules/folders';
 import users from './modules/users';
+import folders from './modules/folders';
+import memos from './modules/memos';
+import alert from './modules/alert';
 
 const store = createStore({
   modules: {
-    alert,
+    users,
     folders,
-    users
+    memos,
+    alert
   }
 });
 

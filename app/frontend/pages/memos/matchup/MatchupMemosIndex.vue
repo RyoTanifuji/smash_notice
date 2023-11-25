@@ -1,0 +1,232 @@
+<template>
+  <div class="text-h3 font-weight-bold">
+    キャラ対メモ
+  </div>
+
+  <div class="my-10" />
+
+  <template v-if="memos.length">
+    <v-row>
+      <v-col
+        cols="12"
+        sm="10"
+        md="8"
+        lg="8"
+        xl="8"
+      >
+        <div class="d-flex align-end">
+          <span class="text-h5 mb-5">
+            メモ一覧
+          </span>
+          <v-spacer />
+          <div>
+            <div>
+            <v-btn
+              size="small"
+              color="indigo-accent-4"
+              class="mb-2 mr-2 p-0"
+            >
+              テンプレートの編集
+            </v-btn>
+            </div>
+            <div>
+            <v-btn
+              size="small"
+              color="indigo-accent-4"
+              class="mb-2 mr-2"
+              @click="handleOpenMemoCreateDialog"
+            >
+              メモの作成
+            </v-btn>
+            </div>
+          </div>
+        </div>
+        <v-list lines="two">
+          <template
+            v-for="memoItem in sortedMemos"
+            :key="memoItem.id"
+          >
+            <div class="list-item-memo">
+              <v-list-item
+                :title="memoItem.title"
+                :subtitle="dateFormat(memoItem.updatedAt)"
+                :to="{ path: '/null' }"
+                :prepend-icon="mdiFile"
+              />
+              <v-btn
+                icon
+                density="compact"
+                variant="plain"
+                class="list-item-memo-info"
+              >
+                <v-icon :icon="mdiInformationOutline" />
+                <v-menu activator="parent">
+                  <v-list density="compact">
+                    <v-list-item :to="{ path: '/null' }">
+                      <v-list-item-title>
+                        <span>
+                          フォルダを編集する
+                        </span>
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="handleOpenMemoDeleteDialog(memoItem)">
+                      <v-list-item-title>
+                        <span class="text-error">
+                          フォルダを削除する
+                        </span>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-btn>
+            </div>
+          </template>
+        </v-list>
+      </v-col>
+    </v-row>
+  </template>
+
+  <template v-else>
+    <v-row>
+      <v-col
+        cols="12"
+        sm="10"
+        md="8"
+        lg="8"
+        xl="8"
+      >
+        <div class="text-body-1 font-weight-bold">
+          まだ、メモがありません。メモの作成からキャラ対メモを追加しましょう
+        </div>
+
+        <div class="my-8" />
+
+        <div class="text-body-1 font-weight-bold">
+          テンプレート機能を使うと、キャラ対メモの作成時にテンプレートに設定した内容が自動的に追加されます
+        </div>
+
+        <div class="my-8" />
+
+        <v-layout>
+          <div class="mx-auto">
+            <v-btn
+              class="mr-8"
+              color="indigo-accent-4"
+              @click="handleOpenMemoCreateDialog"
+            >
+              メモの作成
+            </v-btn>
+            <v-btn
+              color="indigo-accent-4"
+            >
+              テンプレートの編集
+            </v-btn>
+          </div>
+        </v-layout>
+      </v-col>
+    </v-row>
+  </template>
+
+  <div class="justify-center">
+    <v-dialog
+      v-model="memoCreateDialog"
+      width="700px"
+    >
+    </v-dialog>
+  </div>
+  
+  <div class="justify-center">
+    <v-dialog
+      v-model="memoDeleteDialog"
+      width="500px"
+    >
+      <v-card>
+        <v-card-title class="ma-2">
+          <span class="text-h5 font-weight-bold">メモの削除</span>
+        </v-card-title>
+        <v-card-text>
+          「{{ memo.title }}」メモを削除してもよろしいですか？
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn @click="handleCloseMemoDialog">
+            キャンセル
+          </v-btn>
+          <v-btn
+            class="mr-4"
+            color="error"
+            @click="handleMemoDelete"
+          >
+            削除
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex';
+import dayjs from 'dayjs';
+import { 
+  mdiFile,
+  mdiInformationOutline
+} from '@mdi/js';
+import {
+  serverErrorAlertStatus
+} from '../../../plugins/alertStatus';
+
+export default {
+  name: "MatchupMemosIndex",
+  data() {
+    return {
+      memoCreateDialog: false,
+      memoDeleteDialog: false,
+      mdiFile,
+      mdiInformationOutline
+    };
+  },
+  computed: {
+    ...mapGetters("memos", ["memos"]),
+    sortedMemos() {
+      return this.memos.slice().sort((a, b) => {
+        if (a.updatedAt > b.updatedAt) return -1;
+        if (a.updatedAt < b.updatedAt) return 1;
+        return 0;
+      });
+    }
+  },
+  mounted() {
+    this.$store.dispatch("memos/fetchMemos", this.$route.params.folderId);
+  },
+  methods: {
+    ...mapActions("alert", ["displayAlert"]),
+    handleOpenMemoCreateDialog() {
+      this.memoCreateDialog = true;
+    },
+    handleOpenMemoDeleteDialog() {
+      this.memoDeleteDialog = true;
+    },
+    handleCloseMemoDialog() {
+      this.memoCreateDialog = false;
+      this.memoDeleteDialog = false;
+    },
+    handleMemoDelete() {},
+    dateFormat(date) {
+      return dayjs(date).format("YYYY-MM-DD");
+    }
+  }
+};
+</script>
+
+<style scoped>
+.list-item-memo {
+  position: relative;
+}
+
+.list-item-memo-info {
+  position: absolute;
+  top: 25%;
+  right: 2%
+}
+</style>
