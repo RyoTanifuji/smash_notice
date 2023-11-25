@@ -36,7 +36,7 @@
               <v-list-item
                 :title="folderItem.name"
                 :subtitle="dateFormat(folderItem.updatedAt)"
-                :to="{ path: `/matchup/${folderItem.id}` }"
+                :to="{ path: `/matchup/${folderItem.id}/memos` }"
                 :prepend-icon="mdiFolder"
               />
               <v-btn

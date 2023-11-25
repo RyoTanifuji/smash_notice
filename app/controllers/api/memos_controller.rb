@@ -2,8 +2,7 @@ class Api::MemosController < ApplicationController
   before_action :set_folder, only: %i[index]
 
   def index
-    @memos = @folder.memos
-    render json: @memos.to_json(except: [:user_id, :created_at])
+    render json: @folder, include: [{memos: {except: [:user_id, :created_at]}}]
   end
 
   private

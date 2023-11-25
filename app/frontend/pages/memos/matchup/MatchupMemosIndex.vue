@@ -1,6 +1,6 @@
 <template>
   <div class="text-h3 font-weight-bold">
-    キャラ対メモ
+    {{ folderName }}
   </div>
 
   <div class="my-10" />
@@ -180,6 +180,7 @@ export default {
   name: "MatchupMemosIndex",
   data() {
     return {
+      folderType: "MatchupFolder",
       memoCreateDialog: false,
       memoDeleteDialog: false,
       mdiFile,
@@ -187,7 +188,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("memos", ["memos"]),
+    ...mapGetters("memos", [
+      "folderName",
+      "memos"
+    ]),
     sortedMemos() {
       return this.memos.slice().sort((a, b) => {
         if (a.updatedAt > b.updatedAt) return -1;
@@ -197,6 +201,7 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch("folders/fetchFolders", this.folderType);
     this.$store.dispatch("memos/fetchMemos", this.$route.params.folderId);
   },
   methods: {
