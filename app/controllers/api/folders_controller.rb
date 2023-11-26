@@ -3,7 +3,7 @@ class Api::FoldersController < ApplicationController
 
   def index
     @folders = current_user.folders.where(type: params[:type])
-    render json: @folders.to_json(except: [:user_id, :created_at])
+    render json: @folders, except: [:user_id, :created_at]
   end
 
   def create
@@ -11,7 +11,7 @@ class Api::FoldersController < ApplicationController
     @folder.name = Fighter.find(@folder.fighter_id).name if @folder.name.blank?
 
     if @folder.save
-      render json: @folder.to_json(except: [:user_id, :created_at])
+      render json: @folder, except: [:user_id, :created_at]
     else
       render json: @folder.errors.full_messages, status: :bad_request
     end
@@ -22,7 +22,7 @@ class Api::FoldersController < ApplicationController
     @folder.name = Fighter.find(@folder.fighter_id).name if @folder.name.blank?
 
     if @folder.save
-      render json: @folder.to_json(except: [:user_id, :created_at])
+      render json: @folder, except: [:user_id, :created_at]
     else
       render json: @folder.errors.full_messages, status: :bad_request
     end

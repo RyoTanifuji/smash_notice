@@ -36,7 +36,7 @@
               <v-list-item
                 :title="folderItem.name"
                 :subtitle="dateFormat(folderItem.updatedAt)"
-                :to="{ path: `/matchup/${folderItem.id}` }"
+                :to="{ path: `/matchup/${folderItem.id}/memos` }"
                 :prepend-icon="mdiFolder"
               />
               <v-btn
@@ -83,11 +83,9 @@
       >
         <div class="text-body-1 font-weight-bold">
           まだ、フォルダがありません
-        </div>
 
-        <div class="my-8" />
+          <div class="my-8" />
 
-        <div class="text-body-1 font-weight-bold">
           フォルダの追加から自分の使用ファイターを選択して、フォルダを追加しましょう
         </div>
 

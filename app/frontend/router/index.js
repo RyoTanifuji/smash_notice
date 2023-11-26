@@ -35,7 +35,7 @@ const routes = [
     meta: { requiredAuth: true }
   },
   {
-    path: "/matchup/:folderId",
+    path: "/matchup/:folderId/memos",
     name: "MatchupMemosIndex",
     component: MatchupMemosIndex,
     meta: { requiredAuth: true }
