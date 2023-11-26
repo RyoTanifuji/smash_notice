@@ -1,5 +1,6 @@
 class Api::MemosController < ApplicationController
   before_action :set_folder, only: %i[index create]
+  before_action :set_memo, only: %i[destroy]
 
   def index
     render json: @folder, include: [{memos: {except: [:user_id, :created_at]}}]
@@ -17,10 +18,19 @@ class Api::MemosController < ApplicationController
     end
   end
 
+  def destroy
+    @memo.destroy!
+    render json: @memo
+  end
+
   private
 
   def set_folder
     @folder = current_user.folders.find(params[:folder_id])
+  end
+
+  def set_memo
+    @memo = current_user.memos.find(params[:id])
   end
 
   def memo_params

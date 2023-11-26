@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     end
     resources :sessions, only: %i[create]
     resources :folders, only: %i[index create update destroy] do
-      resources :memos, only: %i[index create]
+      resources :memos, only: %i[index create destroy]
     end
   end
 

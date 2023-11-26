@@ -19,6 +19,11 @@ const mutations = {
   },
   addMemo: (state, memo) => {
     state.memos.push(memo);
+  },
+  deleteMemo: (state, deleteMemo) => {
+    state.memos = state.memos.filter(memo => {
+      return memo.id != deleteMemo.id;
+    });
   }
 };
 
@@ -36,6 +41,12 @@ const actions = {
                {...memo, type: memoType})
       .then(res => {
         commit("addMemo", res.data);
+      });
+  },
+  deleteMemo({ commit }, { memo, folderId }) {
+    return axios.delete(`folders/${folderId}/memos/${memo.id}`)
+      .then(res => {
+        commit("deleteMemo", res.data);
       });
   }
 };

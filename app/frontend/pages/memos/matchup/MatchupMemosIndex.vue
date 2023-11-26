@@ -107,7 +107,7 @@
         <v-layout>
           <div class="mx-auto">
             <v-btn
-              class="mr-8"
+              class="mr-8 mb-2"
               color="indigo-accent-4"
               @click="handleOpenMemoCreateDialog"
             >
@@ -204,6 +204,9 @@ export default {
       "folderName",
       "memos"
     ]),
+    folderId() {
+      return this.$route.params.folderId;
+    },
     sortedMemos() {
       return this.memos.slice().sort((a, b) => {
         if (a.updatedAt > b.updatedAt) return -1;
@@ -213,16 +216,20 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("memos/fetchMemos", this.$route.params.folderId);
+    this.$store.dispatch("memos/fetchMemos", this.folderId);
   },
   methods: {
-    ...mapActions("memos", ["createMemo"]),
+    ...mapActions("memos", [
+      "createMemo",
+      "deleteMemo"
+    ]),
     ...mapActions("alert", ["displayAlert"]),
     handleOpenMemoCreateDialog() {
       this.memo = Object.assign({}, this.memoInitial);
       this.memoCreateDialog = true;
     },
-    handleOpenMemoDeleteDialog() {
+    handleOpenMemoDeleteDialog(memo) {
+      this.memo = memo;
       this.memoDeleteDialog = true;
     },
     handleCloseMemoDialog() {
@@ -235,7 +242,7 @@ export default {
         await this.createMemo({
           memo: memo,
           memoType: this.memoType,
-          folderId: this.$route.params.folderId,
+          folderId: this.folderId,
           applyTemplate: applyTemplate
         });
       } catch (error) {
@@ -243,7 +250,14 @@ export default {
       }
       this.handleCloseMemoDialog();
     },
-    async handleMemoDelete() {},
+    async handleMemoDelete() {
+      try {
+        await this.deleteMemo({ memo: this.memo, folderId: this.folderId });
+      } catch (error) {
+        this.displayAlert(serverErrorAlertStatus);
+      }
+      this.handleCloseMemoDialog();
+    },
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");
     }

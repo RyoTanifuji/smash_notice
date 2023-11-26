@@ -2,7 +2,7 @@ export const FIGHTERS_ARRAY = [
   {
     id: 1,
     number: "00",
-    name: "未指定"
+    name: "ファイターを指定しない"
   },
   {
     id: 2,
