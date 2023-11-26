@@ -21,23 +21,22 @@
           <v-spacer />
           <div>
             <div>
-            <v-btn
-              size="small"
-              color="indigo-accent-4"
-              class="mb-2 mr-2 p-0"
-            >
-              テンプレートの編集
-            </v-btn>
+              <v-btn
+                size="small"
+                color="indigo-accent-4"
+                class="mb-2"
+              >
+                テンプレートの編集
+              </v-btn>
             </div>
             <div>
-            <v-btn
-              size="small"
-              color="indigo-accent-4"
-              class="mb-2 mr-2"
-              @click="handleOpenMemoCreateDialog"
-            >
-              メモの作成
-            </v-btn>
+              <v-btn
+                size="small"
+                color="indigo-accent-4"
+                @click="handleOpenMemoCreateDialog"
+              >
+                メモの作成
+              </v-btn>
             </div>
           </div>
         </div>
@@ -65,14 +64,14 @@
                     <v-list-item :to="{ path: '/null' }">
                       <v-list-item-title>
                         <span>
-                          フォルダを編集する
+                          メモを編集する
                         </span>
                       </v-list-item-title>
                     </v-list-item>
                     <v-list-item @click="handleOpenMemoDeleteDialog(memoItem)">
                       <v-list-item-title>
                         <span class="text-error">
-                          フォルダを削除する
+                          メモを削除する
                         </span>
                       </v-list-item-title>
                     </v-list-item>
@@ -97,11 +96,9 @@
       >
         <div class="text-body-1 font-weight-bold">
           まだ、メモがありません。メモの作成からキャラ対メモを追加しましょう
-        </div>
 
-        <div class="my-8" />
+          <div class="my-8" />
 
-        <div class="text-body-1 font-weight-bold">
           テンプレート機能を使うと、キャラ対メモの作成時にテンプレートに設定した内容が自動的に追加されます
         </div>
 
@@ -132,6 +129,11 @@
       v-model="memoCreateDialog"
       width="700px"
     >
+      <MemoCreateFormDialog
+        :memo="memo"
+        @close-dialog="handleCloseMemoDialog"
+        @memo-submit="handleMemoCreate"
+      />
     </v-dialog>
   </div>
   
@@ -175,12 +177,22 @@ import {
 import {
   serverErrorAlertStatus
 } from '../../../plugins/alertStatus';
+import MemoCreateFormDialog from '../components/MemoCreateFormDialog';
 
 export default {
   name: "MatchupMemosIndex",
+  components: {
+    MemoCreateFormDialog
+  },
   data() {
     return {
-      folderType: "MatchupFolder",
+      memoInitial: {
+        id: null,
+        title: "",
+        fighterId: null
+      },
+      memo: {},
+      memoType: "MatchupMemo",
       memoCreateDialog: false,
       memoDeleteDialog: false,
       mdiFile,
@@ -201,22 +213,37 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("folders/fetchFolders", this.folderType);
     this.$store.dispatch("memos/fetchMemos", this.$route.params.folderId);
   },
   methods: {
+    ...mapActions("memos", ["createMemo"]),
     ...mapActions("alert", ["displayAlert"]),
     handleOpenMemoCreateDialog() {
+      this.memo = Object.assign({}, this.memoInitial);
       this.memoCreateDialog = true;
     },
     handleOpenMemoDeleteDialog() {
       this.memoDeleteDialog = true;
     },
     handleCloseMemoDialog() {
+      this.memo = Object.assign({}, this.memoInitial);
       this.memoCreateDialog = false;
       this.memoDeleteDialog = false;
     },
-    handleMemoDelete() {},
+    async handleMemoCreate(memo, applyTemplate) {
+      try {
+        await this.createMemo({
+          memo: memo,
+          memoType: this.memoType,
+          folderId: this.$route.params.folderId,
+          applyTemplate: applyTemplate
+        });
+      } catch (error) {
+        this.displayAlert(serverErrorAlertStatus);
+      }
+      this.handleCloseMemoDialog();
+    },
+    async handleMemoDelete() {},
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");
     }

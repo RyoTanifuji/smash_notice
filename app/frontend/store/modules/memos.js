@@ -16,17 +16,27 @@ const mutations = {
   },
   setMemos: (state, memos) => {
     state.memos = memos;
+  },
+  addMemo: (state, memo) => {
+    state.memos.push(memo);
   }
 };
 
 const actions = {
   fetchMemos({ commit }, folderId) {
-    axios.get('memos', { params: { folder_id: folderId } })
+    axios.get(`folders/${folderId}/memos`)
       .then(res => {
         commit("setFolder", res.data.name);
         commit("setMemos", res.data.memos);
       })
       .catch(err => console.log(err.response));
+  },
+  createMemo({ commit }, { memo, memoType, folderId, applyTemplate }) {
+    axios.post(`folders/${folderId}/memos?apply_template=${applyTemplate}`,
+               {...memo, type: memoType})
+      .then(res => {
+        commit("addMemo", res.data);
+      });
   }
 };
 
