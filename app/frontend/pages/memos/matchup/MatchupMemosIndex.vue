@@ -114,6 +114,7 @@
               メモの作成
             </v-btn>
             <v-btn
+              class="mb-2"
               color="indigo-accent-4"
             >
               テンプレートの編集
@@ -252,7 +253,7 @@ export default {
     },
     async handleMemoDelete() {
       try {
-        await this.deleteMemo({ memo: this.memo, folderId: this.folderId });
+        await this.deleteMemo(this.memo);
       } catch (error) {
         this.displayAlert(serverErrorAlertStatus);
       }

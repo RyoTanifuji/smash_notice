@@ -8,8 +8,9 @@ Rails.application.routes.draw do
     end
     resources :sessions, only: %i[create]
     resources :folders, only: %i[index create update destroy] do
-      resources :memos, only: %i[index create destroy]
+      resources :memos, only: %i[index create]
     end
+    resources :memos, only: %i[show destroy]
   end
 
   get '*path', to: 'top#index'

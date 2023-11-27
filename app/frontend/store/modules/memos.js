@@ -43,8 +43,8 @@ const actions = {
         commit("addMemo", res.data);
       });
   },
-  deleteMemo({ commit }, { memo, folderId }) {
-    return axios.delete(`folders/${folderId}/memos/${memo.id}`)
+  deleteMemo({ commit }, memo) {
+    return axios.delete(`/memos/${memo.id}`)
       .then(res => {
         commit("deleteMemo", res.data);
       });
