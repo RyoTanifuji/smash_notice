@@ -36,7 +36,7 @@
       </v-btn>
       <v-btn
         class="mr-4"
-        color="indigo-accent-4"
+        color="teal-accent-4"
         @click="handleFolderSubmit"
       >
         <slot name="submit" />

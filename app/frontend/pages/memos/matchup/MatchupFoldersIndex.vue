@@ -20,7 +20,7 @@
           </span>
           <v-spacer />
           <v-btn
-            color="indigo-accent-4"
+            color="teal-accent-4"
             class="mb-2 mr-2"
             @click="handleOpenFolderCreateDialog"
           >
@@ -94,7 +94,7 @@
         <v-layout>
           <v-btn
             class="mx-auto"
-            color="indigo-accent-4"
+            color="teal-accent-4"
             @click="handleOpenFolderCreateDialog"
           >
             フォルダの追加

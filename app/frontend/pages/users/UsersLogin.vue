@@ -33,7 +33,7 @@
 
         <v-row class="justify-center mt-5">
           <v-btn
-            color="indigo-accent-4"
+            color="teal-accent-4"
             class="font-weight-bold"
             @click="handleLogin"
           >
