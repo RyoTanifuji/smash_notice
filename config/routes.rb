@@ -10,7 +10,9 @@ Rails.application.routes.draw do
     resources :folders, only: %i[index create update destroy] do
       resources :memos, only: %i[index create]
     end
-    resources :memos, only: %i[show destroy]
+    resources :memos, only: %i[show destroy] do
+      resources :memo_blocks, only: %i[create]
+    end
   end
 
   get '*path', to: 'top#index'

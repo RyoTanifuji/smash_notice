@@ -1,6 +1,6 @@
 class Api::MemosController < ApplicationController
   before_action :set_folder, only: %i[index create]
-  before_action :set_memo, only: %i[destroy]
+  before_action :set_memo, only: %i[show destroy]
 
   def index
     render json: @folder, include: [{memos: {except: [:user_id, :created_at]}}]
@@ -16,6 +16,10 @@ class Api::MemosController < ApplicationController
     else
       render json: @memo.errors.full_messages, status: :bad_request
     end
+  end
+
+  def show
+    render json: @memo, include: [{memo_blocks: {include: [:blockable]}}]
   end
 
   def destroy
