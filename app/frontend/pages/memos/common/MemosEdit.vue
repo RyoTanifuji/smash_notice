@@ -39,6 +39,7 @@
             </v-btn>
             <v-btn
               class="mr-4"
+              @click="handleOpenMemoBlockEditDialog(memoBlockItem)"
             >
               編集
             </v-btn>
@@ -97,6 +98,50 @@
       </MemoBlockFormDialog>
     </v-dialog>
   </div>
+
+  <div class="justify-center">
+    <v-dialog
+      v-model="memoBlockEditDialog"
+      width="700px"
+    >
+      <MemoBlockFormDialog
+        :memo-block="memoBlock"
+        :sentence="sentence"
+        :image="image"
+        :embed="embed"
+        @close-dialog="handleCloseMemoBlockFormDialog"
+        @memoblock-submit="handleMemoBlockUpdate"
+      >
+        <template #radio-button>
+          <v-radio-group
+            v-model="memoBlock.blockableType"
+            inline
+            disabled
+            class="ml-4"
+          >
+            <v-radio
+              label="テキスト"
+              value="Sentence"
+            />
+            <v-radio
+              label="画像"
+              value="Image"
+            />
+            <v-radio
+              label="埋め込み"
+              value="Embed"
+            />
+          </v-radio-group>
+        </template>
+        <template #title>
+          メモブロックの編集
+        </template>
+        <template #submit>
+          更新
+        </template>
+      </MemoBlockFormDialog>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -113,6 +158,7 @@ export default {
   data() {
     return {
       memoBlockCreateDialog: false,
+      memoBlockEditDialog: false,
       memoBlockDefault: {
         id: null,
         levle: 0,
@@ -144,15 +190,39 @@ export default {
     this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId);
   },
   methods: {
-    ...mapActions("memos", ["createMemoBlock"]),
+    ...mapActions("memos", [
+      "createMemoBlock",
+      "updateMemoBlock"
+    ]),
     ...mapActions("alert", ["displayAlert"]),
     handleOpenMemoBlockCreateDialog() {
       this.memoBlockInitialize();
       this.memoBlockCreateDialog = true;
     },
+    handleOpenMemoBlockEditDialog(memoBlock) {
+      switch (memoBlock.blockableType) {
+        case "Sentence":
+          this.memoBlockInitialize();
+          this.sentence = Object.assign({}, memoBlock.blockable);
+          break;
+        case "Image":
+          this.memoBlockInitialize();
+          this.image = Object.assign({}, memoBlock.blockable);
+          break;
+        case "Embed":
+          this.memoBlockInitialize();
+          this.embed = Object.assign({}, memoBlock.blockable);
+          break;
+        default:
+          this.memoBlockInitialize();
+      }
+      this.memoBlock = Object.assign({}, memoBlock);
+      this.memoBlockEditDialog = true;
+    },
     handleCloseMemoBlockFormDialog() {
       this.memoBlockInitialize();
       this.memoBlockCreateDialog = false;
+      this.memoBlockEditDialog = false;
     },
     memoBlockInitialize() {
       this.memoBlock = Object.assign({}, this.memoBlockDefault);
@@ -164,6 +234,18 @@ export default {
       try {
         await this.createMemoBlock({
           memoId: this.memoId,
+          memoBlockParams: memoBlockParams
+        });
+      } catch (error) {
+        this.displayAlert(serverErrorAlertStatus);
+      }
+      this.handleCloseMemoBlockFormDialog();
+    },
+    async handleMemoBlockUpdate(memoBlockParams) {
+      try {
+        await this.updateMemoBlock({
+          memoId: this.memoId,
+          memoBlockId: memoBlockParams.memoBlock.id,
           memoBlockParams: memoBlockParams
         });
       } catch (error) {

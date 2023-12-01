@@ -1,5 +1,6 @@
 class Api::MemoBlocksController < ApplicationController
-  before_action :set_memo, only: %i[create]
+  before_action :set_memo, only: %i[create update]
+  before_action :set_memo_block, only: %i[update]
 
   def create
     MemoBlock.transaction do
@@ -27,10 +28,22 @@ class Api::MemoBlocksController < ApplicationController
     end
   end
 
+  def update
+    if @memo_block.blockable.update(blockable_params)
+      render json: @memo_block, include: [:blockable]
+    else
+      render json: @memo_block.blockable.errors.full_messages, status: :bad_request
+    end
+  end
+
   private
 
   def set_memo
     @memo = current_user.memos.find(params[:memo_id])
+  end
+
+  def set_memo_block
+    @memo_block = @memo.memo_blocks.find(params[:id])
   end
 
   def memo_block_params

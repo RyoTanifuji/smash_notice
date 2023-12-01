@@ -28,6 +28,12 @@ const mutations = {
   addMemoBlock: (state, memoBlock) => {
     state.memoDetail.memoBlocks.push(memoBlock);
   },
+  updateMemoBlock: (state, updateMemoBlock) => {
+    const index = state.memoDetail.memoBlocks.findIndex(memoBlock => {
+      return memoBlock.id == updateMemoBlock.id;
+    });
+    state.memoDetail.memoBlocks.splice(index, 1, updateMemoBlock);
+  },
   deleteMemo: (state, deleteMemo) => {
     state.memos = state.memos.filter(memo => {
       return memo.id != deleteMemo.id;
@@ -61,6 +67,12 @@ const actions = {
     return axios.post(`memos/${memoId}/memo_blocks`, memoBlockParams)
       .then(res => {
         commit("addMemoBlock", res.data);
+      });
+  },
+  updateMemoBlock({ commit }, { memoId, memoBlockId, memoBlockParams }) {
+    return axios.patch(`memos/${memoId}/memo_blocks/${memoBlockId}`, memoBlockParams)
+      .then(res => {
+        commit("updateMemoBlock", res.data);
       });
   },
   deleteMemo({ commit }, memo) {

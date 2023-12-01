@@ -64,6 +64,10 @@ export default {
     memoBlock: {
       type: Object,
       required: true,
+      id: {
+        type: Number,
+        required: true
+      },
       blockableType: {
         type: String,
         required: true
