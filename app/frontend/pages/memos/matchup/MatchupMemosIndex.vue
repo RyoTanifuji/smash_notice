@@ -23,7 +23,7 @@
             <div>
               <v-btn
                 size="small"
-                color="indigo-accent-4"
+                color="teal-accent-4"
                 class="mb-2"
               >
                 テンプレートの編集
@@ -32,7 +32,7 @@
             <div>
               <v-btn
                 size="small"
-                color="indigo-accent-4"
+                color="teal-accent-4"
                 @click="handleOpenMemoCreateDialog"
               >
                 メモの作成
@@ -49,7 +49,7 @@
               <v-list-item
                 :title="memoItem.title"
                 :subtitle="dateFormat(memoItem.updatedAt)"
-                :to="{ path: '/null' }"
+                :to="{ name: 'Null' }"
                 :prepend-icon="mdiFile"
               />
               <v-btn
@@ -61,7 +61,7 @@
                 <v-icon :icon="mdiInformationOutline" />
                 <v-menu activator="parent">
                   <v-list density="compact">
-                    <v-list-item :to="{ path: '/null' }">
+                    <v-list-item :to="{ name: 'MemosEdit', params: { memoId: memoItem.id } }">
                       <v-list-item-title>
                         <span>
                           メモを編集する
@@ -108,14 +108,14 @@
           <div class="mx-auto">
             <v-btn
               class="mr-8 mb-2"
-              color="indigo-accent-4"
+              color="teal-accent-4"
               @click="handleOpenMemoCreateDialog"
             >
               メモの作成
             </v-btn>
             <v-btn
               class="mb-2"
-              color="indigo-accent-4"
+              color="teal-accent-4"
             >
               テンプレートの編集
             </v-btn>
@@ -187,7 +187,7 @@ export default {
   },
   data() {
     return {
-      memoInitial: {
+      memoDefault: {
         id: null,
         title: "",
         fighterId: null
@@ -226,7 +226,7 @@ export default {
     ]),
     ...mapActions("alert", ["displayAlert"]),
     handleOpenMemoCreateDialog() {
-      this.memo = Object.assign({}, this.memoInitial);
+      this.memo = Object.assign({}, this.memoDefault);
       this.memoCreateDialog = true;
     },
     handleOpenMemoDeleteDialog(memo) {
@@ -234,7 +234,7 @@ export default {
       this.memoDeleteDialog = true;
     },
     handleCloseMemoDialog() {
-      this.memo = Object.assign({}, this.memoInitial);
+      this.memo = Object.assign({}, this.memoDefault);
       this.memoCreateDialog = false;
       this.memoDeleteDialog = false;
     },

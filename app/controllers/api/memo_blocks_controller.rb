@@ -21,7 +21,7 @@ class Api::MemoBlocksController < ApplicationController
     end
 
     if @memo_block.blockable.update(blockable_params)
-      render json: @memo_block.blockable
+      render json: @memo_block, include: [:blockable]
     else
       render json: @memo_block.blockable.errors.full_messages, status: :bad_request
     end

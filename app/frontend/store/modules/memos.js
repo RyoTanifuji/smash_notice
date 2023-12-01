@@ -2,12 +2,14 @@ import axios from '../../plugins/axios';
 
 const state = {
   folderName: "",
-  memos: []
+  memos: [],
+  memoDetail: []
 };
 
 const getters = {
   folderName: state => state.folderName,
-  memos: state => state.memos
+  memos: state => state.memos,
+  memoDetail: state => state.memoDetail
 };
 
 const mutations = {
@@ -17,8 +19,14 @@ const mutations = {
   setMemos: (state, memos) => {
     state.memos = memos;
   },
+  setMemoDetail : (state, memo) => {
+    state.memoDetail = memo;
+  },
   addMemo: (state, memo) => {
     state.memos.push(memo);
+  },
+  addMemoBlock: (state, memoBlock) => {
+    state.memoDetail.memoBlocks.push(memoBlock);
   },
   deleteMemo: (state, deleteMemo) => {
     state.memos = state.memos.filter(memo => {
@@ -36,11 +44,23 @@ const actions = {
       })
       .catch(err => console.log(err.response));
   },
+  fetchMemoDetail({ commit }, memoId) {
+    axios.get(`memos/${memoId}`)
+      .then(res => {
+        commit("setMemoDetail", res.data);
+      });
+  },
   createMemo({ commit }, { memo, memoType, folderId, applyTemplate }) {
-    axios.post(`folders/${folderId}/memos?apply_template=${applyTemplate}`,
+    return axios.post(`folders/${folderId}/memos?apply_template=${applyTemplate}`,
                {...memo, type: memoType})
       .then(res => {
         commit("addMemo", res.data);
+      });
+  },
+  createMemoBlock({ commit }, { memoId, memoBlockParams }) {
+    return axios.post(`memos/${memoId}/memo_blocks`, memoBlockParams)
+      .then(res => {
+        commit("addMemoBlock", res.data);
       });
   },
   deleteMemo({ commit }, memo) {

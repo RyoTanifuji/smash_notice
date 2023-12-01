@@ -6,6 +6,7 @@ import UsersRegister from '../pages/users/UsersRegister';
 import UsersLogin from '../pages/users/UsersLogin';
 import MatchupFoldersIndex from '../pages/memos/matchup/MatchupFoldersIndex';
 import MatchupMemosIndex from '../pages/memos/matchup/MatchupMemosIndex';
+import MemosEdit from '../pages/memos/common/MemosEdit';
 
 import { requireLoginAlertStatus } from '../plugins/alertStatus';
 
@@ -38,6 +39,12 @@ const routes = [
     path: "/matchup/:folderId/memos",
     name: "MatchupMemosIndex",
     component: MatchupMemosIndex,
+    meta: { requiredAuth: true }
+  },
+  {
+    path: "/memos/:memoId/edit",
+    name: "MemosEdit",
+    component: MemosEdit,
     meta: { requiredAuth: true }
   },
   {
