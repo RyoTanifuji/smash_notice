@@ -1,5 +1,5 @@
 <template>
-  <div class="text-h3 font-weight-bold">
+  <div class="text-md-h3 text-h4 font-weight-bold">
     新規登録
   </div>
 

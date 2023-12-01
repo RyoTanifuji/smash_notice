@@ -115,7 +115,7 @@ export default {
           maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
         },
         body: {
-          maxLength: helpers.withMessage("保存できる文字数を超えています", maxLength(60))
+          maxLength: helpers.withMessage("保存できる文字数を超えています", maxLength(65536))
         }
       }
     };

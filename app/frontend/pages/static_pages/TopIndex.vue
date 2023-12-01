@@ -1,5 +1,5 @@
 <template>
-  <div class="text-h3 font-weight-bold">
+  <div class="text-md-h3 text-h4 font-weight-bold">
     スマブラ専用メモツール
   </div>
 
