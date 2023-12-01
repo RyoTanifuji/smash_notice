@@ -31,7 +31,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn @click="handleCloseFolderDialog">
+      <v-btn @click="handleCloseFolderFormDialog">
         キャンセル
       </v-btn>
       <v-btn
@@ -52,10 +52,7 @@ import {
   maxLength,
   helpers
 } from '@vuelidate/validators';
-import {
-  requiredMessage,
-  maxLengthMessage
-} from '../../../plugins/validationMessages';
+import { requiredMessage, maxLengthMessage } from '../../../plugins/validationMessages';
 import { FIGHTERS_ARRAY } from '../../../plugins/fightersArray';
 
 export default {
@@ -105,7 +102,7 @@ export default {
     };
   },
   methods: {
-    handleCloseFolderDialog() {
+    handleCloseFolderFormDialog() {
       this.v$.$reset();
       this.$emit("close-dialog");
     },

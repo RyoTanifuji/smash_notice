@@ -51,13 +51,8 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core';
-import {
-  maxLength,
-  helpers
-} from '@vuelidate/validators';
-import {
-  maxLengthMessage
-} from '../../../plugins/validationMessages';
+import { maxLength, helpers } from '@vuelidate/validators';
+import { maxLengthMessage } from '../../../plugins/validationMessages';
 import TextEditor from '../../../components/TextEditor';
 
 export default {

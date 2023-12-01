@@ -171,13 +171,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import dayjs from 'dayjs';
-import { 
-  mdiFile,
-  mdiInformationOutline
-} from '@mdi/js';
-import {
-  serverErrorAlertStatus
-} from '../../../plugins/alertStatus';
+import { mdiFile, mdiInformationOutline } from '@mdi/js';
+import { serverErrorAlertStatus } from '../../../plugins/alertStatus';
 import MemoCreateFormDialog from '../components/MemoCreateFormDialog';
 
 export default {

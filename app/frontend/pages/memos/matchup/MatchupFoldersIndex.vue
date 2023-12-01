@@ -111,7 +111,7 @@
     >
       <FolderFormDialog
         :folder="folder"
-        @close-dialog="handleCloseFolderDialog"
+        @close-dialog="handleCloseFolderFormDialog"
         @folder-submit="handleFolderCreate"
       >
         <template #title>
@@ -131,7 +131,7 @@
     >
       <FolderFormDialog
         :folder="folder"
-        @close-dialog="handleCloseFolderDialog"
+        @close-dialog="handleCloseFolderFormDialog"
         @folder-submit="handleFolderUpdate"
       >
         <template #title>
@@ -158,7 +158,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn @click="handleCloseFolderDialog">
+          <v-btn @click="handleCloseFolderFormDialog">
             キャンセル
           </v-btn>
           <v-btn
@@ -177,13 +177,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import dayjs from 'dayjs';
-import { 
-  mdiFolder,
-  mdiInformationOutline
-} from '@mdi/js';
-import {
-  serverErrorAlertStatus
-} from '../../../plugins/alertStatus';
+import { mdiFolder, mdiInformationOutline } from '@mdi/js';
+import { serverErrorAlertStatus } from '../../../plugins/alertStatus';
 import FolderFormDialog from '../components/FolderFormDialog';
 
 export default {
@@ -197,7 +192,7 @@ export default {
       folderEditDialog: false,
       folderDeleteDialog: false,
       folderType: "MatchupFolder",
-      folderInitial: {
+      folderDefault: {
         id: null,
         name: "",
         fighterId: null
@@ -228,7 +223,7 @@ export default {
     ]),
     ...mapActions("alert", ["displayAlert"]),
     handleOpenFolderCreateDialog() {
-      this.folder = Object.assign({}, this.folderInitial);
+      this.folder = Object.assign({}, this.folderDefault);
       this.folderCreateDialog = true;
     },
     handleOpenFolderEditDialog(folder) {
@@ -239,19 +234,22 @@ export default {
       this.folder = folder;
       this.folderDeleteDialog = true;
     },
-    handleCloseFolderDialog() {
-      this.folder = Object.assign({}, this.folderInitial);
+    handleCloseFolderFormDialog() {
+      this.folder = Object.assign({}, this.folderDefault);
       this.folderCreateDialog = false;
       this.folderEditDialog = false;
       this.folderDeleteDialog = false;
     },
     async handleFolderCreate(folder) {
       try {
-        await this.createFolder({ folder: folder, folderType: this.folderType });
+        await this.createFolder({
+          folder: folder,
+          folderType: this.folderType
+        });
       } catch (error) {
         this.displayAlert(serverErrorAlertStatus);
       }
-      this.handleCloseFolderDialog();
+      this.handleCloseFolderFormDialog();
     },
     async handleFolderUpdate(folder) {
       try {
@@ -259,7 +257,7 @@ export default {
       } catch (error) {
         this.displayAlert(serverErrorAlertStatus);
       }
-      this.handleCloseFolderDialog();
+      this.handleCloseFolderFormDialog();
     },
     async handleFolderDelete() {
       try {
@@ -267,7 +265,7 @@ export default {
       } catch (error) {
         this.displayAlert(serverErrorAlertStatus);
       }
-      this.handleCloseFolderDialog();
+      this.handleCloseFolderFormDialog();
     },
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");

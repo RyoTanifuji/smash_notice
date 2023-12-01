@@ -57,10 +57,7 @@ import {
   maxLength,
   helpers
 } from '@vuelidate/validators';
-import {
-  requiredMessage,
-  maxLengthMessage
-} from '../../../plugins/validationMessages';
+import { requiredMessage, maxLengthMessage } from '../../../plugins/validationMessages';
 import { FIGHTERS_ARRAY } from '../../../plugins/fightersArray';
 
 export default {
