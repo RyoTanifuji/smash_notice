@@ -187,7 +187,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import sanitizeHtml from 'sanitize-html';
+import sanitizeText from '../../../plugins/sanitizeText';
 import { serverErrorAlertStatus } from '../../../plugins/alertStatus';
 import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
 import MemoEditForm from '../components/MemoEditForm';
@@ -338,16 +338,7 @@ export default {
       this.handleCloseMemoBlockDialog();
     },
     sanitizeHtml(html) {
-      return sanitizeHtml(html, {
-        allowedTags: ["p", "strong", "em", "u",
-                      "h1", "h2", "h3", "h4", "h5", "h6",
-                      "ol", "ul", "li",
-                      "sub", "sup", "span"
-                      ],
-        allowedAttributes: {
-          span: [ "style" ]
-        }
-      });
+      return sanitizeText(html);
     }
   }
 };

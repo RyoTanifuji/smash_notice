@@ -16,6 +16,7 @@
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import '@vueup/vue-quill/dist/vue-quill.bubble.css';
+import sanitizeText from '../plugins/sanitizeText';
 
 export default {
   name: "TextEditor",
@@ -25,7 +26,7 @@ export default {
   props: {
     value: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   emits: ["update:modelValue"],
@@ -36,12 +37,12 @@ export default {
       options: {
         modules: {
           toolbar: [
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ "header": [1, 2, 3, 4, 5, 6, false] }],
             ["bold", "italic", "underline"],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'script': 'sub'}, { 'script': 'super' }],
-            [{ 'color': [] }, { 'background': [] }],
-            ['clean']
+            [{ "list": "ordered"}, { "list": "bullet" }],
+            [{ "script": "sub"}, { "script": "super" }],
+            [{ "color": [] }, { "background": [] }],
+            ["clean"]
           ]
         },
         theme: "snow"
@@ -51,18 +52,21 @@ export default {
   watch: {
     content: {
       handler: function(newVal) {
-      this.$emit('update:modelValue', newVal);
+        this.$emit("update:modelValue", newVal);
       },
       immediate: true
     }
   },
   mounted() {
-    this.$refs.editor.setHTML(this.content);
+    this.$refs.editor.setHTML(this.sanitizeHtml(this.content));
   },
   methods: {
     updateContent(newContent) {
       this.content = newContent;
-      this.$emit('update:modelValue', newContent);
+      this.$emit("update:modelValue", newContent);
+    },
+    sanitizeHtml(html) {
+      return sanitizeText(html);
     }
   }
 };
