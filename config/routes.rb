@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       resources :memos, only: %i[index create]
     end
     resources :memos, only: %i[show destroy] do
-      resources :memo_blocks, only: %i[create update]
+      resources :memo_blocks, only: %i[create update destroy]
     end
   end
 

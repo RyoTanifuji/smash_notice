@@ -1,6 +1,6 @@
 class Api::MemoBlocksController < ApplicationController
-  before_action :set_memo, only: %i[create update]
-  before_action :set_memo_block, only: %i[update]
+  before_action :set_memo, only: %i[create update destroy]
+  before_action :set_memo_block, only: %i[update destroy]
 
   def create
     MemoBlock.transaction do
@@ -34,6 +34,11 @@ class Api::MemoBlocksController < ApplicationController
     else
       render json: @memo_block.blockable.errors.full_messages, status: :bad_request
     end
+  end
+
+  def destroy
+    @memo_block.destroy!
+    render json: @memo_block
   end
 
   private

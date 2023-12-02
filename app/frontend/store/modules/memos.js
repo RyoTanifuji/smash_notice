@@ -38,6 +38,11 @@ const mutations = {
     state.memos = state.memos.filter(memo => {
       return memo.id != deleteMemo.id;
     });
+  },
+  deleteMemoBlock: (state, deleteMemoBlock) => {
+    state.memoDetail.memoBlocks = state.memoDetail.memoBlocks.filter(memoBlock => {
+      return memoBlock.id != deleteMemoBlock.id;
+    });
   }
 };
 
@@ -76,9 +81,15 @@ const actions = {
       });
   },
   deleteMemo({ commit }, memo) {
-    return axios.delete(`/memos/${memo.id}`)
+    return axios.delete(`memos/${memo.id}`)
       .then(res => {
         commit("deleteMemo", res.data);
+      });
+  },
+  deleteMemoBlock({ commit }, { memoId, memoBlock }) {
+    return axios.delete(`memos/${memoId}/memo_blocks/${memoBlock.id}`)
+      .then(res => {
+        commit("deleteMemoBlock", res.data);
       });
   }
 };

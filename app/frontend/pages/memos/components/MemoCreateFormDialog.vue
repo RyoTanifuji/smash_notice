@@ -36,7 +36,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn @click="handleCloseMemoCreateDialog">
+      <v-btn @click="handleCloseMemoCreateFormDialog">
         キャンセル
       </v-btn>
       <v-btn
@@ -108,7 +108,7 @@ export default {
     };
   },
   methods: {
-    handleCloseMemoCreateDialog() {
+    handleCloseMemoCreateFormDialog() {
       this.v$.$reset();
       this.$emit("close-dialog");
     },

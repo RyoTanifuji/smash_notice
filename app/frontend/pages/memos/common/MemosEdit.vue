@@ -34,6 +34,7 @@
             <v-spacer />
             <v-btn
               color="error"
+              @click="handleOpenMemoBlockDeleteDialog(memoBlockItem)"
             >
               削除
             </v-btn>
@@ -66,7 +67,7 @@
         :sentence="sentence"
         :image="image"
         :embed="embed"
-        @close-dialog="handleCloseMemoBlockFormDialog"
+        @close-dialog="handleCloseMemoBlockDialog"
         @memoblock-submit="handleMemoBlockCreate"
       >
         <template #radio-button>
@@ -109,7 +110,7 @@
         :sentence="sentence"
         :image="image"
         :embed="embed"
-        @close-dialog="handleCloseMemoBlockFormDialog"
+        @close-dialog="handleCloseMemoBlockDialog"
         @memoblock-submit="handleMemoBlockUpdate"
       >
         <template #radio-button>
@@ -142,6 +143,35 @@
       </MemoBlockFormDialog>
     </v-dialog>
   </div>
+
+  <div class="justify-center">
+    <v-dialog
+      v-model="memoBlockDeleteDialog"
+      width="500px"
+    >
+      <v-card>
+        <v-card-title class="ma-2">
+          <span class="text-h5 font-weight-bold">メモブロックの削除</span>
+        </v-card-title>
+        <v-card-text>
+          メモブロックを削除してもよろしいですか？
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn @click="handleCloseMemoBlockDialog">
+            キャンセル
+          </v-btn>
+          <v-btn
+            class="mr-4"
+            color="error"
+            @click="handleMemoBlockDelete"
+          >
+            削除
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -159,6 +189,7 @@ export default {
     return {
       memoBlockCreateDialog: false,
       memoBlockEditDialog: false,
+      memoBlockDeleteDialog: false,
       memoBlockDefault: {
         id: null,
         levle: 0,
@@ -192,7 +223,8 @@ export default {
   methods: {
     ...mapActions("memos", [
       "createMemoBlock",
-      "updateMemoBlock"
+      "updateMemoBlock",
+      "deleteMemoBlock"
     ]),
     ...mapActions("alert", ["displayAlert"]),
     handleOpenMemoBlockCreateDialog() {
@@ -219,10 +251,15 @@ export default {
       this.memoBlock = Object.assign({}, memoBlock);
       this.memoBlockEditDialog = true;
     },
-    handleCloseMemoBlockFormDialog() {
+    handleOpenMemoBlockDeleteDialog(memoBlock) {
+      this.memoBlock = Object.assign({}, memoBlock);
+      this.memoBlockDeleteDialog = true;
+    },
+    handleCloseMemoBlockDialog() {
       this.memoBlockInitialize();
       this.memoBlockCreateDialog = false;
       this.memoBlockEditDialog = false;
+      this.memoBlockDeleteDialog = false;
     },
     memoBlockInitialize() {
       this.memoBlock = Object.assign({}, this.memoBlockDefault);
@@ -239,7 +276,7 @@ export default {
       } catch (error) {
         this.displayAlert(serverErrorAlertStatus);
       }
-      this.handleCloseMemoBlockFormDialog();
+      this.handleCloseMemoBlockDialog();
     },
     async handleMemoBlockUpdate(memoBlockParams) {
       try {
@@ -251,7 +288,18 @@ export default {
       } catch (error) {
         this.displayAlert(serverErrorAlertStatus);
       }
-      this.handleCloseMemoBlockFormDialog();
+      this.handleCloseMemoBlockDialog();
+    },
+    async handleMemoBlockDelete() {
+      try {
+        await this.deleteMemoBlock({
+          memoId: this.memoId,
+          memoBlock: this.memoBlock
+        });
+      } catch (error) {
+        this.displayAlert(serverErrorAlertStatus);
+      }
+      this.handleCloseMemoBlockDialog();
     },
     sanitizeHtml(html) {
       return sanitizeHtml(html, {

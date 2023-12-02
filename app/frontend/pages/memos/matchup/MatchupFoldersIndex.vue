@@ -111,7 +111,7 @@
     >
       <FolderFormDialog
         :folder="folder"
-        @close-dialog="handleCloseFolderFormDialog"
+        @close-dialog="handleCloseFolderDialog"
         @folder-submit="handleFolderCreate"
       >
         <template #title>
@@ -131,7 +131,7 @@
     >
       <FolderFormDialog
         :folder="folder"
-        @close-dialog="handleCloseFolderFormDialog"
+        @close-dialog="handleCloseFolderDialog"
         @folder-submit="handleFolderUpdate"
       >
         <template #title>
@@ -158,7 +158,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn @click="handleCloseFolderFormDialog">
+          <v-btn @click="handleCloseFolderDialog">
             キャンセル
           </v-btn>
           <v-btn
@@ -234,7 +234,7 @@ export default {
       this.folder = folder;
       this.folderDeleteDialog = true;
     },
-    handleCloseFolderFormDialog() {
+    handleCloseFolderDialog() {
       this.folder = Object.assign({}, this.folderDefault);
       this.folderCreateDialog = false;
       this.folderEditDialog = false;
@@ -249,7 +249,7 @@ export default {
       } catch (error) {
         this.displayAlert(serverErrorAlertStatus);
       }
-      this.handleCloseFolderFormDialog();
+      this.handleCloseFolderDialog();
     },
     async handleFolderUpdate(folder) {
       try {
@@ -257,7 +257,7 @@ export default {
       } catch (error) {
         this.displayAlert(serverErrorAlertStatus);
       }
-      this.handleCloseFolderFormDialog();
+      this.handleCloseFolderDialog();
     },
     async handleFolderDelete() {
       try {
@@ -265,7 +265,7 @@ export default {
       } catch (error) {
         this.displayAlert(serverErrorAlertStatus);
       }
-      this.handleCloseFolderFormDialog();
+      this.handleCloseFolderDialog();
     },
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");
