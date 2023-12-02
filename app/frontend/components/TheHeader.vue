@@ -63,7 +63,7 @@ import { mapGetters, mapActions } from 'vuex';
 import {
   successLogoutAlertStatus,
   serverErrorAlertStatus
-} from '../plugins/alertStatus';
+} from '../constants/alertStatus';
 
 export default {
   name: "TheHeader",

@@ -8,7 +8,7 @@ import MatchupFoldersIndex from '../pages/memos/matchup/MatchupFoldersIndex';
 import MatchupMemosIndex from '../pages/memos/matchup/MatchupMemosIndex';
 import MemosEdit from '../pages/memos/common/MemosEdit';
 
-import { requireLoginAlertStatus } from '../plugins/alertStatus';
+import { requireLoginAlertStatus } from '../constants/alertStatus';
 
 const routes = [
   {

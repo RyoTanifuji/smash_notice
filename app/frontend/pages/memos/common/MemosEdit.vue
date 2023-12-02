@@ -3,7 +3,7 @@
     {{ memoDetail.title }}
   </div>
 
-  <div class="my-10" />
+  <div class="my-6" />
 
   <v-row>
     <v-col
@@ -188,7 +188,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import sanitizeText from '../../../plugins/sanitizeText';
-import { serverErrorAlertStatus } from '../../../plugins/alertStatus';
+import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
 import MemoEditForm from '../components/MemoEditForm';
 

@@ -57,8 +57,8 @@ import {
   maxLength,
   helpers
 } from '@vuelidate/validators';
-import { requiredMessage, maxLengthMessage } from '../../../plugins/validationMessages';
-import { FIGHTERS_ARRAY } from '../../../plugins/fightersArray';
+import { requiredMessage, maxLengthMessage } from '../../../constants/validationMessages';
+import { FIGHTERS_ARRAY } from '../../../constants/fightersArray';
 
 export default {
   name: "MemoCreateFormDialog",

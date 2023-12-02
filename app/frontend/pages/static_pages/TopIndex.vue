@@ -3,7 +3,7 @@
     スマブラ専用メモツール
   </div>
 
-  <div class="my-10" />
+  <div class="my-6" />
 
   <div class="text-body-1 font-weight-bold">
     SmashNoticeは「大乱闘スマッシュブラザーズSPECIAL」の攻略メモを整理・共有できるメモツールです

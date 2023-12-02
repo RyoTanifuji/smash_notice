@@ -3,7 +3,7 @@
     キャラ対メモ
   </div>
 
-  <div class="my-10" />
+  <div class="my-6" />
 
   <template v-if="folders.length">
     <v-row>
@@ -178,7 +178,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import dayjs from 'dayjs';
 import { mdiFolder, mdiInformationOutline } from '@mdi/js';
-import { serverErrorAlertStatus } from '../../../plugins/alertStatus';
+import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import FolderFormDialog from '../components/FolderFormDialog';
 
 export default {

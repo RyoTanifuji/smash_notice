@@ -3,7 +3,7 @@
     {{ folderName }}
   </div>
 
-  <div class="my-10" />
+  <div class="my-6" />
 
   <template v-if="memos.length">
     <v-row>
@@ -172,7 +172,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import dayjs from 'dayjs';
 import { mdiFile, mdiInformationOutline } from '@mdi/js';
-import { serverErrorAlertStatus } from '../../../plugins/alertStatus';
+import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoCreateFormDialog from '../components/MemoCreateFormDialog';
 
 export default {

@@ -3,7 +3,7 @@
     新規登録
   </div>
 
-  <div class="my-10" />
+  <div class="my-6" />
 
   <v-row>
     <v-col
@@ -88,12 +88,12 @@ import {
   maxLengthMessage,
   minLengthMessage,
   sameAsMessage
-} from '../../plugins/validationMessages';
+} from '../../constants/validationMessages';
 import {
   successRegisterAlertStatus,
   failRegisterAlertStatus,
   serverErrorAlertStatus
-} from '../../plugins/alertStatus';
+} from '../../constants/alertStatus';
 
 export default {
   name: "UsersRegister",
