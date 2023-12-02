@@ -1,6 +1,6 @@
 class Api::MemosController < ApplicationController
   before_action :set_folder, only: %i[index create]
-  before_action :set_memo, only: %i[show destroy]
+  before_action :set_memo, only: %i[show update destroy]
 
   def index
     render json: @folder, include: [{memos: {except: [:user_id, :created_at]}}]
@@ -12,7 +12,7 @@ class Api::MemosController < ApplicationController
     @memo.title = Fighter.find(@memo.fighter_id).name if @memo.title.blank?
 
     if @memo.save
-      render json: @memo, except: [:user_id, :created_at]
+      render json: @memo, include: [{memo_blocks: {include: [:blockable]}}]
     else
       render json: @memo.errors.full_messages, status: :bad_request
     end
@@ -20,6 +20,17 @@ class Api::MemosController < ApplicationController
 
   def show
     render json: @memo, include: [{memo_blocks: {include: [:blockable]}}]
+  end
+
+  def update
+    @memo.assign_attributes(memo_params)
+    @memo.title = Fighter.find(@memo.fighter_id).name if @memo.title.blank?
+
+    if @memo.save
+      render json: @memo, include: [{memo_blocks: {include: [:blockable]}}]
+    else
+      render json: @memo.errors.full_messages, status: :bad_request
+    end
   end
 
   def destroy

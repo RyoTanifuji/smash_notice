@@ -3,6 +3,7 @@ import axios from '../../plugins/axios';
 const state = {
   folderName: "",
   memos: [],
+  memoRemovedKeys: [],
   memoDetail: []
 };
 
@@ -22,11 +23,17 @@ const mutations = {
   setMemoDetail : (state, memo) => {
     state.memoDetail = memo;
   },
-  addMemo: (state, memo) => {
-    state.memos.push(memo);
+  addMemo: (state) => {
+    state.memos.push(state.memoRemovedKeys);
   },
   addMemoBlock: (state, memoBlock) => {
     state.memoDetail.memoBlocks.push(memoBlock);
+  },
+  updateMemo: (state) => {
+    const index = state.memos.findIndex(memo => {
+      return memo.id == state.memoRemovedKeys.id;
+    });
+    state.memos.splice(index, 1, state.memoRemovedKeys);
   },
   updateMemoBlock: (state, updateMemoBlock) => {
     const index = state.memoDetail.memoBlocks.findIndex(memoBlock => {
@@ -43,6 +50,15 @@ const mutations = {
     state.memoDetail.memoBlocks = state.memoDetail.memoBlocks.filter(memoBlock => {
       return memoBlock.id != deleteMemoBlock.id;
     });
+  },
+  removeKeysOfMemoDetail: (state, memoDetail) => {
+    const keysToRemove = ["userId", "createdAt", "memoBlocks"];
+    state.memoRemovedKeys = Object.keys(memoDetail).reduce((result, key) => {
+      if (!keysToRemove.includes(key)) {
+        result[key] = memoDetail[key];
+      }
+      return result;
+    }, {});
   }
 };
 
@@ -65,13 +81,21 @@ const actions = {
     return axios.post(`folders/${folderId}/memos?apply_template=${applyTemplate}`,
                {...memo, type: memoType})
       .then(res => {
-        commit("addMemo", res.data);
+        commit("removeKeysOfMemoDetail", res.data);
+        commit("addMemo");
       });
   },
   createMemoBlock({ commit }, { memoId, memoBlockParams }) {
     return axios.post(`memos/${memoId}/memo_blocks`, memoBlockParams)
       .then(res => {
         commit("addMemoBlock", res.data);
+      });
+  },
+  updateMemo({ commit }, memo) {
+    return axios.patch(`memos/${memo.id}`, memo)
+      .then(res => {
+        commit("removeKeysOfMemoDetail", res.data);
+        commit("updateMemo");
       });
   },
   updateMemoBlock({ commit }, { memoId, memoBlockId, memoBlockParams }) {

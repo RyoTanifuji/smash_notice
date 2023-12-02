@@ -31,7 +31,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn @click="handleCloseFolderDialog">
+      <v-btn @click="handleCloseFolderFormDialog">
         キャンセル
       </v-btn>
       <v-btn

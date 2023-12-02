@@ -61,7 +61,7 @@
                 <v-icon :icon="mdiInformationOutline" />
                 <v-menu activator="parent">
                   <v-list density="compact">
-                    <v-list-item :to="{ name: 'MemosEdit', params: { memoId: memoItem.id } }">
+                    <v-list-item :to="{ name: 'MatchupMemosEdit', params: { memoId: memoItem.id } }">
                       <v-list-item-title>
                         <span>
                           メモを編集する

@@ -42,8 +42,8 @@ const routes = [
     meta: { requiredAuth: true }
   },
   {
-    path: "/memos/:memoId/edit",
-    name: "MemosEdit",
+    path: "/matchup/memos/:memoId/edit",
+    name: "MatchupMemosEdit",
     component: MemosEdit,
     meta: { requiredAuth: true }
   },

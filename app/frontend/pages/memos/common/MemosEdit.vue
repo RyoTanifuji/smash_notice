@@ -8,7 +8,6 @@
   <v-row>
     <v-col
       cols="12"
-      sm="10"
       md="8"
       lg="8"
       xl="8"
@@ -55,6 +54,18 @@
       >
         メモブロックを追加する
       </v-btn>
+    </v-col>
+    <v-col
+      cols="12"
+      md="4"
+      lg="4"
+      xl="4"
+    >
+      <MemoEditForm
+        :memo="memo"
+        :is-matchup="isMatchup"
+        @memo-submit="handleMemoUpdate"
+      />
     </v-col>
   </v-row>
   <div class="justify-center">
@@ -179,17 +190,24 @@ import { mapGetters, mapActions } from 'vuex';
 import sanitizeHtml from 'sanitize-html';
 import { serverErrorAlertStatus } from '../../../plugins/alertStatus';
 import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
+import MemoEditForm from '../components/MemoEditForm';
 
 export default {
   name: "MemosEdit",
   components: {
-    MemoBlockFormDialog
+    MemoBlockFormDialog,
+    MemoEditForm
   },
   data() {
     return {
       memoBlockCreateDialog: false,
       memoBlockEditDialog: false,
       memoBlockDeleteDialog: false,
+      memo: {
+        title: "",
+        fighterId: null,
+        state: ""
+      },
       memoBlockDefault: {
         id: null,
         levle: 0,
@@ -213,16 +231,26 @@ export default {
   },
   computed: {
     ...mapGetters("memos", ["memoDetail"]),
+    isMatchup() {
+      return (this.$route.name == "MatchupMemosEdit") ? true : false;
+    },
     memoId() {
       return this.$route.params.memoId;
     }
   },
   mounted() {
-    this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId);
+    this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId)
+      .then(() => {
+        this.memo = Object.assign({}, this.memoDetail);
+      });
+  },
+  updated() {
+    this.memo = Object.assign({}, this.memoDetail);
   },
   methods: {
     ...mapActions("memos", [
       "createMemoBlock",
+      "updateMemo",
       "updateMemoBlock",
       "deleteMemoBlock"
     ]),
@@ -277,6 +305,14 @@ export default {
         this.displayAlert(serverErrorAlertStatus);
       }
       this.handleCloseMemoBlockDialog();
+    },
+    async handleMemoUpdate(memo) {
+      try {
+        await this.updateMemo(memo);
+        this.$router.go({path: this.$router.currentRoute.path, force: true});
+      } catch (error) {
+        this.displayAlert(serverErrorAlertStatus);
+      }
     },
     async handleMemoBlockUpdate(memoBlockParams) {
       try {
