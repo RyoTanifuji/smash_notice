@@ -188,7 +188,10 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import sanitizeText from '../../../plugins/sanitizeText';
-import { serverErrorAlertStatus } from '../../../constants/alertStatus';
+import {
+  serverErrorAlertStatus,
+  accessForbiddenAlertStatus
+} from '../../../constants/alertStatus';
 import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
 import MemoEditForm from '../components/MemoEditForm';
 
@@ -242,6 +245,10 @@ export default {
     this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId)
       .then(() => {
         this.memo = Object.assign({}, this.memoDetail);
+      })
+      .catch(() => {
+        this.displayAlert(accessForbiddenAlertStatus);
+        this.$router.push({ name: "TopIndex" });
       });
   },
   updated() {

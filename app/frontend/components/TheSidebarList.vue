@@ -1,8 +1,10 @@
 <template>
   <v-container>
-    <span class="text-h5 font-weight-bold">
-      SmashNotice
-    </span>
+    <router-link :to="{ name: 'TopIndex' }">
+      <span class="text-h5 font-weight-bold">
+        SmashNotice
+      </span>
+    </router-link>
   </v-container>
 
   <v-list>

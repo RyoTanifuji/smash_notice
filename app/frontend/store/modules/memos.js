@@ -64,15 +64,14 @@ const mutations = {
 
 const actions = {
   fetchMemos({ commit }, folderId) {
-    axios.get(`folders/${folderId}/memos`)
+    return axios.get(`folders/${folderId}/memos`)
       .then(res => {
         commit("setFolder", res.data.name);
         commit("setMemos", res.data.memos);
-      })
-      .catch(err => console.log(err.response));
+      });
   },
   fetchMemoDetail({ commit }, memoId) {
-    axios.get(`memos/${memoId}`)
+    return axios.get(`memos/${memoId}`)
       .then(res => {
         commit("setMemoDetail", res.data);
       });
