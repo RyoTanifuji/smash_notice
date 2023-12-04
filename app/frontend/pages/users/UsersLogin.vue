@@ -116,13 +116,13 @@ export default {
     async login() {
       try {
         await this.loginUser(this.user);
-        this.displayAlert(successLoginAlertStatus);
+        this.displayAlert({ alertStatus: successLoginAlertStatus });
         this.$router.push({ name: 'TopIndex' });
       } catch(err) {
         if (err.response) {
-          this.displayAlert(failLoginAlertStatus);
+          this.displayAlert({ alertStatus: failLoginAlertStatus });
         } else {
-          this.displayAlert(serverErrorAlertStatus);
+          this.displayAlert({ alertStatus: serverErrorAlertStatus });
         }
       }
     }

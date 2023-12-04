@@ -248,16 +248,16 @@ export default {
           folderId: this.folderId,
           applyTemplate: applyTemplate
         });
+        this.handleCloseMemoDialog();
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus, isDialog: true });
       }
-      this.handleCloseMemoDialog();
     },
     async handleMemoDelete() {
       try {
         await this.deleteMemo(this.memo);
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }
       this.handleCloseMemoDialog();
     },

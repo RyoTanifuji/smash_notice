@@ -247,7 +247,7 @@ export default {
         this.memo = Object.assign({}, this.memoDetail);
       })
       .catch(() => {
-        this.displayAlert(accessForbiddenAlertStatus);
+        this.displayAlert({ alertStatus: accessForbiddenAlertStatus });
         this.$router.push({ name: "TopIndex" });
       });
   },
@@ -308,17 +308,17 @@ export default {
           memoId: this.memoId,
           memoBlockParams: memoBlockParams
         });
+        this.handleCloseMemoBlockDialog();
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus, isDialog: true });
       }
-      this.handleCloseMemoBlockDialog();
     },
     async handleMemoUpdate(memo) {
       try {
         await this.updateMemo(memo);
         this.$router.go({path: this.$router.currentRoute.path, force: true});
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }
     },
     async handleMemoBlockUpdate(memoBlockParams) {
@@ -328,10 +328,10 @@ export default {
           memoBlockId: memoBlockParams.memoBlock.id,
           memoBlockParams: memoBlockParams
         });
+        this.handleCloseMemoBlockDialog();
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus, isDialog: true });
       }
-      this.handleCloseMemoBlockDialog();
     },
     async handleMemoBlockDelete() {
       try {
@@ -340,7 +340,7 @@ export default {
           memoBlock: this.memoBlock
         });
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }
       this.handleCloseMemoBlockDialog();
     },

@@ -67,7 +67,7 @@ router.beforeEach((to, from, next) => {
   // ログインしているかをチェック
   store.dispatch("users/fetchAuthUser").then((authUser) => {
     if (to.matched.some(record => record.meta.requiredAuth) && !authUser) {
-      store.dispatch("alert/displayAlert", requireLoginAlertStatus);
+      store.dispatch("alert/displayAlert", { alertStatus: requireLoginAlertStatus });
       if (from.name == 'UsersLogin') store.dispatch("alert/cancelTransition");
       next({ name: 'UsersLogin' });
     } else {

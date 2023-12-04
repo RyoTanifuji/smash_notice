@@ -4,6 +4,7 @@
       <span class="text-h5 font-weight-bold"><slot name="title" /></span>
     </v-card-title>
     <v-card-text>
+      <TheAlert :isDialog="true" />
       <form>
         <v-text-field
           v-model="v$.folder.name.$model"
@@ -54,9 +55,13 @@ import {
 } from '@vuelidate/validators';
 import { requiredMessage, maxLengthMessage } from '../../../constants/validationMessages';
 import { FIGHTERS_ARRAY } from '../../../constants/fightersArray';
+import TheAlert from '../../../components/TheAlert';
 
 export default {
   name: "FolderFormDialog",
+  components: {
+    TheAlert
+  },
   props: {
     folder: {
       type: Object,

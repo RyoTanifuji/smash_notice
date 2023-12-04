@@ -153,19 +153,19 @@ export default {
           // responseが帰ってきたときは格納されているエラーを、返ってこないときはサーバーエラーを表示
           if (err.response) {
             failRegisterAlertStatus.alertTextArray = err.response.data;
-            this.displayAlert(failRegisterAlertStatus);
+            this.displayAlert({ alertStatus: failRegisterAlertStatus });
           } else {
-            this.displayAlert(serverErrorAlertStatus);
+            this.displayAlert({ alertStatus: serverErrorAlertStatus });
           }
         });
     },
     async login() {
       try {
         await this.loginUser(this.user);
-        this.displayAlert(successRegisterAlertStatus);
+        this.displayAlert({ alertStatus: successRegisterAlertStatus });
         this.$router.push({ name: 'TopIndex' });
       } catch(err) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }
     }
   }

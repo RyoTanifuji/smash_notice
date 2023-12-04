@@ -84,10 +84,10 @@ export default {
     async handleLogout() {
       try {
         await this.logoutUser();
-        this.displayAlert(successLogoutAlertStatus);
+        this.displayAlert({ alertStatus: successLogoutAlertStatus });
         this.$router.push({ name: 'TopIndex' });
       } catch (err) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }
     }
   }

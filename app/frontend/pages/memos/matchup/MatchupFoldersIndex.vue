@@ -246,24 +246,24 @@ export default {
           folder: folder,
           folderType: this.folderType
         });
+        this.handleCloseFolderDialog();
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus, isDialog: true });
       }
-      this.handleCloseFolderDialog();
     },
     async handleFolderUpdate(folder) {
       try {
         await this.updateFolder(folder);
+        this.handleCloseFolderDialog();
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus, isDialog: true });
       }
-      this.handleCloseFolderDialog();
     },
     async handleFolderDelete() {
       try {
         await this.deleteFolder(this.folder);
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }
       this.handleCloseFolderDialog();
     },

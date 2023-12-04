@@ -4,6 +4,7 @@
       <span class="text-h5 font-weight-bold"><slot name="title" /></span>
     </v-card-title>
     <v-card-text>
+      <TheAlert :isDialog="true" />
       <form>
         <slot name="radio-button" />
         <template v-if="memoBlock.blockableType == 'Sentence'">
@@ -54,11 +55,13 @@ import { useVuelidate } from '@vuelidate/core';
 import { maxLength, helpers } from '@vuelidate/validators';
 import { maxLengthMessage } from '../../../constants/validationMessages';
 import TextEditor from '../../../components/TextEditor';
+import TheAlert from '../../../components/TheAlert';
 
 export default {
   name: "MemoBlockFormDialog",
   components: {
-    TextEditor
+    TextEditor,
+    TheAlert
   },
   props: {
     memoBlock: {

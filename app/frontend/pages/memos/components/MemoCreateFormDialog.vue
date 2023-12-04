@@ -4,6 +4,7 @@
       <span class="text-h5 font-weight-bold">メモの作成</span>
     </v-card-title>
     <v-card-text>
+      <TheAlert :isDialog="true" />
       <form>
         <v-text-field
           v-model="v$.memo.title.$model"
@@ -59,9 +60,13 @@ import {
 } from '@vuelidate/validators';
 import { requiredMessage, maxLengthMessage } from '../../../constants/validationMessages';
 import { FIGHTERS_ARRAY } from '../../../constants/fightersArray';
+import TheAlert from '../../../components/TheAlert';
 
 export default {
   name: "MemoCreateFormDialog",
+  components: {
+    TheAlert
+  },
   props: {
     memo: {
       type: Object,
