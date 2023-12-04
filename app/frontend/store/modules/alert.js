@@ -2,21 +2,24 @@
 
 // アラートの表示の有無、種類、テキスト、表示時にページの遷移が行われるかのステータス
 const state = {
-  isVisibleAlert: false,
+  isVisibleStandardAlert: false,
+  isVisibleDialogAlert: false,
   alertType: "",
   alertTextArray: [],
   isTransition: false
 };
 
 const getters = {
-  isVisibleAlert: state => state.isVisibleAlert,
+  isVisibleStandardAlert: state => state.isVisibleStandardAlert,
+  isVisibleDialogAlert: state => state.isVisibleDialogAlert,
   alertType: state => state.alertType,
   alertTextArray: state => state.alertTextArray
 };
 
 const mutations = {
-  setAlert: (state, alertStatus) => {
-    state.isVisibleAlert = true;
+  setAlert: (state, { alertStatus, isDialog }) => {
+    state.isVisibleStandardAlert = !isDialog;
+    state.isVisibleDialogAlert = isDialog;
     state.alertType = alertStatus.alertType;
     state.alertTextArray = alertStatus.alertTextArray;
     state.isTransition = alertStatus.isTransition;
@@ -24,7 +27,8 @@ const mutations = {
   resetAlert: (state, forceReset) => {
     if (forceReset || !state.isTransition) {
       state.isTransition = false;
-      state.isVisibleAlert = false;
+      state.isVisibleStandardAlert = false;
+      state.isVisibleDialogAlert = false;
       state.alertType = "";
       state.alertTextArray = [];
     } else {
@@ -37,8 +41,8 @@ const mutations = {
 };
 
 const actions = {
-  displayAlert({ commit }, alertStatus) {
-    commit("setAlert", alertStatus);
+  displayAlert({ commit }, { alertStatus, isDialog = false }) {
+    commit("setAlert", { alertStatus: alertStatus, isDialog: isDialog });
   },
   closeAlert({ commit }) {
     commit("resetAlert", false);

@@ -6,8 +6,9 @@ import UsersRegister from '../pages/users/UsersRegister';
 import UsersLogin from '../pages/users/UsersLogin';
 import MatchupFoldersIndex from '../pages/memos/matchup/MatchupFoldersIndex';
 import MatchupMemosIndex from '../pages/memos/matchup/MatchupMemosIndex';
+import MemosEdit from '../pages/memos/common/MemosEdit';
 
-import { requireLoginAlertStatus } from '../plugins/alertStatus';
+import { requireLoginAlertStatus } from '../constants/alertStatus';
 
 const routes = [
   {
@@ -41,6 +42,12 @@ const routes = [
     meta: { requiredAuth: true }
   },
   {
+    path: "/matchup/memos/:memoId/edit",
+    name: "MatchupMemosEdit",
+    component: MemosEdit,
+    meta: { requiredAuth: true }
+  },
+  {
     path: "/null",
     name: "Null",
     component: TopIndex,
@@ -60,7 +67,7 @@ router.beforeEach((to, from, next) => {
   // ログインしているかをチェック
   store.dispatch("users/fetchAuthUser").then((authUser) => {
     if (to.matched.some(record => record.meta.requiredAuth) && !authUser) {
-      store.dispatch("alert/displayAlert", requireLoginAlertStatus);
+      store.dispatch("alert/displayAlert", { alertStatus: requireLoginAlertStatus });
       if (from.name == 'UsersLogin') store.dispatch("alert/cancelTransition");
       next({ name: 'UsersLogin' });
     } else {

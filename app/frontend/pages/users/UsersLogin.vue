@@ -1,9 +1,9 @@
 <template>
-  <div class="text-h3 font-weight-bold">
+  <div class="text-md-h3 text-h4 font-weight-bold">
     ログイン
   </div>
 
-  <div class="my-10" />
+  <div class="my-6" />
 
   <v-row>
     <v-col 
@@ -33,7 +33,7 @@
 
         <v-row class="justify-center mt-5">
           <v-btn
-            color="indigo-accent-4"
+            color="teal-accent-4"
             class="font-weight-bold"
             @click="handleLogin"
           >
@@ -66,12 +66,12 @@ import {
   requiredMessage,
   emailMessage,
   minLengthMessage
-} from '../../plugins/validationMessages';
+} from '../../constants/validationMessages';
 import {
   successLoginAlertStatus,
   failLoginAlertStatus,
   serverErrorAlertStatus
-} from '../../plugins/alertStatus';
+} from '../../constants/alertStatus';
 
 export default {
   name: "UsersLogin",
@@ -116,13 +116,13 @@ export default {
     async login() {
       try {
         await this.loginUser(this.user);
-        this.displayAlert(successLoginAlertStatus);
+        this.displayAlert({ alertStatus: successLoginAlertStatus });
         this.$router.push({ name: 'TopIndex' });
       } catch(err) {
         if (err.response) {
-          this.displayAlert(failLoginAlertStatus);
+          this.displayAlert({ alertStatus: failLoginAlertStatus });
         } else {
-          this.displayAlert(serverErrorAlertStatus);
+          this.displayAlert({ alertStatus: serverErrorAlertStatus });
         }
       }
     }

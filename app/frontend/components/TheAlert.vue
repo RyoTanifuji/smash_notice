@@ -3,7 +3,7 @@
     <v-alert
       :type="alertType"
       variant="outlined"
-      class="w-75 mx-10"
+      :class="classOption"
     >
       <div class="d-flex flex-row align-center">
         <ul>
@@ -35,12 +35,29 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: "TheAlert",
+  props: {
+    isDialog: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     ...mapGetters("alert", [
-      "isVisibleAlert",
+      "isVisibleStandardAlert",
+      "isVisibleDialogAlert",
       "alertType",
       "alertTextArray"
-    ])
+    ]),
+    isVisibleAlert() {
+      return this.isDialog ? this.isVisibleDialogAlert : this.isVisibleStandardAlert;
+    },
+    classOption() {
+      return {
+        'w-75': !this.isDialog,
+        'mx-10': !this.isDialog,
+        'mb-2': this.isDialog
+      };
+    }
   },
   methods: {
     ...mapActions("alert", ["closeAlertWithCross"])

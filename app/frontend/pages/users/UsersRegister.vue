@@ -1,9 +1,9 @@
 <template>
-  <div class="text-h3 font-weight-bold">
+  <div class="text-md-h3 text-h4 font-weight-bold">
     新規登録
   </div>
 
-  <div class="my-10" />
+  <div class="my-6" />
 
   <v-row>
     <v-col
@@ -51,7 +51,7 @@
 
         <v-row class="justify-center mt-5">
           <v-btn
-            color="indigo-accent-4"
+            color="teal-accent-4"
             class="font-weight-bold"
             @click="handleRegister"
           >
@@ -88,12 +88,12 @@ import {
   maxLengthMessage,
   minLengthMessage,
   sameAsMessage
-} from '../../plugins/validationMessages';
+} from '../../constants/validationMessages';
 import {
   successRegisterAlertStatus,
   failRegisterAlertStatus,
   serverErrorAlertStatus
-} from '../../plugins/alertStatus';
+} from '../../constants/alertStatus';
 
 export default {
   name: "UsersRegister",
@@ -153,19 +153,19 @@ export default {
           // responseが帰ってきたときは格納されているエラーを、返ってこないときはサーバーエラーを表示
           if (err.response) {
             failRegisterAlertStatus.alertTextArray = err.response.data;
-            this.displayAlert(failRegisterAlertStatus);
+            this.displayAlert({ alertStatus: failRegisterAlertStatus });
           } else {
-            this.displayAlert(serverErrorAlertStatus);
+            this.displayAlert({ alertStatus: serverErrorAlertStatus });
           }
         });
     },
     async login() {
       try {
         await this.loginUser(this.user);
-        this.displayAlert(successRegisterAlertStatus);
+        this.displayAlert({ alertStatus: successRegisterAlertStatus });
         this.$router.push({ name: 'TopIndex' });
       } catch(err) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }
     }
   }

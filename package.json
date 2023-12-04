@@ -17,6 +17,7 @@
     "axios": "^1.6.0",
     "dayjs": "^1.11.10",
     "humps": "^2.0.1",
+    "sanitize-html": "^2.11.0",
     "vue": "^3.3.7",
     "vue-router": "^4.2.5",
     "vue-turbolinks": "^2.2.2",

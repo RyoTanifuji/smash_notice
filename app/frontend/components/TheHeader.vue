@@ -6,57 +6,55 @@
   >
     <TheSidebarList />
   </v-navigation-drawer>
-  <v-card>
-    <v-app-bar class="elevation-0">
-      <template #prepend>
-        <v-app-bar-nav-icon
-          variant="text"
-          @click.stop="drawer = !drawer"
-        />
-      </template>
+  <v-app-bar class="elevation-0">
+    <template #prepend>
+      <v-app-bar-nav-icon
+        variant="text"
+        @click.stop="drawer = !drawer"
+      />
+    </template>
 
-      <v-app-bar-title v-if="!drawer">
-        <router-link :to="{ name: 'TopIndex' }">
-          <span class="text-h5 font-weight-bold">
-            SmashNotice
+    <v-app-bar-title v-if="!drawer">
+      <router-link :to="{ name: 'TopIndex' }">
+        <span class="text-h5 font-weight-bold">
+          SmashNotice
+        </span>
+      </router-link>
+    </v-app-bar-title>
+
+    <template #append>
+      <template v-if="!authUser">
+        <v-btn
+          :to="{ name: 'UsersLogin' }"
+          :active="false"
+        >
+          <span class="text-body-1">
+            ログイン
           </span>
-        </router-link>
-      </v-app-bar-title>
+        </v-btn>
 
-      <template #append>
-        <template v-if="!authUser">
-          <v-btn
-            :to="{ name: 'UsersLogin' }"
-            :active="false"
-          >
-            <span class="text-body-1">
-              ログイン
-            </span>
-          </v-btn>
-
-          <v-btn
-            :to="{ name: 'UsersRegister' }"
-            :active="false"
-            class="hidden-xs"
-          >
-            <span class="text-body-1">
-              新規登録
-            </span>
-          </v-btn>
-        </template>
-        <template v-else>
-          <v-btn
-            :active="false"
-            @click="handleLogout"
-          >
-            <span class="text-body-1">
-              ログアウト
-            </span>
-          </v-btn>
-        </template>
+        <v-btn
+          :to="{ name: 'UsersRegister' }"
+          :active="false"
+          class="hidden-xs"
+        >
+          <span class="text-body-1">
+            新規登録
+          </span>
+        </v-btn>
       </template>
-    </v-app-bar>
-  </v-card>
+      <template v-else>
+        <v-btn
+          :active="false"
+          @click="handleLogout"
+        >
+          <span class="text-body-1">
+            ログアウト
+          </span>
+        </v-btn>
+      </template>
+    </template>
+  </v-app-bar>
 </template>
 
 <script>
@@ -65,7 +63,7 @@ import { mapGetters, mapActions } from 'vuex';
 import {
   successLogoutAlertStatus,
   serverErrorAlertStatus
-} from '../plugins/alertStatus';
+} from '../constants/alertStatus';
 
 export default {
   name: "TheHeader",
@@ -86,10 +84,10 @@ export default {
     async handleLogout() {
       try {
         await this.logoutUser();
-        this.displayAlert(successLogoutAlertStatus);
+        this.displayAlert({ alertStatus: successLogoutAlertStatus });
         this.$router.push({ name: 'TopIndex' });
       } catch (err) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }
     }
   }

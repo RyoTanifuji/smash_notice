@@ -4,6 +4,7 @@
       <span class="text-h5 font-weight-bold"><slot name="title" /></span>
     </v-card-title>
     <v-card-text>
+      <TheAlert :isDialog="true" />
       <form>
         <v-text-field
           v-model="v$.folder.name.$model"
@@ -31,12 +32,12 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn @click="handleCloseFolderDialog">
+      <v-btn @click="handleCloseFolderFormDialog">
         キャンセル
       </v-btn>
       <v-btn
         class="mr-4"
-        color="indigo-accent-4"
+        color="teal-accent-4"
         @click="handleFolderSubmit"
       >
         <slot name="submit" />
@@ -52,14 +53,15 @@ import {
   maxLength,
   helpers
 } from '@vuelidate/validators';
-import {
-  requiredMessage,
-  maxLengthMessage
-} from '../../../plugins/validationMessages';
-import { FIGHTERS_ARRAY } from '../../../plugins/fightersArray';
+import { requiredMessage, maxLengthMessage } from '../../../constants/validationMessages';
+import { FIGHTERS_ARRAY } from '../../../constants/fightersArray';
+import TheAlert from '../../../components/TheAlert';
 
 export default {
   name: "FolderFormDialog",
+  components: {
+    TheAlert
+  },
   props: {
     folder: {
       type: Object,
@@ -105,7 +107,7 @@ export default {
     };
   },
   methods: {
-    handleCloseFolderDialog() {
+    handleCloseFolderFormDialog() {
       this.v$.$reset();
       this.$emit("close-dialog");
     },

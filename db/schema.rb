@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_24_080554) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_27_080743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_24_080554) do
     t.index ["user_id"], name: "index_folders_on_user_id"
   end
 
+  create_table "memo_blocks", force: :cascade do |t|
+    t.bigint "memo_id"
+    t.string "blockable_type"
+    t.bigint "blockable_id"
+    t.integer "level", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["blockable_type", "blockable_id"], name: "index_memo_blocks_on_blockable"
+    t.index ["level"], name: "index_memo_blocks_on_level"
+    t.index ["memo_id"], name: "index_memo_blocks_on_memo_id"
+  end
+
   create_table "memos", force: :cascade do |t|
     t.string "title", null: false
     t.integer "state", default: 1
@@ -44,6 +56,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_24_080554) do
     t.index ["user_id"], name: "index_memos_on_user_id"
   end
 
+  create_table "sentences", force: :cascade do |t|
+    t.string "subtitle"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
@@ -56,6 +75,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_24_080554) do
 
   add_foreign_key "folders", "fighters"
   add_foreign_key "folders", "users"
+  add_foreign_key "memo_blocks", "memos"
   add_foreign_key "memos", "fighters"
   add_foreign_key "memos", "folders"
   add_foreign_key "memos", "users"

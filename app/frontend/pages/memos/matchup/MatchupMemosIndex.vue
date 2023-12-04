@@ -1,9 +1,9 @@
 <template>
-  <div class="text-h3 font-weight-bold">
+  <div class="text-md-h3 text-h4 font-weight-bold">
     {{ folderName }}
   </div>
 
-  <div class="my-10" />
+  <div class="my-6" />
 
   <template v-if="memos.length">
     <v-row>
@@ -23,7 +23,7 @@
             <div>
               <v-btn
                 size="small"
-                color="indigo-accent-4"
+                color="teal-accent-4"
                 class="mb-2"
               >
                 テンプレートの編集
@@ -32,7 +32,7 @@
             <div>
               <v-btn
                 size="small"
-                color="indigo-accent-4"
+                color="teal-accent-4"
                 @click="handleOpenMemoCreateDialog"
               >
                 メモの作成
@@ -49,7 +49,7 @@
               <v-list-item
                 :title="memoItem.title"
                 :subtitle="dateFormat(memoItem.updatedAt)"
-                :to="{ path: '/null' }"
+                :to="{ name: 'Null' }"
                 :prepend-icon="mdiFile"
               />
               <v-btn
@@ -61,7 +61,7 @@
                 <v-icon :icon="mdiInformationOutline" />
                 <v-menu activator="parent">
                   <v-list density="compact">
-                    <v-list-item :to="{ path: '/null' }">
+                    <v-list-item :to="{ name: 'MatchupMemosEdit', params: { memoId: memoItem.id } }">
                       <v-list-item-title>
                         <span>
                           メモを編集する
@@ -108,13 +108,14 @@
           <div class="mx-auto">
             <v-btn
               class="mr-8 mb-2"
-              color="indigo-accent-4"
+              color="teal-accent-4"
               @click="handleOpenMemoCreateDialog"
             >
               メモの作成
             </v-btn>
             <v-btn
-              color="indigo-accent-4"
+              class="mb-2"
+              color="teal-accent-4"
             >
               テンプレートの編集
             </v-btn>
@@ -170,13 +171,11 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import dayjs from 'dayjs';
-import { 
-  mdiFile,
-  mdiInformationOutline
-} from '@mdi/js';
+import { mdiFile, mdiInformationOutline } from '@mdi/js';
 import {
-  serverErrorAlertStatus
-} from '../../../plugins/alertStatus';
+  serverErrorAlertStatus,
+  accessForbiddenAlertStatus
+} from '../../../constants/alertStatus';
 import MemoCreateFormDialog from '../components/MemoCreateFormDialog';
 
 export default {
@@ -186,7 +185,7 @@ export default {
   },
   data() {
     return {
-      memoInitial: {
+      memoDefault: {
         id: null,
         title: "",
         fighterId: null
@@ -216,7 +215,11 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("memos/fetchMemos", this.folderId);
+    this.$store.dispatch("memos/fetchMemos", this.folderId)
+      .catch(() => {
+        this.displayAlert(accessForbiddenAlertStatus);
+        this.$router.push({ name: "TopIndex" });
+      });
   },
   methods: {
     ...mapActions("memos", [
@@ -225,7 +228,7 @@ export default {
     ]),
     ...mapActions("alert", ["displayAlert"]),
     handleOpenMemoCreateDialog() {
-      this.memo = Object.assign({}, this.memoInitial);
+      this.memo = Object.assign({}, this.memoDefault);
       this.memoCreateDialog = true;
     },
     handleOpenMemoDeleteDialog(memo) {
@@ -233,7 +236,7 @@ export default {
       this.memoDeleteDialog = true;
     },
     handleCloseMemoDialog() {
-      this.memo = Object.assign({}, this.memoInitial);
+      this.memo = Object.assign({}, this.memoDefault);
       this.memoCreateDialog = false;
       this.memoDeleteDialog = false;
     },
@@ -245,16 +248,16 @@ export default {
           folderId: this.folderId,
           applyTemplate: applyTemplate
         });
+        this.handleCloseMemoDialog();
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus, isDialog: true });
       }
-      this.handleCloseMemoDialog();
     },
     async handleMemoDelete() {
       try {
-        await this.deleteMemo({ memo: this.memo, folderId: this.folderId });
+        await this.deleteMemo(this.memo);
       } catch (error) {
-        this.displayAlert(serverErrorAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }
       this.handleCloseMemoDialog();
     },
