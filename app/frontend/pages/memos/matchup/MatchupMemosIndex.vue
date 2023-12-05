@@ -172,10 +172,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import dayjs from 'dayjs';
 import { mdiFile, mdiInformationOutline } from '@mdi/js';
-import {
-  serverErrorAlertStatus,
-  accessForbiddenAlertStatus
-} from '../../../constants/alertStatus';
+import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoCreateFormDialog from '../components/MemoCreateFormDialog';
 
 export default {
@@ -217,7 +214,7 @@ export default {
   mounted() {
     this.$store.dispatch("memos/fetchMemos", this.folderId)
       .catch(() => {
-        this.displayAlert(accessForbiddenAlertStatus);
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
         this.$router.push({ name: "TopIndex" });
       });
   },
