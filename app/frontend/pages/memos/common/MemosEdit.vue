@@ -24,10 +24,8 @@
             <template v-if="memoBlockItem.blockableType == 'Sentence'">
               <p v-html="sanitizeHtml(memoBlockItem.blockable.body)" />
             </template>
-            <template v-else-if="memoBlockItem.blockableType == 'Image'">
-            </template>
-            <template v-else-if="memoBlockItem.blockableType == 'Embed'">
-            </template>
+            <template v-else-if="memoBlockItem.blockableType == 'Image'" />
+            <template v-else-if="memoBlockItem.blockableType == 'Embed'" />
           </v-card-text>
           <v-card-actions>
             <v-spacer />
@@ -66,6 +64,16 @@
         :is-matchup="isMatchup"
         @memo-submit="handleMemoUpdate"
       />
+      <router-link
+        :to="{ name: pageInformation.showRouteName, params: { memoId: memoDetail.id } }"
+      >
+        <v-btn
+          block
+          class="mt-4"
+        >
+          メモ詳細画面へ進む
+        </v-btn>
+      </router-link>
     </v-col>
   </v-row>
   <div class="justify-center">
@@ -188,10 +196,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import sanitizeText from '../../../plugins/sanitizeText';
-import {
-  serverErrorAlertStatus,
-  accessForbiddenAlertStatus
-} from '../../../constants/alertStatus';
+import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
 import MemoEditForm from '../components/MemoEditForm';
 
@@ -206,6 +211,7 @@ export default {
       memoBlockCreateDialog: false,
       memoBlockEditDialog: false,
       memoBlockDeleteDialog: false,
+      pageInformation: {},
       memo: {
         title: "",
         fighterId: null,
@@ -241,13 +247,20 @@ export default {
       return this.$route.params.memoId;
     }
   },
-  mounted() {
+  created() {
     this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId)
       .then(() => {
         this.memo = Object.assign({}, this.memoDetail);
+        if (this.isMatchup) {
+          this.pageInformation = {
+            showRouteName: "MatchupMemosShow"
+          };
+        } else {
+          this.pageInformation = {};
+        }
       })
       .catch(() => {
-        this.displayAlert({ alertStatus: accessForbiddenAlertStatus });
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
         this.$router.push({ name: "TopIndex" });
       });
   },
