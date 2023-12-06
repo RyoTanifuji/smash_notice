@@ -58,6 +58,8 @@ class Api::MemoBlocksController < ApplicationController
   def blockable_params
     if params.key?(:sentence)
       sentence_params
+    elsif params.key?(:image)
+      image_params
     else
       raise ActionController::ParameterMissing, :blockable
     end
@@ -65,5 +67,9 @@ class Api::MemoBlocksController < ApplicationController
 
   def sentence_params
     params.require(:sentence).permit(:subtitle, :body)
+  end
+
+  def image_params
+    params.require(:image).permit(:subtitle, pictures: [])
   end
 end

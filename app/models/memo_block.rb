@@ -14,7 +14,7 @@ class MemoBlock < ApplicationRecord
 
   class << self
     def blockable_types
-      %w[Sentence]
+      %w[Sentence Image]
     end
 
     def valid_blockable_type?(type)
@@ -26,6 +26,8 @@ class MemoBlock < ApplicationRecord
     case type
     when 'Sentence'
       self.blockable = Sentence.create!
+    when 'Image'
+      self.blockable = Image.create!
     else
       raise "不正なブロックタイプです (#{type})"
     end
