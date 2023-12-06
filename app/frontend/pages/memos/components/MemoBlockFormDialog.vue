@@ -4,7 +4,7 @@
       <span class="text-h5 font-weight-bold"><slot name="title" /></span>
     </v-card-title>
     <v-card-text>
-      <TheAlert :isDialog="true" />
+      <TheAlert :is-dialog="true" />
       <form>
         <slot name="radio-button" />
         <template v-if="memoBlock.blockableType == 'Sentence'">
@@ -28,10 +28,8 @@
             </p>
           </template>
         </template>
-        <template v-else-if="memoBlock.blockableType == 'Image'">
-        </template>
-        <template v-else-if="memoBlock.blockableType == 'Embed'">
-        </template>
+        <template v-else-if="memoBlock.blockableType == 'Image'" />
+        <template v-else-if="memoBlock.blockableType == 'Embed'" />
       </form>
     </v-card-text>
     <v-card-actions>

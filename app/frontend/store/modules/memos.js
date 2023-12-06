@@ -4,7 +4,9 @@ const state = {
   folderName: "",
   memos: [],
   memoRemovedKeys: [],
-  memoDetail: []
+  memoDetail: {
+    memoBlocks: []
+  }
 };
 
 const getters = {

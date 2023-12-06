@@ -5,15 +5,15 @@
 
   <div class="my-6" />
 
-  <template v-if="memos.length">
-    <v-row>
-      <v-col
-        cols="12"
-        sm="10"
-        md="8"
-        lg="8"
-        xl="8"
-      >
+  <v-row>
+    <v-col
+      cols="12"
+      sm="10"
+      md="8"
+      lg="8"
+      xl="8"
+    >
+      <template v-if="memos.length">
         <div class="d-flex align-end">
           <span class="text-h5 mb-5">
             メモ一覧
@@ -49,7 +49,7 @@
               <v-list-item
                 :title="memoItem.title"
                 :subtitle="dateFormat(memoItem.updatedAt)"
-                :to="{ name: 'Null' }"
+                :to="{ path: `/matchup/memos/${memoItem.id}` }"
                 :prepend-icon="mdiFile"
               />
               <v-btn
@@ -81,25 +81,16 @@
             </div>
           </template>
         </v-list>
-      </v-col>
-    </v-row>
-  </template>
+      </template>
 
-  <template v-else>
-    <v-row>
-      <v-col
-        cols="12"
-        sm="10"
-        md="8"
-        lg="8"
-        xl="8"
-      >
+      <template v-else>
         <div class="text-body-1 font-weight-bold">
-          まだ、メモがありません。メモの作成からキャラ対メモを追加しましょう
+          まだ、メモがありません。
+          メモの作成からキャラ対メモを追加しましょう。
 
           <div class="my-8" />
 
-          テンプレート機能を使うと、キャラ対メモの作成時にテンプレートに設定した内容が自動的に追加されます
+          テンプレート機能を使うと、キャラ対メモの作成時にテンプレートに設定した内容が自動的に追加されます。
         </div>
 
         <div class="my-8" />
@@ -121,9 +112,9 @@
             </v-btn>
           </div>
         </v-layout>
-      </v-col>
-    </v-row>
-  </template>
+      </template>
+    </v-col>
+  </v-row>
 
   <div class="justify-center">
     <v-dialog
@@ -211,7 +202,7 @@ export default {
       });
     }
   },
-  mounted() {
+  created() {
     this.$store.dispatch("memos/fetchMemos", this.folderId)
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });

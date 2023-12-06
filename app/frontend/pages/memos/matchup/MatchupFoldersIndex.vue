@@ -5,15 +5,15 @@
 
   <div class="my-6" />
 
-  <template v-if="folders.length">
-    <v-row>
-      <v-col
-        cols="12"
-        sm="10"
-        md="8"
-        lg="8"
-        xl="8"
-      >
+  <v-row>
+    <v-col
+      cols="12"
+      sm="10"
+      md="8"
+      lg="8"
+      xl="8"
+    >
+      <template v-if="folders.length">
         <div class="d-flex">
           <span class="text-h5">
             フォルダ一覧
@@ -68,25 +68,15 @@
             </div>
           </template>
         </v-list>
-      </v-col>
-    </v-row>
-  </template>
+      </template>
 
-  <template v-else>
-    <v-row>
-      <v-col
-        cols="12"
-        sm="10"
-        md="8"
-        lg="8"
-        xl="8"
-      >
+      <template v-else>
         <div class="text-body-1 font-weight-bold">
-          まだ、フォルダがありません
+          まだ、フォルダがありません。
 
           <div class="my-8" />
 
-          フォルダの追加から自分の使用ファイターを選択して、フォルダを追加しましょう
+          フォルダの追加から自分の使用ファイターを選択して、フォルダを追加しましょう。
         </div>
 
         <div class="my-8" />
@@ -100,9 +90,9 @@
             フォルダの追加
           </v-btn>
         </v-layout>
-      </v-col>
-    </v-row>
-  </template>
+      </template>
+    </v-col>
+  </v-row>
 
   <div class="justify-center">
     <v-dialog
@@ -212,7 +202,7 @@ export default {
       });
     }
   },
-  mounted() {
+  created() {
     this.$store.dispatch("folders/fetchFolders", this.folderType);
   },
   methods: {

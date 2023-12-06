@@ -4,7 +4,7 @@
       <span class="text-h5 font-weight-bold">メモの作成</span>
     </v-card-title>
     <v-card-text>
-      <TheAlert :isDialog="true" />
+      <TheAlert :is-dialog="true" />
       <form>
         <v-text-field
           v-model="v$.memo.title.$model"
