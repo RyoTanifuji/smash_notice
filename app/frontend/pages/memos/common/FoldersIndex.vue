@@ -1,6 +1,6 @@
 <template>
   <div class="text-md-h3 text-h4 font-weight-bold">
-    キャラ対メモ
+    {{ pageInformation.pageTitle }}
   </div>
 
   <div class="my-6" />
@@ -36,7 +36,7 @@
               <v-list-item
                 :title="folderItem.name"
                 :subtitle="dateFormat(folderItem.updatedAt)"
-                :to="{ path: `/matchup/${folderItem.id}/memos` }"
+                :to="{ path: `/${pageInformation.pathPrefix}/${folderItem.id}/memos` }"
                 :prepend-icon="mdiFolder"
               />
               <v-btn
@@ -172,16 +172,25 @@ import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import FolderFormDialog from '../components/FolderFormDialog';
 
 export default {
-  name: "MatchupFoldersIndex",
+  name: "FoldersIndex",
   components: {
     FolderFormDialog
   },
   data() {
     return {
+      pageInformationMatchup: {
+        pageTitle: "キャラ対メモ",
+        pathPrefix: "matchup",
+        folderType: "MatchupFolder"
+      },
+      pageInformationStrategy: {
+        pageTitle: "攻略メモ",
+        pathPrefix: "strategy",
+        folderType: "StrategyFolder"
+      },
       folderCreateDialog: false,
       folderEditDialog: false,
       folderDeleteDialog: false,
-      folderType: "MatchupFolder",
       folderDefault: {
         id: null,
         name: "",
@@ -194,6 +203,12 @@ export default {
   },
   computed: {
     ...mapGetters("folders", ["folders"]),
+    isMatchup() {
+      return (this.$route.name == "MatchupFoldersIndex") ? true : false;
+    },
+    pageInformation() {
+      return (this.isMatchup) ? this.pageInformationMatchup : this.pageInformationStrategy;
+    },
     sortedFolders() {
       return this.folders.slice().sort((a, b) => {
         if (a.updatedAt > b.updatedAt) return -1;
@@ -203,7 +218,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("folders/fetchFolders", this.folderType);
+    this.$store.dispatch("folders/fetchFolders", this.pageInformation.folderType);
   },
   methods: {
     ...mapActions("folders", [
@@ -234,7 +249,7 @@ export default {
       try {
         await this.createFolder({
           folder: folder,
-          folderType: this.folderType
+          folderType: this.pageInformation.folderType
         });
         this.handleCloseFolderDialog();
       } catch (error) {

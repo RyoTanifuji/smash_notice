@@ -18,12 +18,14 @@
             v-for="memoBlockItem in memoDetail.memoBlocks"
             :key="memoBlockItem.id"
           >
-            <div class="text-md-h5 text-h6 mb-2">
-              {{ memoBlockItem.blockable.subtitle }}
-            </div>
+            <template v-if="!(memoBlockItem.blockable.subtitle == '')">
+              <div class="text-md-h5 text-h6 mb-4">
+                {{ memoBlockItem.blockable.subtitle }}
+              </div>
+            </template>
             <template v-if="memoBlockItem.blockableType == 'Sentence'">
               <div
-                class="ml-2 mb-6 sentence-body"
+                class="ml-2 mt-n2 mb-4 sentence-body"
                 v-html="sanitizeHtml(memoBlockItem.blockable.body)"
               />
             </template>
@@ -113,8 +115,15 @@ export default {
   name: "MemosEdit",
   data() {
     return {
+      pageInformationMatchup: {
+        indexRouteName: "MatchupMemosIndex",
+        editRouteName: "MatchupMemosEdit"
+      },
+      pageInformationStrategy: {
+        indexRouteName: "StrategyMemosIndex",
+        editRouteName: "StrategyMemosEdit"
+      },
       memoDeleteDialog: false,
-      pageInformation: {}
     };
   },
   computed: {
@@ -122,22 +131,15 @@ export default {
     isMatchup() {
       return (this.$route.name == "MatchupMemosShow") ? true : false;
     },
+    pageInformation() {
+      return (this.isMatchup) ? this.pageInformationMatchup : this.pageInformationStrategy;
+    },
     memoId() {
       return this.$route.params.memoId;
     }
   },
   created() {
     this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId)
-      .then(() => {
-        if (this.isMatchup) {
-          this.pageInformation = {
-            editRouteName: "MatchupMemosEdit",
-            indexRouteName: "MatchupMemosIndex"
-          };
-        } else {
-          this.pageInformation = {};
-        }
-      })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
         this.$router.push({ name: "TopIndex" });

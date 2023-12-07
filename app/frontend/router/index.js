@@ -4,8 +4,8 @@ import store from '../store';
 import TopIndex from '../pages/static_pages/TopIndex';
 import UsersRegister from '../pages/users/UsersRegister';
 import UsersLogin from '../pages/users/UsersLogin';
-import MatchupFoldersIndex from '../pages/memos/matchup/MatchupFoldersIndex';
-import MatchupMemosIndex from '../pages/memos/matchup/MatchupMemosIndex';
+import FoldersIndex from '../pages/memos/common/FoldersIndex';
+import MemosIndex from '../pages/memos/common/MemosIndex';
 import MemosShow from '../pages/memos/common/MemosShow';
 import MemosEdit from '../pages/memos/common/MemosEdit';
 
@@ -33,13 +33,13 @@ const routes = [
   {
     path: "/matchup",
     name: "MatchupFoldersIndex",
-    component: MatchupFoldersIndex,
+    component: FoldersIndex,
     meta: { requiredAuth: true }
   },
   {
     path: "/matchup/:folderId/memos",
     name: "MatchupMemosIndex",
-    component: MatchupMemosIndex,
+    component: MemosIndex,
     meta: { requiredAuth: true }
   },
   {

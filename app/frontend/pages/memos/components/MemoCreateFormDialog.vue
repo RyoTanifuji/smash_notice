@@ -15,24 +15,26 @@
           hint="未入力の場合、下記の相手ファイター名が設定されます"
           variant="underlined"
         />
-        <v-autocomplete
-          v-model="v$.memo.fighterId.$model"
-          :error-messages="v$.memo.fighterId.$errors.map(e => e.$message)"
-          :items="fightersArray"
-          item-value="id"
-          item-title="name"
-          clearable
-          :menu-props="{ location: 'top', scrollStrategy: 'none' }"
-          name="相手ファイター"
-          label="相手ファイター"
-          hint="対策するファイターを選択してください"
-          variant="underlined"
-        />
-        <v-checkbox
-          v-model="applyTemplate"
-          name="キャラ対テンプレート"
-          label="テンプレートを適用する"
-        />
+        <template v-if="isMatchup">
+          <v-autocomplete
+            v-model="v$.memo.fighterId.$model"
+            :error-messages="v$.memo.fighterId.$errors.map(e => e.$message)"
+            :items="fightersArray"
+            item-value="id"
+            item-title="name"
+            clearable
+            :menu-props="{ location: 'top', scrollStrategy: 'none' }"
+            name="相手ファイター"
+            label="相手ファイター"
+            hint="対策するファイターを選択してください"
+            variant="underlined"
+          />
+          <v-checkbox
+            v-model="applyTemplate"
+            name="キャラ対テンプレート"
+            label="テンプレートを適用する"
+          />
+        </template>
       </form>
     </v-card-text>
     <v-card-actions>
@@ -99,6 +101,11 @@ export default {
       applyTemplate: false,
       fightersArray: FIGHTERS_ARRAY
     };
+  },
+  computed: {
+    isMatchup() {
+      return (this.$route.name == "MatchupMemosIndex") ? true : false;
+    }
   },
   validations () {
     return {

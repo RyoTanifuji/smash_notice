@@ -61,7 +61,6 @@
     >
       <MemoEditForm
         :memo="memo"
-        :is-matchup="isMatchup"
         @memo-submit="handleMemoUpdate"
       />
       <router-link
@@ -208,10 +207,15 @@ export default {
   },
   data() {
     return {
+      pageInformationMatchup: {
+        showRouteName: "MatchupMemosShow"
+      },
+      pageInformationStrategy: {
+        showRouteName: "StrategyMemosShow"
+      },
       memoBlockCreateDialog: false,
       memoBlockEditDialog: false,
       memoBlockDeleteDialog: false,
-      pageInformation: {},
       memo: {
         title: "",
         fighterId: null,
@@ -219,7 +223,7 @@ export default {
       },
       memoBlockDefault: {
         id: null,
-        levle: 0,
+        level: 0,
         blockableType: "Sentence"
       },
       sentenceDefault: {
@@ -227,7 +231,8 @@ export default {
         body: ""
       },
       imageDefault: {
-        subtitle: ""
+        subtitle: "",
+        picture: null
       },
       embedDefault: {
         subtitle: ""
@@ -243,6 +248,9 @@ export default {
     isMatchup() {
       return (this.$route.name == "MatchupMemosEdit") ? true : false;
     },
+    pageInformation() {
+      return (this.isMatchup) ? this.pageInformationMatchup : this.pageInformationStrategy;
+    },
     memoId() {
       return this.$route.params.memoId;
     }
@@ -251,13 +259,6 @@ export default {
     this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId)
       .then(() => {
         this.memo = Object.assign({}, this.memoDetail);
-        if (this.isMatchup) {
-          this.pageInformation = {
-            showRouteName: "MatchupMemosShow"
-          };
-        } else {
-          this.pageInformation = {};
-        }
       })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
