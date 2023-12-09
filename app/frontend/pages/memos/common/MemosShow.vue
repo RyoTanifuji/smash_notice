@@ -152,11 +152,15 @@ export default {
   },
   methods: {
     ...mapActions("memos", ["deleteMemo"]),
-    ...mapActions("alert", ["displayAlert"]),
+    ...mapActions("alert", [
+      "displayAlert",
+      "closeAlertWithCross"
+    ]),
     handleOpenMemoDeleteDialog() {
       this.memoDeleteDialog = true;
     },
     handleCloseMemoDialog() {
+      this.closeAlertWithCross();
       this.memoDeleteDialog = false;
     },
     async handleMemoDelete() {

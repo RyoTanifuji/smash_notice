@@ -248,7 +248,10 @@ export default {
       "createMemo",
       "deleteMemo"
     ]),
-    ...mapActions("alert", ["displayAlert"]),
+    ...mapActions("alert", [
+      "displayAlert",
+      "closeAlertWithCross"
+    ]),
     handleOpenMemoCreateDialog() {
       this.memo = Object.assign({}, this.memoDefault);
       this.memoCreateDialog = true;
@@ -258,6 +261,7 @@ export default {
       this.memoDeleteDialog = true;
     },
     handleCloseMemoDialog() {
+      this.closeAlertWithCross();
       this.memo = Object.assign({}, this.memoDefault);
       this.memoCreateDialog = false;
       this.memoDeleteDialog = false;

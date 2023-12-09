@@ -281,7 +281,10 @@ export default {
       "updateMemoBlock",
       "deleteMemoBlock"
     ]),
-    ...mapActions("alert", ["displayAlert"]),
+    ...mapActions("alert", [
+      "displayAlert",
+      "closeAlertWithCross"
+    ]),
     handleOpenMemoBlockCreateDialog() {
       this.memoBlockInitialize();
       this.memoBlockCreateDialog = true;
@@ -311,6 +314,7 @@ export default {
       this.memoBlockDeleteDialog = true;
     },
     handleCloseMemoBlockDialog() {
+      this.closeAlertWithCross();
       this.memoBlockInitialize();
       this.memoBlockCreateDialog = false;
       this.memoBlockEditDialog = false;

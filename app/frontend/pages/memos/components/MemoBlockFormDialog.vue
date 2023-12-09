@@ -42,11 +42,12 @@
           <v-file-input
             label="ファイルを選択してください"
             show-size
+            prepend-icon=""
             variant="underlined"
             class="w-75 ml-4"
             @change="handleFileChange"
           />
-          <p class="text-body-2 font-weight-thin">
+          <p class="text-body-2 font-weight-thin ml-4">
             画像サイズ
           </p>
           <v-slider

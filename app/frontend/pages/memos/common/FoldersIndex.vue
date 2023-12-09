@@ -226,7 +226,10 @@ export default {
       "updateFolder",
       "deleteFolder"
     ]),
-    ...mapActions("alert", ["displayAlert"]),
+    ...mapActions("alert", [
+      "displayAlert",
+      "closeAlertWithCross"
+    ]),
     handleOpenFolderCreateDialog() {
       this.folder = Object.assign({}, this.folderDefault);
       this.folderCreateDialog = true;
@@ -240,6 +243,7 @@ export default {
       this.folderDeleteDialog = true;
     },
     handleCloseFolderDialog() {
+      this.closeAlertWithCross();
       this.folder = Object.assign({}, this.folderDefault);
       this.folderCreateDialog = false;
       this.folderEditDialog = false;
