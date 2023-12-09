@@ -29,7 +29,12 @@
                 v-html="sanitizeHtml(memoBlockItem.blockable.body)"
               />
             </template>
-            <template v-else-if="memoBlockItem.blockableType == 'Image'" />
+            <template v-else-if="memoBlockItem.blockableType == 'Image'">
+              <v-img
+                :src="memoBlockItem.blockable.pictureUrl"
+                :width="memoBlockItem.blockable.pictureWidth"
+              />
+            </template>
             <template v-else-if="memoBlockItem.blockableType == 'Embed'" />
           </template>
         </div>

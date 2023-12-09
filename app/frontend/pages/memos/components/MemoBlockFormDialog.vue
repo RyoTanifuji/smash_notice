@@ -28,7 +28,37 @@
             </p>
           </template>
         </template>
-        <template v-else-if="memoBlock.blockableType == 'Image'" />
+        <template v-else-if="memoBlock.blockableType == 'Image'">
+          <v-text-field
+            v-model="v$.image.subtitle.$model"
+            :error-messages="v$.image.subtitle.$errors.map(e => e.$message)"
+            :counter="20"
+            name="見出し"
+            label="見出し"
+            hint="未入力にすることも可能です"
+            variant="underlined"
+            class="w-75 ml-4"
+          />
+          <v-file-input
+            label="ファイルを選択してください"
+            show-size
+            variant="underlined"
+            class="w-75 ml-4"
+            @change="handleFileChange"
+          />
+          <p class="text-body-2 font-weight-thin">
+            画像サイズ
+          </p>
+          <v-slider
+            v-model="v$.image.pictureWidth.$model"
+            name="画像サイズ"
+            max="800"
+            min="200"
+            step="10"
+            thumb-label
+            class="w-75 ml-4"
+          />
+        </template>
         <template v-else-if="memoBlock.blockableType == 'Embed'" />
       </form>
     </v-card-text>
@@ -92,6 +122,14 @@ export default {
       subtitle: {
         type: String,
         default: ""
+      },
+      file: {
+        type: String,
+        default: ""
+      },
+      pictureWidth: {
+        type: Number,
+        default: 500
       }
     },
     embed: {
@@ -120,8 +158,15 @@ export default {
           maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
         },
         body: {
-          maxLength: helpers.withMessage("保存できる文字数を超えています", maxLength(65536))
+          maxLength: helpers.withMessage("保存できる文字数を超えています", maxLength(65535))
         }
+      },
+      image: {
+        subtitle: { 
+          maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
+        },
+        file: {},
+        pictureWidth: {}
       }
     };
   },
@@ -132,6 +177,15 @@ export default {
     },
     updateContent(newContent) {
       this.v$.sentence.body.$model = newContent;
+    },
+    handleFileChange(event) {
+      let file = event.target.files[0];
+      let reader = new FileReader();
+      reader.onload = (event) => {
+        const base64Data = event.target.result;
+        this.image.file = base64Data;
+      };
+      reader.readAsDataURL(file);
     },
     async handleMemoBlockSubmit() {
       const result = await this.v$.$validate();
