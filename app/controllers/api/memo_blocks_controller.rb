@@ -66,6 +66,8 @@ class Api::MemoBlocksController < ApplicationController
       sentence_params
     elsif params.key?(:image)
       image_params
+    elsif params.key?(:embed)
+      embed_params
     else
       raise ActionController::ParameterMissing, :blockable
     end
@@ -77,5 +79,9 @@ class Api::MemoBlocksController < ApplicationController
 
   def image_params
     params.require(:image).permit(:subtitle, :file, :picture_width)
+  end
+
+  def embed_params
+    params.require(:embed).permit(:subtitle, :embed_type, :identifier)
   end
 end
