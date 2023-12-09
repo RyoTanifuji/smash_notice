@@ -88,7 +88,7 @@ import {
   maxLengthMessage,
   minLengthMessage,
   sameAsMessage
-} from '../../constants/validationMessages';
+} from '../../constants/validationCustom';
 import {
   successRegisterAlertStatus,
   failRegisterAlertStatus,

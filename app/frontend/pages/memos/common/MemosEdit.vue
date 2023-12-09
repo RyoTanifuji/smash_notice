@@ -238,7 +238,8 @@ export default {
       imageDefault: {
         subtitle: "",
         file: "",
-        pictureWidth: 500
+        pictureWidth: 500,
+        pictureUrl: ""
       },
       embedDefault: {
         subtitle: ""

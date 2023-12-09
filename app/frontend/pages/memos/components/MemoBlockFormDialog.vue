@@ -39,15 +39,26 @@
             variant="underlined"
             class="w-75 ml-4"
           />
+          <template v-if="previewUrl">
+            <v-img
+              :src="previewUrl"
+              width="200"
+              class="ml-4"
+            />
+          </template>
           <v-file-input
             label="ファイルを選択してください"
-            show-size
             prepend-icon=""
             variant="underlined"
             class="w-75 ml-4"
             @change="handleFileChange"
           />
-          <p class="text-body-2 font-weight-thin ml-4">
+          <template v-if="v$.image.file.$errors">
+            <p class="text-error text-caption ml-4 mt-n4">
+              {{ v$.image.file.$errors.map(e => e.$message)[0] }}
+            </p>
+          </template>
+          <p class="text-body-2 font-weight-thin mt-2 ml-4">
             画像サイズ
           </p>
           <v-slider
@@ -82,7 +93,8 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import { maxLength, helpers } from '@vuelidate/validators';
-import { maxLengthMessage } from '../../../constants/validationMessages';
+import { image, maxLengthMessage } from '../../../constants/validationCustom';
+import imageCompression from '../../../plugins/imageCompression';
 import TextEditor from '../../../components/TextEditor';
 import TheAlert from '../../../components/TheAlert';
 
@@ -131,6 +143,10 @@ export default {
       pictureWidth: {
         type: Number,
         default: 500
+      },
+      pictureUrl: {
+        type: String,
+        default: ""
       }
     },
     embed: {
@@ -152,6 +168,18 @@ export default {
       v$: useVuelidate()
     };
   },
+  data() {
+    return {
+      formPreviewUrl: ""
+    };
+  },
+  computed: {
+    previewUrl() {
+      return this.formPreviewUrl ? this.formPreviewUrl
+        : this.image.pictureUrl ? this.image.pictureUrl
+        : "";
+    }
+  },
   validations () {
     return {
       sentence: {
@@ -166,7 +194,9 @@ export default {
         subtitle: { 
           maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
         },
-        file: {},
+        file: {
+          image: helpers.withMessage("無効なファイル形式です", image)
+        },
         pictureWidth: {}
       }
     };
@@ -179,14 +209,23 @@ export default {
     updateContent(newContent) {
       this.v$.sentence.body.$model = newContent;
     },
-    handleFileChange(event) {
-      let file = event.target.files[0];
-      let reader = new FileReader();
+    async handleFileChange(event) {
+      const file = event.target.files[0];
+      if (!file) {
+        return;
+      }
+      const reader = new FileReader();
       reader.onload = (event) => {
         const base64Data = event.target.result;
-        this.image.file = base64Data;
+        this.v$.image.file.$model = base64Data;
       };
-      reader.readAsDataURL(file);
+      try {
+        const compFile = await imageCompression.getCompressImageFileAsync(file);
+        this.formPreviewUrl = await imageCompression.getDataUrlFromFile(compFile);
+        reader.readAsDataURL(compFile);
+      } catch(err) {
+        console.log(err);
+      }
     },
     async handleMemoBlockSubmit() {
       const result = await this.v$.$validate();

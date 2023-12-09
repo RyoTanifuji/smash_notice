@@ -66,7 +66,7 @@ import {
   requiredMessage,
   emailMessage,
   minLengthMessage
-} from '../../constants/validationMessages';
+} from '../../constants/validationCustom';
 import {
   successLoginAlertStatus,
   failLoginAlertStatus,
