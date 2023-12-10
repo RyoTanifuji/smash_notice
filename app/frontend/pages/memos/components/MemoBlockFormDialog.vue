@@ -169,11 +169,11 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import { maxLength, helpers } from '@vuelidate/validators';
-import { mdiHelpCircleOutline } from '@mdi/js';
 import { image, maxLengthMessage } from '../../../constants/validationCustom';
-import imageCompression from '../../../plugins/imageCompression';
+import { mdiHelpCircleOutline } from '@mdi/js';
 import TextEditor from '../../../components/TextEditor';
 import TheAlert from '../../../components/TheAlert';
+import imageCompression from '../../../plugins/imageCompression';
 
 export default {
   name: "MemoBlockFormDialog",

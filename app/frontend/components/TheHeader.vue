@@ -58,12 +58,12 @@
 </template>
 
 <script>
-import TheSidebarList from './TheSidebarList';
 import { mapGetters, mapActions } from 'vuex';
 import {
   successLogoutAlertStatus,
   serverErrorAlertStatus
 } from '../constants/alertStatus';
+import TheSidebarList from './TheSidebarList';
 
 export default {
   name: "TheHeader",

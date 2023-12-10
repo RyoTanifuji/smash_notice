@@ -178,10 +178,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import dayjs from 'dayjs';
 import { mdiFile, mdiInformationOutline } from '@mdi/js';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoCreateFormDialog from '../components/MemoCreateFormDialog';
+import dayjs from 'dayjs';
 
 export default {
   name: "MemosIndex",

@@ -166,10 +166,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import dayjs from 'dayjs';
 import { mdiFolder, mdiInformationOutline } from '@mdi/js';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import FolderFormDialog from '../components/FolderFormDialog';
+import dayjs from 'dayjs';
 
 export default {
   name: "FoldersIndex",

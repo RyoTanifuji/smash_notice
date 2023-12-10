@@ -86,6 +86,33 @@
         </v-layout>
       </template>
     </v-col>
+    <template v-if="$vuetify.display.mdAndUp">
+      <v-col
+        md="4"
+        lg="4"
+        xl="4"
+      >
+        <router-link
+          :to="{ name: pageInformation.editRouteName, params: { memoId: memoDetail.id }}"
+        >
+          <v-btn
+            block
+            color="teal-accent-4"
+            class="mt-4"
+          >
+            メモを編集する
+          </v-btn>
+        </router-link>
+        <v-btn
+          block
+          color="error"
+          class="mt-4"
+          @click="handleOpenMemoDeleteDialog"
+        >
+          メモを削除する
+        </v-btn>
+      </v-col>
+    </template>
   </v-row>
 
   <div class="justify-center">
@@ -120,9 +147,9 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import sanitizeText from '../../../plugins/sanitizeText';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import EmbedYoutube from '../components/EmbedYoutube';
+import sanitizeText from '../../../plugins/sanitizeText';
 
 export default {
   name: "MemosEdit",
