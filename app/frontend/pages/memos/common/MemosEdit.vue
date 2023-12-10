@@ -24,8 +24,17 @@
             <template v-if="memoBlockItem.blockableType == 'Sentence'">
               <p v-html="sanitizeHtml(memoBlockItem.blockable.body)" />
             </template>
-            <template v-else-if="memoBlockItem.blockableType == 'Image'" />
-            <template v-else-if="memoBlockItem.blockableType == 'Embed'" />
+            <template v-else-if="memoBlockItem.blockableType == 'Image'">
+              <v-img
+                :src="memoBlockItem.blockable.pictureUrl"
+                :width="memoBlockItem.blockable.pictureWidth"
+              />
+            </template>
+            <template v-else-if="memoBlockItem.blockableType == 'Embed'">
+              <EmbedYoutube
+                :youtube-url="memoBlockItem.blockable.identifier"
+              />
+            </template>
           </v-card-text>
           <v-card-actions>
             <v-spacer />
@@ -61,7 +70,6 @@
     >
       <MemoEditForm
         :memo="memo"
-        :is-matchup="isMatchup"
         @memo-submit="handleMemoUpdate"
       />
       <router-link
@@ -86,29 +94,10 @@
         :sentence="sentence"
         :image="image"
         :embed="embed"
+        :is-edit="false"
         @close-dialog="handleCloseMemoBlockDialog"
         @memoblock-submit="handleMemoBlockCreate"
       >
-        <template #radio-button>
-          <v-radio-group
-            v-model="memoBlock.blockableType"
-            inline
-            class="ml-4"
-          >
-            <v-radio
-              label="テキスト"
-              value="Sentence"
-            />
-            <v-radio
-              label="画像"
-              value="Image"
-            />
-            <v-radio
-              label="埋め込み"
-              value="Embed"
-            />
-          </v-radio-group>
-        </template>
         <template #title>
           メモブロックの追加
         </template>
@@ -129,30 +118,10 @@
         :sentence="sentence"
         :image="image"
         :embed="embed"
+        :is-edit="true"
         @close-dialog="handleCloseMemoBlockDialog"
         @memoblock-submit="handleMemoBlockUpdate"
       >
-        <template #radio-button>
-          <v-radio-group
-            v-model="memoBlock.blockableType"
-            inline
-            disabled
-            class="ml-4"
-          >
-            <v-radio
-              label="テキスト"
-              value="Sentence"
-            />
-            <v-radio
-              label="画像"
-              value="Image"
-            />
-            <v-radio
-              label="埋め込み"
-              value="Embed"
-            />
-          </v-radio-group>
-        </template>
         <template #title>
           メモブロックの編集
         </template>
@@ -195,23 +164,30 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import sanitizeText from '../../../plugins/sanitizeText';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
 import MemoEditForm from '../components/MemoEditForm';
+import EmbedYoutube from '../components/EmbedYoutube';
+import sanitizeText from '../../../plugins/sanitizeText';
 
 export default {
   name: "MemosEdit",
   components: {
     MemoBlockFormDialog,
-    MemoEditForm
+    MemoEditForm,
+    EmbedYoutube
   },
   data() {
     return {
+      pageInformationMatchup: {
+        showRouteName: "MatchupMemosShow"
+      },
+      pageInformationStrategy: {
+        showRouteName: "StrategyMemosShow"
+      },
       memoBlockCreateDialog: false,
       memoBlockEditDialog: false,
       memoBlockDeleteDialog: false,
-      pageInformation: {},
       memo: {
         title: "",
         fighterId: null,
@@ -219,7 +195,7 @@ export default {
       },
       memoBlockDefault: {
         id: null,
-        levle: 0,
+        level: 0,
         blockableType: "Sentence"
       },
       sentenceDefault: {
@@ -227,10 +203,15 @@ export default {
         body: ""
       },
       imageDefault: {
-        subtitle: ""
+        subtitle: "",
+        file: "",
+        pictureWidth: 500,
+        pictureUrl: ""
       },
       embedDefault: {
-        subtitle: ""
+        subtitle: "",
+        embedType: "youtube",
+        identifier: ""
       },
       memoBlock: {},
       sentence: {},
@@ -243,6 +224,9 @@ export default {
     isMatchup() {
       return (this.$route.name == "MatchupMemosEdit") ? true : false;
     },
+    pageInformation() {
+      return (this.isMatchup) ? this.pageInformationMatchup : this.pageInformationStrategy;
+    },
     memoId() {
       return this.$route.params.memoId;
     }
@@ -251,13 +235,6 @@ export default {
     this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId)
       .then(() => {
         this.memo = Object.assign({}, this.memoDetail);
-        if (this.isMatchup) {
-          this.pageInformation = {
-            showRouteName: "MatchupMemosShow"
-          };
-        } else {
-          this.pageInformation = {};
-        }
       })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
@@ -274,7 +251,10 @@ export default {
       "updateMemoBlock",
       "deleteMemoBlock"
     ]),
-    ...mapActions("alert", ["displayAlert"]),
+    ...mapActions("alert", [
+      "displayAlert",
+      "closeAlertWithCross"
+    ]),
     handleOpenMemoBlockCreateDialog() {
       this.memoBlockInitialize();
       this.memoBlockCreateDialog = true;
@@ -304,6 +284,7 @@ export default {
       this.memoBlockDeleteDialog = true;
     },
     handleCloseMemoBlockDialog() {
+      this.closeAlertWithCross();
       this.memoBlockInitialize();
       this.memoBlockCreateDialog = false;
       this.memoBlockEditDialog = false;

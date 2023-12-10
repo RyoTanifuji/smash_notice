@@ -87,7 +87,11 @@ const actions = {
       });
   },
   createMemoBlock({ commit }, { memoId, memoBlockParams }) {
-    return axios.post(`memos/${memoId}/memo_blocks`, memoBlockParams)
+    return axios.post(`memos/${memoId}/memo_blocks`, memoBlockParams, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
       .then(res => {
         commit("addMemoBlock", res.data);
       });
@@ -100,7 +104,11 @@ const actions = {
       });
   },
   updateMemoBlock({ commit }, { memoId, memoBlockId, memoBlockParams }) {
-    return axios.patch(`memos/${memoId}/memo_blocks/${memoBlockId}`, memoBlockParams)
+    return axios.patch(`memos/${memoId}/memo_blocks/${memoBlockId}`, memoBlockParams, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
       .then(res => {
         commit("updateMemoBlock", res.data);
       });

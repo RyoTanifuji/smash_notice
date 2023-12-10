@@ -21,18 +21,24 @@ class Api::MemoBlocksController < ApplicationController
       @memo_block.insert_and_save!
     end
 
-    if @memo_block.blockable.update(blockable_params)
-      render json: @memo_block, include: [:blockable]
+    @blockable = @memo_block.blockable
+
+    if @blockable.update(blockable_params)
+      @blockable.parse_base64(image_params[:file]) if params.key?(:image)
+      render json: @memo_block, include: [{blockable: {methods: :picture_url}}]
     else
-      render json: @memo_block.blockable.errors.full_messages, status: :bad_request
+      render json: @blockable.errors.full_messages, status: :bad_request
     end
   end
 
   def update
-    if @memo_block.blockable.update(blockable_params)
-      render json: @memo_block, include: [:blockable]
+    @blockable = @memo_block.blockable
+
+    if @blockable.update(blockable_params)
+      @blockable.parse_base64(image_params[:file]) if params.key?(:image)
+      render json: @memo_block, include: [{blockable: {methods: :picture_url}}]
     else
-      render json: @memo_block.blockable.errors.full_messages, status: :bad_request
+      render json: @blockable.errors.full_messages, status: :bad_request
     end
   end
 
@@ -58,6 +64,10 @@ class Api::MemoBlocksController < ApplicationController
   def blockable_params
     if params.key?(:sentence)
       sentence_params
+    elsif params.key?(:image)
+      image_params
+    elsif params.key?(:embed)
+      embed_params
     else
       raise ActionController::ParameterMissing, :blockable
     end
@@ -65,5 +75,13 @@ class Api::MemoBlocksController < ApplicationController
 
   def sentence_params
     params.require(:sentence).permit(:subtitle, :body)
+  end
+
+  def image_params
+    params.require(:image).permit(:subtitle, :file, :picture_width)
+  end
+
+  def embed_params
+    params.require(:embed).permit(:subtitle, :embed_type, :identifier)
   end
 end

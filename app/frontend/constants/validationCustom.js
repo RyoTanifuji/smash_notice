@@ -1,5 +1,11 @@
-// バリデーションのエラーメッセージ
+import { helpers } from '@vuelidate/validators';
 
+export const image = (value) => {
+  const pattern = /^data:image\/(jpeg|jpg|png);base64,/;
+  return value.match(pattern) || !helpers.req(value);
+};
+
+// バリデーションのエラーメッセージ
 export const requiredMessage = (value) => `${value}は必須項目です`;
 
 export const emailMessage = () => "メールアドレスの形式が正しくありません";

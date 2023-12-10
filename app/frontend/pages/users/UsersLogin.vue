@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import { useVuelidate } from '@vuelidate/core';
 import { mapActions } from 'vuex';
+import { useVuelidate } from '@vuelidate/core';
 import {
   required,
   email,
@@ -66,7 +66,7 @@ import {
   requiredMessage,
   emailMessage,
   minLengthMessage
-} from '../../constants/validationMessages';
+} from '../../constants/validationCustom';
 import {
   successLoginAlertStatus,
   failLoginAlertStatus,

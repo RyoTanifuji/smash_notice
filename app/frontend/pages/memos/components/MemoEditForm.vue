@@ -47,7 +47,7 @@ import {
   maxLength,
   helpers
 } from '@vuelidate/validators';
-import { requiredMessage, maxLengthMessage } from '../../../constants/validationMessages';
+import { requiredMessage, maxLengthMessage } from '../../../constants/validationCustom';
 import { FIGHTERS_ARRAY } from '../../../constants/fightersArray';
 
 export default {
@@ -70,12 +70,8 @@ export default {
       },
       state: {
         type: String,
-        required: true
+        default: "local"
       }
-    },
-    isMatchup: {
-      type: Boolean,
-      required: true
     }
   },
   emits: ["memo-submit"],
@@ -88,12 +84,15 @@ export default {
     return {
       memoStates: {
         local: "非公開",
-        shared: "公開中"
+        shared: "公開"
       },
       fightersArray: FIGHTERS_ARRAY
     };
   },
   computed: {
+    isMatchup() {
+      return (this.$route.name == "MatchupMemosEdit") ? true : false;
+    },
     memoStateLabel() {
       return this.memoStates[this.memo.state];
     }

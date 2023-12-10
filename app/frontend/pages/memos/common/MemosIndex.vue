@@ -20,24 +20,35 @@
           </span>
           <v-spacer />
           <div>
-            <div>
+            <template v-if="isMatchup">
+              <div>
+                <v-btn
+                  size="small"
+                  color="teal-accent-4"
+                  class="mb-2"
+                >
+                  テンプレートの編集
+                </v-btn>
+              </div>
+              <div>
+                <v-btn
+                  size="small"
+                  color="teal-accent-4"
+                  @click="handleOpenMemoCreateDialog"
+                >
+                  メモの作成
+                </v-btn>
+              </div>
+            </template>
+            <template v-else>
               <v-btn
-                size="small"
                 color="teal-accent-4"
-                class="mb-2"
-              >
-                テンプレートの編集
-              </v-btn>
-            </div>
-            <div>
-              <v-btn
-                size="small"
-                color="teal-accent-4"
+                class="mb-2 mr-2"
                 @click="handleOpenMemoCreateDialog"
               >
                 メモの作成
               </v-btn>
-            </div>
+            </template>
           </div>
         </div>
         <v-list lines="two">
@@ -49,7 +60,7 @@
               <v-list-item
                 :title="memoItem.title"
                 :subtitle="dateFormat(memoItem.updatedAt)"
-                :to="{ path: `/matchup/memos/${memoItem.id}` }"
+                :to="{ path: `/${pageInformation.pathPrefix}/memos/${memoItem.id}` }"
                 :prepend-icon="mdiFile"
               />
               <v-btn
@@ -61,7 +72,9 @@
                 <v-icon :icon="mdiInformationOutline" />
                 <v-menu activator="parent">
                   <v-list density="compact">
-                    <v-list-item :to="{ name: 'MatchupMemosEdit', params: { memoId: memoItem.id } }">
+                    <v-list-item
+                      :to="{ name: pageInformation.editRouteName, params: { memoId: memoItem.id } }"
+                    >
                       <v-list-item-title>
                         <span>
                           メモを編集する
@@ -86,11 +99,13 @@
       <template v-else>
         <div class="text-body-1 font-weight-bold">
           まだ、メモがありません。
-          メモの作成からキャラ対メモを追加しましょう。
+          メモの作成から{{ pageInformation.memoCategory }}を追加しましょう。
 
-          <div class="my-8" />
+          <template v-if="isMatchup">
+            <div class="my-8" />
 
-          テンプレート機能を使うと、キャラ対メモの作成時にテンプレートに設定した内容が自動的に追加されます。
+            テンプレート機能を使うと、キャラ対メモの作成時にテンプレートに設定した内容が自動的に追加されます。
+          </template>
         </div>
 
         <div class="my-8" />
@@ -104,12 +119,14 @@
             >
               メモの作成
             </v-btn>
-            <v-btn
-              class="mb-2"
-              color="teal-accent-4"
-            >
-              テンプレートの編集
-            </v-btn>
+            <template v-if="isMatchup">
+              <v-btn
+                class="mb-2"
+                color="teal-accent-4"
+              >
+                テンプレートの編集
+              </v-btn>
+            </template>
           </div>
         </v-layout>
       </template>
@@ -161,25 +178,36 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import dayjs from 'dayjs';
 import { mdiFile, mdiInformationOutline } from '@mdi/js';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoCreateFormDialog from '../components/MemoCreateFormDialog';
+import dayjs from 'dayjs';
 
 export default {
-  name: "MatchupMemosIndex",
+  name: "MemosIndex",
   components: {
     MemoCreateFormDialog
   },
   data() {
     return {
+      pageInformationMatchup: {
+        memoCategory: "キャラ対メモ",
+        memoType: "MatchupMemo",
+        pathPrefix: "matchup",
+        editRouteName: "MatchupMemosEdit"
+      },
+      pageInformationStrategy: {
+        memoCategory: "攻略メモ",
+        memoType: "StrategyMemo",
+        pathPrefix: "strategy",
+        editRouteName: "StrategyMemosEdit"
+      },
       memoDefault: {
         id: null,
         title: "",
         fighterId: null
       },
       memo: {},
-      memoType: "MatchupMemo",
       memoCreateDialog: false,
       memoDeleteDialog: false,
       mdiFile,
@@ -191,6 +219,12 @@ export default {
       "folderName",
       "memos"
     ]),
+    isMatchup() {
+      return (this.$route.name == "MatchupMemosIndex") ? true : false;
+    },
+    pageInformation() {
+      return (this.isMatchup) ? this.pageInformationMatchup : this.pageInformationStrategy;
+    },
     folderId() {
       return this.$route.params.folderId;
     },
@@ -214,7 +248,10 @@ export default {
       "createMemo",
       "deleteMemo"
     ]),
-    ...mapActions("alert", ["displayAlert"]),
+    ...mapActions("alert", [
+      "displayAlert",
+      "closeAlertWithCross"
+    ]),
     handleOpenMemoCreateDialog() {
       this.memo = Object.assign({}, this.memoDefault);
       this.memoCreateDialog = true;
@@ -224,6 +261,7 @@ export default {
       this.memoDeleteDialog = true;
     },
     handleCloseMemoDialog() {
+      this.closeAlertWithCross();
       this.memo = Object.assign({}, this.memoDefault);
       this.memoCreateDialog = false;
       this.memoDeleteDialog = false;
@@ -232,7 +270,7 @@ export default {
       try {
         await this.createMemo({
           memo: memo,
-          memoType: this.memoType,
+          memoType: this.pageInformation.memoType,
           folderId: this.folderId,
           applyTemplate: applyTemplate
         });

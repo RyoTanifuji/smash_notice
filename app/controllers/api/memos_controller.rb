@@ -12,14 +12,14 @@ class Api::MemosController < ApplicationController
     @memo.title = Fighter.find(@memo.fighter_id).name if @memo.title.blank?
 
     if @memo.save
-      render json: @memo, include: [{memo_blocks: {include: [:blockable]}}]
+      render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
     else
       render json: @memo.errors.full_messages, status: :bad_request
     end
   end
 
   def show
-    render json: @memo, include: [{memo_blocks: {include: [:blockable]}}]
+    render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
   end
 
   def update
@@ -27,7 +27,7 @@ class Api::MemosController < ApplicationController
     @memo.title = Fighter.find(@memo.fighter_id).name if @memo.title.blank?
 
     if @memo.save
-      render json: @memo, include: [{memo_blocks: {include: [:blockable]}}]
+      render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
     else
       render json: @memo.errors.full_messages, status: :bad_request
     end
@@ -49,6 +49,6 @@ class Api::MemosController < ApplicationController
   end
 
   def memo_params
-    params.require(:memo).permit(:title, :type, :fighter_id)
+    params.require(:memo).permit(:title, :type, :fighter_id, :state)
   end
 end

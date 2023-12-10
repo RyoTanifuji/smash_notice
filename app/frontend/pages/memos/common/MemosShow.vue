@@ -18,17 +18,31 @@
             v-for="memoBlockItem in memoDetail.memoBlocks"
             :key="memoBlockItem.id"
           >
-            <div class="text-md-h5 text-h6 mb-2">
-              {{ memoBlockItem.blockable.subtitle }}
-            </div>
+            <template v-if="!(memoBlockItem.blockable.subtitle == '')">
+              <div class="text-md-h5 text-h6 mb-4">
+                {{ memoBlockItem.blockable.subtitle }}
+              </div>
+            </template>
             <template v-if="memoBlockItem.blockableType == 'Sentence'">
               <div
-                class="ml-2 mb-6 sentence-body"
+                class="ml-2 mt-n2 mb-4 sentence-body"
                 v-html="sanitizeHtml(memoBlockItem.blockable.body)"
               />
             </template>
-            <template v-else-if="memoBlockItem.blockableType == 'Image'" />
-            <template v-else-if="memoBlockItem.blockableType == 'Embed'" />
+            <template v-else-if="memoBlockItem.blockableType == 'Image'">
+              <v-img
+                :src="memoBlockItem.blockable.pictureUrl"
+                :width="memoBlockItem.blockable.pictureWidth"
+                class="ml-2 mt-n2 mb-4"
+              />
+            </template>
+            <template v-else-if="memoBlockItem.blockableType == 'Embed'">
+              <div class="ml-2 mt-n2 mb-4">
+                <EmbedYoutube
+                  :youtube-url="memoBlockItem.blockable.identifier"
+                />
+              </div>
+            </template>
           </template>
         </div>
         <div class="d-flex flex-row justify-end mt-8">
@@ -72,6 +86,33 @@
         </v-layout>
       </template>
     </v-col>
+    <template v-if="$vuetify.display.mdAndUp">
+      <v-col
+        md="4"
+        lg="4"
+        xl="4"
+      >
+        <router-link
+          :to="{ name: pageInformation.editRouteName, params: { memoId: memoDetail.id }}"
+        >
+          <v-btn
+            block
+            color="teal-accent-4"
+            class="mt-4"
+          >
+            メモを編集する
+          </v-btn>
+        </router-link>
+        <v-btn
+          block
+          color="error"
+          class="mt-4"
+          @click="handleOpenMemoDeleteDialog"
+        >
+          メモを削除する
+        </v-btn>
+      </v-col>
+    </template>
   </v-row>
 
   <div class="justify-center">
@@ -106,15 +147,26 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import sanitizeText from '../../../plugins/sanitizeText';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
+import EmbedYoutube from '../components/EmbedYoutube';
+import sanitizeText from '../../../plugins/sanitizeText';
 
 export default {
   name: "MemosEdit",
+  components: {
+    EmbedYoutube
+  },
   data() {
     return {
+      pageInformationMatchup: {
+        indexRouteName: "MatchupMemosIndex",
+        editRouteName: "MatchupMemosEdit"
+      },
+      pageInformationStrategy: {
+        indexRouteName: "StrategyMemosIndex",
+        editRouteName: "StrategyMemosEdit"
+      },
       memoDeleteDialog: false,
-      pageInformation: {}
     };
   },
   computed: {
@@ -122,22 +174,15 @@ export default {
     isMatchup() {
       return (this.$route.name == "MatchupMemosShow") ? true : false;
     },
+    pageInformation() {
+      return (this.isMatchup) ? this.pageInformationMatchup : this.pageInformationStrategy;
+    },
     memoId() {
       return this.$route.params.memoId;
     }
   },
   created() {
     this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId)
-      .then(() => {
-        if (this.isMatchup) {
-          this.pageInformation = {
-            editRouteName: "MatchupMemosEdit",
-            indexRouteName: "MatchupMemosIndex"
-          };
-        } else {
-          this.pageInformation = {};
-        }
-      })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
         this.$router.push({ name: "TopIndex" });
@@ -145,11 +190,15 @@ export default {
   },
   methods: {
     ...mapActions("memos", ["deleteMemo"]),
-    ...mapActions("alert", ["displayAlert"]),
+    ...mapActions("alert", [
+      "displayAlert",
+      "closeAlertWithCross"
+    ]),
     handleOpenMemoDeleteDialog() {
       this.memoDeleteDialog = true;
     },
     handleCloseMemoDialog() {
+      this.closeAlertWithCross();
       this.memoDeleteDialog = false;
     },
     async handleMemoDelete() {

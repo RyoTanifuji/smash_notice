@@ -72,8 +72,8 @@
 </template>
 
 <script>
-import { useVuelidate } from '@vuelidate/core';
 import { mapActions } from 'vuex';
+import { useVuelidate } from '@vuelidate/core';
 import {
   required,
   email,
@@ -88,7 +88,7 @@ import {
   maxLengthMessage,
   minLengthMessage,
   sameAsMessage
-} from '../../constants/validationMessages';
+} from '../../constants/validationCustom';
 import {
   successRegisterAlertStatus,
   failRegisterAlertStatus,
