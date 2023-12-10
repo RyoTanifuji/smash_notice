@@ -33,9 +33,16 @@
               <v-img
                 :src="memoBlockItem.blockable.pictureUrl"
                 :width="memoBlockItem.blockable.pictureWidth"
+                class="ml-2 mt-n2 mb-4"
               />
             </template>
-            <template v-else-if="memoBlockItem.blockableType == 'Embed'" />
+            <template v-else-if="memoBlockItem.blockableType == 'Embed'">
+              <div class="ml-2 mt-n2 mb-4">
+                <EmbedYoutube
+                  :youtube-url="memoBlockItem.blockable.identifier"
+                />
+              </div>
+            </template>
           </template>
         </div>
         <div class="d-flex flex-row justify-end mt-8">
@@ -115,9 +122,13 @@
 import { mapGetters, mapActions } from 'vuex';
 import sanitizeText from '../../../plugins/sanitizeText';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
+import EmbedYoutube from '../components/EmbedYoutube';
 
 export default {
   name: "MemosEdit",
+  components: {
+    EmbedYoutube
+  },
   data() {
     return {
       pageInformationMatchup: {

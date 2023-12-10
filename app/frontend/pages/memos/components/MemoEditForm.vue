@@ -70,7 +70,7 @@ export default {
       },
       state: {
         type: String,
-        required: true
+        default: "local"
       }
     }
   },

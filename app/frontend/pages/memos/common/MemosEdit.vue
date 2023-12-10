@@ -30,7 +30,11 @@
                 :width="memoBlockItem.blockable.pictureWidth"
               />
             </template>
-            <template v-else-if="memoBlockItem.blockableType == 'Embed'" />
+            <template v-else-if="memoBlockItem.blockableType == 'Embed'">
+              <EmbedYoutube
+                :youtube-url="memoBlockItem.blockable.identifier"
+              />
+            </template>
           </v-card-text>
           <v-card-actions>
             <v-spacer />
@@ -90,29 +94,10 @@
         :sentence="sentence"
         :image="image"
         :embed="embed"
+        :is-edit="false"
         @close-dialog="handleCloseMemoBlockDialog"
         @memoblock-submit="handleMemoBlockCreate"
       >
-        <template #radio-button>
-          <v-radio-group
-            v-model="memoBlock.blockableType"
-            inline
-            class="ml-4"
-          >
-            <v-radio
-              label="テキスト"
-              value="Sentence"
-            />
-            <v-radio
-              label="画像"
-              value="Image"
-            />
-            <v-radio
-              label="埋め込み"
-              value="Embed"
-            />
-          </v-radio-group>
-        </template>
         <template #title>
           メモブロックの追加
         </template>
@@ -133,30 +118,10 @@
         :sentence="sentence"
         :image="image"
         :embed="embed"
+        :is-edit="true"
         @close-dialog="handleCloseMemoBlockDialog"
         @memoblock-submit="handleMemoBlockUpdate"
       >
-        <template #radio-button>
-          <v-radio-group
-            v-model="memoBlock.blockableType"
-            inline
-            disabled
-            class="ml-4"
-          >
-            <v-radio
-              label="テキスト"
-              value="Sentence"
-            />
-            <v-radio
-              label="画像"
-              value="Image"
-            />
-            <v-radio
-              label="埋め込み"
-              value="Embed"
-            />
-          </v-radio-group>
-        </template>
         <template #title>
           メモブロックの編集
         </template>
@@ -203,12 +168,14 @@ import sanitizeText from '../../../plugins/sanitizeText';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
 import MemoEditForm from '../components/MemoEditForm';
+import EmbedYoutube from '../components/EmbedYoutube';
 
 export default {
   name: "MemosEdit",
   components: {
     MemoBlockFormDialog,
-    MemoEditForm
+    MemoEditForm,
+    EmbedYoutube
   },
   data() {
     return {
@@ -242,7 +209,9 @@ export default {
         pictureUrl: ""
       },
       embedDefault: {
-        subtitle: ""
+        subtitle: "",
+        embedType: "youtube",
+        identifier: ""
       },
       memoBlock: {},
       sentence: {},

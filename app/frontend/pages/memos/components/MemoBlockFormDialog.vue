@@ -6,7 +6,25 @@
     <v-card-text>
       <TheAlert :is-dialog="true" />
       <form>
-        <slot name="radio-button" />
+        <v-radio-group
+          v-model="v$.memoBlock.blockableType.$model"
+          inline
+          :disabled="isEdit"
+          class="ml-4"
+        >
+          <v-radio
+            label="テキスト"
+            value="Sentence"
+          />
+          <v-radio
+            label="画像"
+            value="Image"
+          />
+          <v-radio
+            label="埋め込み"
+            value="Embed"
+          />
+        </v-radio-group>
         <template v-if="memoBlock.blockableType == 'Sentence'">
           <v-text-field
             v-model="v$.sentence.subtitle.$model"
@@ -71,7 +89,65 @@
             class="w-75 ml-4"
           />
         </template>
-        <template v-else-if="memoBlock.blockableType == 'Embed'" />
+        <template v-else-if="memoBlock.blockableType == 'Embed'">
+          <v-text-field
+            v-model="v$.embed.subtitle.$model"
+            :error-messages="v$.embed.subtitle.$errors.map(e => e.$message)"
+            :counter="20"
+            name="見出し"
+            label="見出し"
+            hint="未入力にすることも可能です"
+            variant="underlined"
+            class="w-75 ml-4"
+          />
+          <v-text-field
+            v-model="v$.embed.identifier.$model"
+            :error-messages="v$.embed.identifier.$errors.map(e => e.$message)"
+            :counter="200"
+            clearable
+            name="埋め込み"
+            label="埋め込みURL"
+            hint="YouTubeのURLを入力してください"
+            variant="underlined"
+            class="w-75 ml-4"
+          >
+            <template #append>
+              <v-btn
+                icon
+                density="compact"
+                variant="plain"
+                @cllick="handleOpenEmbedYoutubeHelp"
+              >
+                <v-icon :icon="mdiHelpCircleOutline" />
+                <v-dialog
+                  v-model="embedYoutubeHelp"
+                  width="500px"
+                  activator="parent"
+                >
+                  <v-card>
+                    <v-card-title class="ma-2">
+                      <span class="text-h5 font-weight-bold">動画の埋め込み方法</span>
+                    </v-card-title>
+                    <v-card-text>
+                      YouTube動画ページ上部のURLか共有ボタンを押して表示されるURLをコピー&ペーストすることで、
+                      YouTubeの埋め込みを作成できます。
+
+                      <div class="my-4" />
+
+                      動画の開始位置の指定やプレイリストの埋め込みにも対応しています。
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer />
+                      <v-btn @click="embedYoutubeHelp = false">
+                        閉じる
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-btn>
+            </template>
+          </v-text-field>
+        </template>
       </form>
     </v-card-text>
     <v-card-actions>
@@ -93,6 +169,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import { maxLength, helpers } from '@vuelidate/validators';
+import { mdiHelpCircleOutline } from '@mdi/js';
 import { image, maxLengthMessage } from '../../../constants/validationCustom';
 import imageCompression from '../../../plugins/imageCompression';
 import TextEditor from '../../../components/TextEditor';
@@ -155,7 +232,19 @@ export default {
       subtitle: {
         type: String,
         default: ""
+      },
+      embedType: {
+        type: String,
+        default: "youtube",
+      },
+      identifier: {
+        type: String,
+        default: ""
       }
+    },
+    isEdit: {
+      type: Boolean,
+      required: true
     }
   },
   emits: [
@@ -170,7 +259,9 @@ export default {
   },
   data() {
     return {
-      formPreviewUrl: ""
+      formPreviewUrl: "",
+      embedYoutubeHelp: false,
+      mdiHelpCircleOutline
     };
   },
   computed: {
@@ -182,6 +273,9 @@ export default {
   },
   validations () {
     return {
+      memoBlock: {
+        blockableType: {}
+      },
       sentence: {
         subtitle: { 
           maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
@@ -198,6 +292,15 @@ export default {
           image: helpers.withMessage("無効なファイル形式です", image)
         },
         pictureWidth: {}
+      },
+      embed: {
+        subtitle: { 
+          maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
+        },
+        embedType: {},
+        identifier: {
+          maxLength: helpers.withMessage(maxLengthMessage(200), maxLength(200))
+        }
       }
     };
   },
