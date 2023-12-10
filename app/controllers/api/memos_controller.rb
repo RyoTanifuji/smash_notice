@@ -49,6 +49,6 @@ class Api::MemosController < ApplicationController
   end
 
   def memo_params
-    params.require(:memo).permit(:title, :type, :fighter_id)
+    params.require(:memo).permit(:title, :type, :fighter_id, :state)
   end
 end
