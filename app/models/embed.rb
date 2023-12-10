@@ -5,7 +5,7 @@ class Embed < ApplicationRecord
   validates :subtitle, length: { maximum: 20 }
   validates :identifier, length: { maximum: 200 }
 
-  enum embed_type: { youtube: 0, twitter: 1 }
+  enum embed_type: { youtube: 0 }
 
   def picture_url
     nil
