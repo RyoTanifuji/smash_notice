@@ -91,7 +91,7 @@ export default {
   },
   computed: {
     isMatchup() {
-      return (this.$route.name == "MatchupMemosEdit") ? true : false;
+      return this.$route.name == "MatchupMemosEdit" ? true : false;
     },
     memoStateLabel() {
       return this.memoStates[this.memo.state];

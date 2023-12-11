@@ -222,10 +222,10 @@ export default {
   computed: {
     ...mapGetters("memos", ["memoDetail"]),
     isMatchup() {
-      return (this.$route.name == "MatchupMemosEdit") ? true : false;
+      return this.$route.name == "MatchupMemosEdit" ? true : false;
     },
     pageInformation() {
-      return (this.isMatchup) ? this.pageInformationMatchup : this.pageInformationStrategy;
+      return this.isMatchup ? this.pageInformationMatchup : this.pageInformationStrategy;
     },
     memoId() {
       return this.$route.params.memoId;

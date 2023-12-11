@@ -204,10 +204,10 @@ export default {
   computed: {
     ...mapGetters("folders", ["folders"]),
     isMatchup() {
-      return (this.$route.name == "MatchupFoldersIndex") ? true : false;
+      return this.$route.name == "MatchupFoldersIndex" ? true : false;
     },
     pageInformation() {
-      return (this.isMatchup) ? this.pageInformationMatchup : this.pageInformationStrategy;
+      return this.isMatchup ? this.pageInformationMatchup : this.pageInformationStrategy;
     },
     sortedFolders() {
       return this.folders.slice().sort((a, b) => {

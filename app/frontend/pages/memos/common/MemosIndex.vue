@@ -220,10 +220,10 @@ export default {
       "memos"
     ]),
     isMatchup() {
-      return (this.$route.name == "MatchupMemosIndex") ? true : false;
+      return this.$route.name == "MatchupMemosIndex" ? true : false;
     },
     pageInformation() {
-      return (this.isMatchup) ? this.pageInformationMatchup : this.pageInformationStrategy;
+      return this.isMatchup ? this.pageInformationMatchup : this.pageInformationStrategy;
     },
     folderId() {
       return this.$route.params.folderId;
