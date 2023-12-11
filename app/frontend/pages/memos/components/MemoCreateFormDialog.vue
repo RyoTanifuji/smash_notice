@@ -9,7 +9,7 @@
         <v-text-field
           v-model="v$.memo.title.$model"
           :error-messages="v$.memo.title.$errors.map(e => e.$message)"
-          :counter="20"
+          :counter="30"
           name="タイトル"
           label="タイトル"
           hint="未入力の場合、下記の相手ファイター名が設定されます"
@@ -111,7 +111,7 @@ export default {
     return {
       memo: {
         title: { 
-          maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
+          maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
         },
         fighterId: {
           required: helpers.withMessage(requiredMessage("相手ファイター"), required)

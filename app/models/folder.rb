@@ -4,5 +4,5 @@ class Folder < ApplicationRecord
 
   has_many :memos, dependent: :destroy
 
-  validates :name, presence: true, length: { maximum: 20 }
+  validates :name, presence: true, length: { maximum: 30 }
 end
