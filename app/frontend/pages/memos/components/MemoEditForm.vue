@@ -6,6 +6,7 @@
       :counter="30"
       name="タイトル"
       label="タイトル"
+      :hint="formTitleHint"
       variant="underlined"
     />
     <template v-if="isMatchup">
@@ -43,7 +44,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import {
-  required,
+  requiredIf,
   maxLength,
   helpers
 } from '@vuelidate/validators';
@@ -72,6 +73,10 @@ export default {
         type: String,
         default: "local"
       }
+    },
+    formTitleHint: {
+      type: String,
+      required: true
     }
   },
   emits: ["memo-submit"],
@@ -101,10 +106,11 @@ export default {
     return {
       memo: {
         title: { 
+          required: helpers.withMessage(requiredMessage("タイトル"), requiredIf(!this.isMatchup)),
           maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
         },
         opponentId: {
-          required: helpers.withMessage(requiredMessage("相手ファイター"), required)
+          required: helpers.withMessage(requiredMessage("相手ファイター"), requiredIf(this.isMatchup))
         },
         state: {}
       }

@@ -52,7 +52,7 @@
   <template v-else>
     <div class="text-body-1 font-weight-bold">
       <router-link
-        :to="{ name: 'Null' }"
+        :to="{ name: 'StrategyFoldersIndex' }"
         class="text-decoration-underline"
       >
         攻略メモ

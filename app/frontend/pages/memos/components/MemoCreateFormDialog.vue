@@ -12,7 +12,7 @@
           :counter="30"
           name="タイトル"
           label="タイトル"
-          hint="未入力の場合、下記の相手ファイター名が設定されます"
+          :hint="formTitleHint"
           variant="underlined"
         />
         <template v-if="isMatchup">
@@ -56,7 +56,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import {
-  required,
+  requiredIf,
   maxLength,
   helpers
 } from '@vuelidate/validators';
@@ -85,6 +85,10 @@ export default {
         type: Number,
         required: true
       }
+    },
+    formTitleHint: {
+      type: String,
+      required: true
     }
   },
   emits: [
@@ -110,11 +114,12 @@ export default {
   validations () {
     return {
       memo: {
-        title: { 
+        title: {
+          required: helpers.withMessage(requiredMessage("タイトル"), requiredIf(!this.isMatchup)),
           maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
         },
         opponentId: {
-          required: helpers.withMessage(requiredMessage("相手ファイター"), required)
+          required: helpers.withMessage(requiredMessage("相手ファイター"), requiredIf(this.isMatchup))
         }
       }
     };

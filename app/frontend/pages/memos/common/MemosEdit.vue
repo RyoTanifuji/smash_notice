@@ -70,6 +70,7 @@
     >
       <MemoEditForm
         :memo="memo"
+        :form-title-hint="pageInformation.formTitleHint"
         @memo-submit="handleMemoUpdate"
       />
       <router-link
@@ -180,10 +181,12 @@ export default {
   data() {
     return {
       pageInformationMatchup: {
-        showRouteName: "MatchupMemosShow"
+        showRouteName: "MatchupMemosShow",
+        formTitleHint: "未入力の場合、下記の相手ファイター名が設定されます"
       },
       pageInformationStrategy: {
-        showRouteName: "StrategyMemosShow"
+        showRouteName: "StrategyMemosShow",
+        formTitleHint: "メモのタイトルを入力してください"
       },
       memoBlockCreateDialog: false,
       memoBlockEditDialog: false,

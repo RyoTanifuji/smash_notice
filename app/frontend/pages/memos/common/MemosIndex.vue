@@ -140,6 +140,7 @@
     >
       <MemoCreateFormDialog
         :memo="memo"
+        :form-title-hint="pageInformation.formTitleHint"
         @close-dialog="handleCloseMemoDialog"
         @memo-submit="handleMemoCreate"
       />
@@ -194,13 +195,15 @@ export default {
         memoCategory: "キャラ対メモ",
         memoType: "MatchupMemo",
         pathPrefix: "matchup",
-        editRouteName: "MatchupMemosEdit"
+        editRouteName: "MatchupMemosEdit",
+        formTitleHint: "未入力の場合、下記の相手ファイター名が設定されます"
       },
       pageInformationStrategy: {
         memoCategory: "攻略メモ",
         memoType: "StrategyMemo",
         pathPrefix: "strategy",
-        editRouteName: "StrategyMemosEdit"
+        editRouteName: "StrategyMemosEdit",
+        formTitleHint: "メモのタイトルを入力してください"
       },
       memoDefault: {
         id: null,
@@ -254,6 +257,7 @@ export default {
     ]),
     handleOpenMemoCreateDialog() {
       this.memo = Object.assign({}, this.memoDefault);
+      if (!this.isMatchup) this.memo.opponentId = 1;
       this.memoCreateDialog = true;
     },
     handleOpenMemoDeleteDialog(memo) {
