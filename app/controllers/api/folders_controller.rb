@@ -2,8 +2,8 @@ class Api::FoldersController < ApplicationController
   before_action :set_folder, only: %i[update destroy]
 
   def index
-    @folders = current_user.folders.where(type: params[:type])
-    render json: @folders, except: [:user_id, :created_at]
+    @folders = current_user.folders.where(type: params[:type]).order(updated_at: :desc)
+    render json: @folders, except: [:user_id, :created_at], methods: [:type]
   end
 
   def create

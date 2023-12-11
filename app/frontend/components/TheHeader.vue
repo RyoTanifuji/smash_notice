@@ -80,11 +80,15 @@ export default {
   },
   methods: {
     ...mapActions("users", ["logoutUser"]),
-    ...mapActions("alert", ["displayAlert"]),
+    ...mapActions("alert", [
+      "displayAlert",
+      "cancelTransition"
+    ]),
     async handleLogout() {
       try {
         await this.logoutUser();
         this.displayAlert({ alertStatus: successLogoutAlertStatus });
+        if (this.$route.name == "TopIndex") this.cancelTransition();
         this.$router.push({ name: 'TopIndex' });
       } catch (err) {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });

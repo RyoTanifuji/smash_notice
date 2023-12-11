@@ -313,7 +313,7 @@ export default {
     async handleMemoUpdate(memo) {
       try {
         await this.updateMemo(memo);
-        this.$router.go({path: this.$router.currentRoute.path, force: true});
+        this.$router.go({ name: this.$route.name, force: true });
       } catch (error) {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }
