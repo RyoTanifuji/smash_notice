@@ -205,7 +205,7 @@ export default {
       memoDefault: {
         id: null,
         title: "",
-        fighterId: null
+        opponentId: null
       },
       memo: {},
       memoCreateDialog: false,

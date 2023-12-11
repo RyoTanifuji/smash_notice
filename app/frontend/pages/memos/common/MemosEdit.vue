@@ -190,7 +190,7 @@ export default {
       memoBlockDeleteDialog: false,
       memo: {
         title: "",
-        fighterId: null,
+        opponentId: null,
         state: ""
       },
       memoBlockDefault: {

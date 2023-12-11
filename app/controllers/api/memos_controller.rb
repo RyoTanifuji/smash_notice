@@ -9,7 +9,8 @@ class Api::MemosController < ApplicationController
   def create
     @memo = current_user.memos.build(memo_params)
     @memo.folder = @folder
-    @memo.title = Fighter.find(@memo.fighter_id).name if @memo.title.blank?
+    @memo.fighter = @folder.fighter
+    @memo.title = @memo.opponent.name if @memo.title.blank? && @memo.type == "MatchupMemo"
 
     if @memo.save
       render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
@@ -24,7 +25,7 @@ class Api::MemosController < ApplicationController
 
   def update
     @memo.assign_attributes(memo_params)
-    @memo.title = Fighter.find(@memo.fighter_id).name if @memo.title.blank?
+    @memo.title = @memo.opponent.name if @memo.title.blank? && @memo.type == "MatchupMemo"
 
     if @memo.save
       render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
@@ -49,6 +50,6 @@ class Api::MemosController < ApplicationController
   end
 
   def memo_params
-    params.require(:memo).permit(:title, :type, :fighter_id, :state)
+    params.require(:memo).permit(:title, :type, :opponent_id, :state)
   end
 end

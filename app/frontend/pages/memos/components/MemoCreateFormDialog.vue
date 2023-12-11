@@ -17,8 +17,8 @@
         />
         <template v-if="isMatchup">
           <v-autocomplete
-            v-model="v$.memo.fighterId.$model"
-            :error-messages="v$.memo.fighterId.$errors.map(e => e.$message)"
+            v-model="v$.memo.opponentId.$model"
+            :error-messages="v$.memo.opponentId.$errors.map(e => e.$message)"
             :items="fightersArray"
             item-value="id"
             item-title="name"
@@ -81,7 +81,7 @@ export default {
         type: String,
         required: true
       },
-      fighterId: {
+      opponentId: {
         type: Number,
         required: true
       }
@@ -113,7 +113,7 @@ export default {
         title: { 
           maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
         },
-        fighterId: {
+        opponentId: {
           required: helpers.withMessage(requiredMessage("相手ファイター"), required)
         }
       }

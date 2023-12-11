@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       embedYoutubeUrl : ""
-    }
+    };
   },
   computed: {
     playerWidth() {
@@ -43,7 +43,7 @@ export default {
       params.forEach((param) => {
         param.replace("t=", "amp;start=");
         result = result + param + "&";
-      })
+      });
 
       result = "https://www.youtube.com/embed/" + result.slice(0, -1);
       return result;
