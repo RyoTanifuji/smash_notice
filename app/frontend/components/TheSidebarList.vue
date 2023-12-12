@@ -92,7 +92,7 @@ export default {
         strategy: {
           id: 1,
           title: "攻略メモ",
-          route: "Null",
+          route: "StrategyFoldersIndex",
           icon: mdiChartBar
         },
         matchup: {

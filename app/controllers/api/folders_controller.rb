@@ -2,13 +2,13 @@ class Api::FoldersController < ApplicationController
   before_action :set_folder, only: %i[update destroy]
 
   def index
-    @folders = current_user.folders.where(type: params[:type])
-    render json: @folders, except: [:user_id, :created_at]
+    @folders = current_user.folders.where(type: params[:type]).order(updated_at: :desc)
+    render json: @folders, except: [:user_id, :created_at], methods: [:type]
   end
 
   def create
     @folder = current_user.folders.build(folder_params)
-    @folder.name = Fighter.find(@folder.fighter_id).name if @folder.name.blank?
+    @folder.name = @folder.fighter.name if @folder.name.blank?
 
     if @folder.save
       render json: @folder, except: [:user_id, :created_at]
@@ -19,7 +19,7 @@ class Api::FoldersController < ApplicationController
 
   def update
     @folder.assign_attributes(folder_params)
-    @folder.name = Fighter.find(@folder.fighter_id).name if @folder.name.blank?
+    @folder.name = @folder.fighter.name if @folder.name.blank?
 
     if @folder.save
       render json: @folder, except: [:user_id, :created_at]

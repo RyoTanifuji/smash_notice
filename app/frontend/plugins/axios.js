@@ -13,7 +13,7 @@ if (localStorage.auth_token) {
 
 axiosInstance.interceptors.request.use((req) => {
   // axiosでリクエストを送るたびに、アラートを初期化
-  store.dispatch("alert/closeAlert");
+  if (req.method === "post" || req.method === "patch") store.dispatch("alert/closeAlert");
 
   // リクエストのデータの各Keyをスネークケース化
   req.data = humps.decamelizeKeys(req.data);

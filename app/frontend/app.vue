@@ -3,7 +3,7 @@
     <TheHeader />
     <v-main>
       <TheAlert />
-      <div class="mx-10 my-6">
+      <div class="mx-10 my-2">
         <router-view />
       </div>
     </v-main>

@@ -70,6 +70,7 @@
     >
       <MemoEditForm
         :memo="memo"
+        :form-title-hint="pageInformation.formTitleHint"
         @memo-submit="handleMemoUpdate"
       />
       <router-link
@@ -180,17 +181,19 @@ export default {
   data() {
     return {
       pageInformationMatchup: {
-        showRouteName: "MatchupMemosShow"
+        showRouteName: "MatchupMemosShow",
+        formTitleHint: "未入力の場合、下記の相手ファイター名が設定されます"
       },
       pageInformationStrategy: {
-        showRouteName: "StrategyMemosShow"
+        showRouteName: "StrategyMemosShow",
+        formTitleHint: "メモのタイトルを入力してください"
       },
       memoBlockCreateDialog: false,
       memoBlockEditDialog: false,
       memoBlockDeleteDialog: false,
       memo: {
         title: "",
-        fighterId: null,
+        opponentId: null,
         state: ""
       },
       memoBlockDefault: {
@@ -222,10 +225,10 @@ export default {
   computed: {
     ...mapGetters("memos", ["memoDetail"]),
     isMatchup() {
-      return (this.$route.name == "MatchupMemosEdit") ? true : false;
+      return this.$route.name == "MatchupMemosEdit" ? true : false;
     },
     pageInformation() {
-      return (this.isMatchup) ? this.pageInformationMatchup : this.pageInformationStrategy;
+      return this.isMatchup ? this.pageInformationMatchup : this.pageInformationStrategy;
     },
     memoId() {
       return this.$route.params.memoId;
@@ -310,7 +313,7 @@ export default {
     async handleMemoUpdate(memo) {
       try {
         await this.updateMemo(memo);
-        this.$router.go({path: this.$router.currentRoute.path, force: true});
+        this.$router.go({ name: this.$route.name, force: true });
       } catch (error) {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
       }

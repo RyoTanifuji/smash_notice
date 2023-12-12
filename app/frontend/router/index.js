@@ -37,8 +37,20 @@ const routes = [
     meta: { requiredAuth: true }
   },
   {
+    path: "/strategy",
+    name: "StrategyFoldersIndex",
+    component: FoldersIndex,
+    meta: { requiredAuth: true }
+  },
+  {
     path: "/matchup/:folderId/memos",
     name: "MatchupMemosIndex",
+    component: MemosIndex,
+    meta: { requiredAuth: true }
+  },
+  {
+    path: "/strategy/:folderId/memos",
+    name: "StrategyMemosIndex",
     component: MemosIndex,
     meta: { requiredAuth: true }
   },
@@ -49,8 +61,20 @@ const routes = [
     meta: { requiredAuth: true }
   },
   {
+    path: "/Strategy/memos/:memoId",
+    name: "StrategyMemosShow",
+    component: MemosShow,
+    meta: { requiredAuth: true }
+  },
+  {
     path: "/matchup/memos/:memoId/edit",
     name: "MatchupMemosEdit",
+    component: MemosEdit,
+    meta: { requiredAuth: true }
+  },
+  {
+    path: "/strategy/memos/:memoId/edit",
+    name: "StrategyMemosEdit",
     component: MemosEdit,
     meta: { requiredAuth: true }
   },

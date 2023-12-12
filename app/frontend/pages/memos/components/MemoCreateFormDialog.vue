@@ -9,16 +9,16 @@
         <v-text-field
           v-model="v$.memo.title.$model"
           :error-messages="v$.memo.title.$errors.map(e => e.$message)"
-          :counter="20"
+          :counter="30"
           name="タイトル"
           label="タイトル"
-          hint="未入力の場合、下記の相手ファイター名が設定されます"
+          :hint="formTitleHint"
           variant="underlined"
         />
         <template v-if="isMatchup">
           <v-autocomplete
-            v-model="v$.memo.fighterId.$model"
-            :error-messages="v$.memo.fighterId.$errors.map(e => e.$message)"
+            v-model="v$.memo.opponentId.$model"
+            :error-messages="v$.memo.opponentId.$errors.map(e => e.$message)"
             :items="fightersArray"
             item-value="id"
             item-title="name"
@@ -56,7 +56,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import {
-  required,
+  requiredIf,
   maxLength,
   helpers
 } from '@vuelidate/validators';
@@ -81,10 +81,14 @@ export default {
         type: String,
         required: true
       },
-      fighterId: {
+      opponentId: {
         type: Number,
         required: true
       }
+    },
+    formTitleHint: {
+      type: String,
+      required: true
     }
   },
   emits: [
@@ -104,17 +108,18 @@ export default {
   },
   computed: {
     isMatchup() {
-      return (this.$route.name == "MatchupMemosIndex") ? true : false;
+      return this.$route.name == "MatchupMemosIndex" ? true : false;
     }
   },
   validations () {
     return {
       memo: {
-        title: { 
-          maxLength: helpers.withMessage(maxLengthMessage(20), maxLength(20))
+        title: {
+          required: helpers.withMessage(requiredMessage("タイトル"), requiredIf(!this.isMatchup)),
+          maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
         },
-        fighterId: {
-          required: helpers.withMessage(requiredMessage("相手ファイター"), required)
+        opponentId: {
+          required: helpers.withMessage(requiredMessage("相手ファイター"), requiredIf(this.isMatchup))
         }
       }
     };

@@ -2,7 +2,7 @@ class Image < ApplicationRecord
   has_one :memo_block, as: :blockable, dependent: :destroy
   has_one :memo, through: :memo_block
 
-  validates :subtitle, length: { maximum: 20 }
+  validates :subtitle, length: { maximum: 30 }
   validates :picture_width, numericality: { only_integer: true, greater_than_or_equal_to: 200, less_than_or_equal_to: 800 }
 
   has_one_attached :picture
