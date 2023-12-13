@@ -204,7 +204,7 @@ export default {
   computed: {
     ...mapGetters("folders", ["folders"]),
     isMatchup() {
-      return this.$route.name == "MatchupFoldersIndex" ? true : false;
+      return this.$route.name == "MatchupFoldersIndex";
     },
     pageInformation() {
       return this.isMatchup ? this.pageInformationMatchup : this.pageInformationStrategy;
@@ -218,6 +218,9 @@ export default {
     }
   },
   created() {
+    this.$store.dispatch("folders/fetchFolders", this.pageInformation.folderType);
+  },
+  updated() {
     this.$store.dispatch("folders/fetchFolders", this.pageInformation.folderType);
   },
   methods: {

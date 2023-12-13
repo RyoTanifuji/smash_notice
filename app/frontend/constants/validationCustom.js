@@ -2,7 +2,7 @@ import { helpers } from '@vuelidate/validators';
 
 export const image = (value) => {
   const pattern = /^data:image\/(jpeg|jpg|png);base64,/;
-  return value.match(pattern) || !helpers.req(value);
+  return pattern.test(value) || !helpers.req(value);
 };
 
 // バリデーションのエラーメッセージ

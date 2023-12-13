@@ -172,7 +172,7 @@ export default {
   computed: {
     ...mapGetters("memos", ["memoDetail"]),
     isMatchup() {
-      return this.$route.name == "MatchupMemosShow" ? true : false;
+      return this.$route.name == "MatchupMemosShow";
     },
     pageInformation() {
       return this.isMatchup ? this.pageInformationMatchup : this.pageInformationStrategy;

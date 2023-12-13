@@ -108,7 +108,7 @@ export default {
   },
   computed: {
     isMatchup() {
-      return this.$route.name == "MatchupMemosIndex" ? true : false;
+      return this.$route.name == "MatchupMemosIndex";
     }
   },
   validations () {
