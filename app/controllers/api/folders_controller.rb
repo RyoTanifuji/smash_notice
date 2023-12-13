@@ -7,14 +7,23 @@ class Api::FoldersController < ApplicationController
   end
 
   def create
-    @folder = current_user.folders.build(folder_params)
-    @folder.name = @folder.fighter.name if @folder.name.blank?
+    Folder.transaction do
+      @folder = current_user.folders.build(folder_params)
+      @folder.name = @folder.fighter.name if @folder.name.blank?
 
-    if @folder.save
-      render json: @folder, except: [:user_id, :created_at]
-    else
-      render json: @folder.errors.full_messages, status: :bad_request
+      @folder.save!
+      if @folder.type == "MatchupFolder"
+        @template_memo = @folder.build_template_memo(
+          title: "キャラ対テンプレート",
+          user: current_user,
+          fighter: @folder.fighter,
+          opponent: Fighter.first
+        )
+        @template_memo.save!
+      end
     end
+
+    render json: @folder, except: [:user_id, :created_at]
   end
 
   def update

@@ -218,13 +218,14 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("folders/fetchFolders", this.pageInformation.folderType);
+    this.fetchFolders(this.pageInformation.folderType);
   },
   updated() {
-    this.$store.dispatch("folders/fetchFolders", this.pageInformation.folderType);
+    this.fetchFolders(this.pageInformation.folderType);
   },
   methods: {
     ...mapActions("folders", [
+      "fetchFolders",
       "createFolder",
       "updateFolder",
       "deleteFolder"

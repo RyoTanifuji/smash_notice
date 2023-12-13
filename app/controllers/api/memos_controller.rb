@@ -1,5 +1,5 @@
 class Api::MemosController < ApplicationController
-  before_action :set_folder, only: %i[index create]
+  before_action :set_folder, only: %i[index create template]
   before_action :set_memo, only: %i[show update destroy]
 
   def index
@@ -37,6 +37,11 @@ class Api::MemosController < ApplicationController
   def destroy
     @memo.destroy!
     render json: @memo
+  end
+
+  def template
+    @template_memo = @folder.template_memo
+    render json: @template_memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
   end
 
   private

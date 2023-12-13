@@ -47,6 +47,11 @@
           </template>
         </template>
         <template v-else-if="memoBlock.blockableType == 'Image'">
+          <template v-if="isTemplate">
+            <div class="text-caption mt-n4 ml-4">
+              テンプレートの画像メモブロックは見出しと画像サイズのみ指定できます。
+            </div>
+          </template>
           <v-text-field
             v-model="v$.image.subtitle.$model"
             :error-messages="v$.image.subtitle.$errors.map(e => e.$message)"
@@ -65,6 +70,7 @@
             />
           </template>
           <v-file-input
+            :disabled="isTemplate"
             label="ファイルを選択してください"
             prepend-icon=""
             variant="underlined"
@@ -265,6 +271,9 @@ export default {
     };
   },
   computed: {
+    isTemplate() {
+      return this.$route.name == "MatchupTemplate";
+    },
     previewUrl() {
       return this.formPreviewUrl ? this.formPreviewUrl
         : this.image.pictureUrl ? this.image.pictureUrl

@@ -1,6 +1,6 @@
 <template>
   <div class="text-md-h3 text-h4 font-weight-bold">
-    {{ folderName }}
+    {{ folder.name }}
   </div>
 
   <div class="my-6" />
@@ -22,13 +22,17 @@
           <div>
             <template v-if="isMatchup">
               <div>
-                <v-btn
-                  size="small"
-                  color="teal-accent-4"
-                  class="mb-2"
+                <router-link
+                  :to="{ name: 'MatchupTemplate', params: { folderId: folder.id } }"
                 >
-                  テンプレートの編集
-                </v-btn>
+                  <v-btn
+                    size="small"
+                    color="teal-accent-4"
+                    class="mb-2"
+                  >
+                    テンプレートの編集
+                  </v-btn>
+                </router-link>
               </div>
               <div>
                 <v-btn
@@ -219,7 +223,7 @@ export default {
   },
   computed: {
     ...mapGetters("memos", [
-      "folderName",
+      "folder",
       "memos"
     ]),
     isMatchup() {
@@ -240,7 +244,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("memos/fetchMemos", this.folderId)
+    this.fetchMemos(this.folderId)
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
         this.$router.push({ name: "TopIndex" });
@@ -248,6 +252,7 @@ export default {
   },
   methods: {
     ...mapActions("memos", [
+      "fetchMemos",
       "createMemo",
       "deleteMemo"
     ]),

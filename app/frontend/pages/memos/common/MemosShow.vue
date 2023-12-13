@@ -182,14 +182,17 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId)
+    this.fetchMemoDetail(this.$route.params.memoId)
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
         this.$router.push({ name: "TopIndex" });
       });
   },
   methods: {
-    ...mapActions("memos", ["deleteMemo"]),
+    ...mapActions("memos", [
+      "fetchMemoDetail",
+      "deleteMemo"
+    ]),
     ...mapActions("alert", [
       "displayAlert",
       "closeAlertWithCross"
