@@ -5,4 +5,8 @@ class Folder < ApplicationRecord
   has_many :memos, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 30 }
+
+  def memos_excluded_template
+    memos.where.not(type: "TemplateMemo")
+  end
 end

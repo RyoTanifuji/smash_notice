@@ -3,7 +3,7 @@ class Api::MemosController < ApplicationController
   before_action :set_memo, only: %i[show update destroy]
 
   def index
-    render json: @folder, include: [{memos: {except: [:user_id, :created_at]}}]
+    render json: @folder, methods: [:memos_excluded_template]
   end
 
   def create
