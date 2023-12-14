@@ -169,13 +169,11 @@ export default {
         editRouteName: "StrategyMemosEdit"
       },
       memoDeleteDialog: false,
+      isDataReceived: false
     };
   },
   computed: {
-    ...mapGetters("memos", [
-      "isDataReceived",
-      "memoDetail"
-    ]),
+    ...mapGetters("memos", ["memoDetail"]),
     isMatchup() {
       return this.$route.name == "MatchupMemosShow";
     },
@@ -188,6 +186,9 @@ export default {
   },
   created() {
     this.fetchMemoDetail(this.$route.params.memoId)
+      .then(() => {
+          this.isDataReceived = true;
+      })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
         this.$router.push({ name: "TopIndex" });

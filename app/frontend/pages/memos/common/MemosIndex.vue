@@ -219,13 +219,13 @@ export default {
       memo: {},
       memoCreateDialog: false,
       memoDeleteDialog: false,
+      isDataReceived: false,
       mdiFile,
       mdiInformationOutline
     };
   },
   computed: {
     ...mapGetters("memos", [
-      "isDataReceived",
       "folder",
       "memos"
     ]),
@@ -248,6 +248,9 @@ export default {
   },
   created() {
     this.fetchMemos(this.folderId)
+      .then(() => {
+          this.isDataReceived = true;
+      })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
         this.$router.push({ name: "TopIndex" });

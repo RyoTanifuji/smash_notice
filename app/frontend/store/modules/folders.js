@@ -1,19 +1,14 @@
 import axios from '../../plugins/axios';
 
 const state = {
-  isDataReceived: false,
   folders: []
 };
 
 const getters = {
-  isDataReceived: state => state.isDataReceived,
   folders: state => state.folders
 };
 
 const mutations = {
-  setDataComplete: (state) => {
-    state.isDataReceived = true;
-  },
   setFolders: (state, folders) => {
     state.folders = folders;
   },
@@ -38,7 +33,6 @@ const actions = {
     axios.get('folders', { params: { type: folderType } })
       .then(res => {
         commit("setFolders", res.data);
-        commit("setDataComplete");
       })
       .catch(err => console.log(err.response));
   },

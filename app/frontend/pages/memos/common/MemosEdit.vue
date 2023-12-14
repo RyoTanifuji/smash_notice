@@ -247,14 +247,12 @@ export default {
       memoBlock: {},
       sentence: {},
       image: {},
-      embed: {}
+      embed: {},
+      isDataReceived: false
     };
   },
   computed: {
-    ...mapGetters("memos", [
-      "isDataReceived",
-      "memoDetail"
-    ]),
+    ...mapGetters("memos", ["memoDetail"]),
     isTemplate() {
       return this.$route.name == "MatchupTemplate";
     },
@@ -275,6 +273,7 @@ export default {
       this.fetchTemplate(this.$route.params.folderId)
         .then(() => {
           this.memo = Object.assign({}, this.memoDetail);
+          this.isDataReceived = true;
         })
         .catch(() => {
           this.displayAlert({ alertStatus: serverErrorAlertStatus });
@@ -284,6 +283,7 @@ export default {
       this.fetchMemoDetail(this.memoId)
         .then(() => {
           this.memo = Object.assign({}, this.memoDetail);
+          this.isDataReceived = true;
         })
         .catch(() => {
           this.displayAlert({ alertStatus: serverErrorAlertStatus });

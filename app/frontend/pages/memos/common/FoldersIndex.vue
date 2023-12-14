@@ -199,15 +199,13 @@ export default {
         fighterId: null
       },
       folder: {},
+      isDataReceived: false,
       mdiFolder,
       mdiInformationOutline
     };
   },
   computed: {
-    ...mapGetters("folders", [
-      "isDataReceived",
-      "folders"
-    ]),
+    ...mapGetters("folders", ["folders"]),
     isMatchup() {
       return this.$route.name == "MatchupFoldersIndex";
     },
@@ -223,10 +221,19 @@ export default {
     }
   },
   created() {
-    this.fetchFolders(this.pageInformation.folderType);
+    this.fetchFolders(this.pageInformation.folderType)
+      .then(() => {
+          this.isDataReceived = true;
+      });
   },
   updated() {
-    this.fetchFolders(this.pageInformation.folderType);
+    this.fetchFolders(this.pageInformation.folderType)
+      .then(() => {
+          this.isDataReceived = true;
+      });
+  },
+  beforeRouteUpdate(){
+    this.isDataReceived = false;
   },
   methods: {
     ...mapActions("folders", [
