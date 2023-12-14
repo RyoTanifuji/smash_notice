@@ -7,16 +7,19 @@ class Api::MemosController < ApplicationController
   end
 
   def create
-    @memo = current_user.memos.build(memo_params)
-    @memo.folder = @folder
-    @memo.fighter = @folder.fighter
-    @memo.title = @memo.opponent.name if @memo.title.blank? && @memo.type == "MatchupMemo"
+    Memo.transaction do
+      @memo = current_user.memos.build(memo_params.merge(
+        folder: @folder,
+        fighter: @folder.fighter
+      ))
+      @memo.title = @memo.opponent.name if @memo.title.blank? && @memo.type == "MatchupMemo"
 
-    if @memo.save
-      render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
-    else
-      render json: @memo.errors.full_messages, status: :bad_request
+      @memo.save!
+
+      @memo.apply_template! if apply_template?
     end
+
+    render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
   end
 
   def show
@@ -56,5 +59,9 @@ class Api::MemosController < ApplicationController
 
   def memo_params
     params.require(:memo).permit(:title, :type, :opponent_id, :state)
+  end
+
+  def apply_template?
+    ActiveRecord::Type::Boolean.new.cast(params[:apply_template])
   end
 end
