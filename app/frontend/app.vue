@@ -1,7 +1,7 @@
 <template>
   <v-app id="vuetify-app">
     <TheHeader />
-    <v-main>
+    <v-main class="main-contents">
       <TheAlert />
       <div class="mx-10 my-2">
         <router-view />
@@ -30,5 +30,9 @@ a {
   /* router-linkによるaタグの装飾の無効化 */
   text-decoration: none;
   color: inherit;
+}
+
+.main-contents {
+  margin-bottom: 60px;
 }
 </style>

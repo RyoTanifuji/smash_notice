@@ -1,6 +1,7 @@
 <template>
   <v-footer
     app
+    absolute
     border
     class="d-flex justify-center"
   >
