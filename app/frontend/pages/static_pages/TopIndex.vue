@@ -78,12 +78,12 @@
               v-for="folderItem in strategyFolders"
               :key="folderItem.id"
             >
-                <v-list-item
-                  :title="folderItem.name"
-                  :subtitle="dateFormat(folderItem.updatedAt)"
-                  :to="{ path: `/strategy/${folderItem.id}/memos` }"
-                  :prepend-icon="mdiFolder"
-                />
+              <v-list-item
+                :title="folderItem.name"
+                :subtitle="dateFormat(folderItem.updatedAt)"
+                :to="{ path: `/strategy/${folderItem.id}/memos` }"
+                :prepend-icon="mdiFolder"
+              />
             </template>
           </v-list>
         </v-card-text>
@@ -115,12 +115,12 @@
                 v-for="folderItem in matchupFolders"
                 :key="folderItem.id"
               >
-                  <v-list-item
-                    :title="folderItem.name"
-                    :subtitle="dateFormat(folderItem.updatedAt)"
-                    :to="{ path: `/matchup/${folderItem.id}/memos` }"
-                    :prepend-icon="mdiFolder"
-                  />
+                <v-list-item
+                  :title="folderItem.name"
+                  :subtitle="dateFormat(folderItem.updatedAt)"
+                  :to="{ path: `/matchup/${folderItem.id}/memos` }"
+                  :prepend-icon="mdiFolder"
+                />
               </template>
             </v-list>
           </v-card-text>
@@ -144,7 +144,7 @@ export default {
   data() {
     return {
       mdiFolder
-    }
+    };
   },
   computed: {
     ...mapGetters("users", ["authUser"]),
@@ -157,12 +157,12 @@ export default {
     matchupFolders() {
       return this.folders.filter(folder => {
         return folder.type == "MatchupFolder";
-      })
+      });
     },
     strategyFolders() {
       return this.folders.filter(folder => {
         return folder.type == "StrategyFolder";
-      })
+      });
     }
   },
   created() {
@@ -175,3 +175,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.text-body-1 {
+  line-height: 1.7em;
+}
+</style>

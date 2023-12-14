@@ -22,14 +22,15 @@ class MemoBlock < ApplicationRecord
     end
   end
 
-  def create_blockable!(type)
+  def create_blockable!(type, blockable_params)
     case type
     when "Sentence"
-      self.blockable = Sentence.create!
+      self.blockable = Sentence.create!(blockable_params)
     when "Image"
-      self.blockable = Image.create!
+      self.blockable = Image.create!(blockable_params)
+      self.blockable.parse_base64(blockable_params[:file])
     when "Embed"
-      self.blockable = Embed.create!
+      self.blockable = Embed.create!(blockable_params)
     else
       raise "不正なブロックタイプです (#{type})"
     end

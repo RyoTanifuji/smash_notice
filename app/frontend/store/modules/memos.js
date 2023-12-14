@@ -1,7 +1,8 @@
 import axios from '../../plugins/axios';
 
 const state = {
-  folderName: "",
+  isDataReceived: false,
+  folder: [],
   memos: [],
   memoRemovedKeys: [],
   memoDetail: {
@@ -10,14 +11,18 @@ const state = {
 };
 
 const getters = {
-  folderName: state => state.folderName,
+  isDataReceived: state => state.isDataReceived,
+  folder: state => state.folder,
   memos: state => state.memos,
   memoDetail: state => state.memoDetail
 };
 
 const mutations = {
-  setFolder: (state, folderName) => {
-    state.folderName = folderName;
+  setDataComplete: (state) => {
+    state.isDataReceived = true;
+  },
+  setFolder: (state, folder) => {
+    state.folder = folder;
   },
   setMemos: (state, memos) => {
     state.memos = memos;
@@ -68,14 +73,23 @@ const actions = {
   fetchMemos({ commit }, folderId) {
     return axios.get(`folders/${folderId}/memos`)
       .then(res => {
-        commit("setFolder", res.data.name);
-        commit("setMemos", res.data.memos);
+        commit("setFolder", res.data);
+        commit("setMemos", res.data.memosExcludedTemplate);
+        commit("setDataComplete");
+      });
+  },
+  fetchTemplate({ commit }, folderId) {
+    return axios.get(`folders/${folderId}/template`)
+      .then(res => {
+        commit("setMemoDetail", res.data);
+        commit("setDataComplete");
       });
   },
   fetchMemoDetail({ commit }, memoId) {
     return axios.get(`memos/${memoId}`)
       .then(res => {
         commit("setMemoDetail", res.data);
+        commit("setDataComplete");
       });
   },
   createMemo({ commit }, { memo, memoType, folderId, applyTemplate }) {

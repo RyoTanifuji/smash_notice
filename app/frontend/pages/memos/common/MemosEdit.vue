@@ -1,166 +1,190 @@
 <template>
-  <div class="text-md-h3 text-h4 font-weight-bold">
-    {{ memoDetail.title }}
-  </div>
+  <template v-if="isDataReceived">
+    <div class="text-md-h3 text-h4 font-weight-bold">
+      {{ memoDetail.title }}
+    </div>
 
-  <div class="my-6" />
+    <div class="my-6" />
 
-  <v-row>
-    <v-col
-      cols="12"
-      md="8"
-      lg="8"
-      xl="8"
-    >
-      <template
-        v-for="memoBlockItem in memoDetail.memoBlocks"
-        :key="memoBlockItem.id"
+    <v-row>
+      <v-col
+        cols="12"
+        md="8"
+        lg="8"
+        xl="8"
       >
-        <v-card
-          :title="memoBlockItem.blockable.subtitle"
-          class="mb-2"
+        <template v-if="memoDetail.memoBlocks.length">
+          <template
+            v-for="memoBlockItem in memoDetail.memoBlocks"
+            :key="memoBlockItem.id"
+          >
+            <v-card
+              :title="memoBlockItem.blockable.subtitle"
+              class="mb-2"
+            >
+              <v-card-text>
+                <template v-if="memoBlockItem.blockableType == 'Sentence'">
+                  <p v-html="sanitizeHtml(memoBlockItem.blockable.body)" />
+                </template>
+                <template v-else-if="memoBlockItem.blockableType == 'Image'">
+                  <v-img
+                    :src="memoBlockItem.blockable.pictureUrl"
+                    :width="memoBlockItem.blockable.pictureWidth"
+                  />
+                </template>
+                <template v-else-if="memoBlockItem.blockableType == 'Embed'">
+                  <EmbedYoutube
+                    :youtube-url="memoBlockItem.blockable.identifier"
+                  />
+                </template>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn
+                  color="error"
+                  @click="handleOpenMemoBlockDeleteDialog(memoBlockItem)"
+                >
+                  削除
+                </v-btn>
+                <v-btn
+                  class="mr-4"
+                  @click="handleOpenMemoBlockEditDialog(memoBlockItem)"
+                >
+                  編集
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </template>
+        <template v-else>
+          <template v-if="isTemplate">
+            <div class="text-body-1 font-weight-bold">
+              <span class="d-inline-block">キャラ対メモの作成時に「テンプレートを適用する」にチェックを入れることで、</span>
+              <span class="d-inline-block">テンプレートに設定した内容が自動的に追加されます。</span>
+            </div>
+          </template>
+          <template v-else>
+            <div class="text-body-1 font-weight-bold">
+              まだ、メモブロックがありません。
+              メモブロックを追加しましょう。
+            </div>
+          </template>
+
+            <div class="my-8" />
+        </template>
+        <v-btn
+          block
+          color="teal-accent-4"
+          class="mt-4"
+          @click="handleOpenMemoBlockCreateDialog"
         >
+          メモブロックを追加する
+        </v-btn>
+      </v-col>
+
+      <template v-if="!isTemplate">
+        <v-col
+          cols="12"
+          md="4"
+          lg="4"
+          xl="4"
+        >
+          <MemoEditForm
+            :memo="memo"
+            :form-title-hint="pageInformation.formTitleHint"
+            @memo-submit="handleMemoUpdate"
+          />
+          <router-link
+            :to="{ name: pageInformation.showRouteName, params: { memoId: memoDetail.id } }"
+          >
+            <v-btn
+              block
+              class="mt-4"
+            >
+              メモ詳細画面へ進む
+            </v-btn>
+          </router-link>
+        </v-col>
+      </template>
+    </v-row>
+
+    <div class="justify-center">
+      <v-dialog
+        v-model="memoBlockCreateDialog"
+        width="700px"
+      >
+        <MemoBlockFormDialog
+          :memo-block="memoBlock"
+          :sentence="sentence"
+          :image="image"
+          :embed="embed"
+          :is-edit="false"
+          @close-dialog="handleCloseMemoBlockDialog"
+          @memoblock-submit="handleMemoBlockCreate"
+        >
+          <template #title>
+            メモブロックの追加
+          </template>
+          <template #submit>
+            作成
+          </template>
+        </MemoBlockFormDialog>
+      </v-dialog>
+    </div>
+
+    <div class="justify-center">
+      <v-dialog
+        v-model="memoBlockEditDialog"
+        width="700px"
+      >
+        <MemoBlockFormDialog
+          :memo-block="memoBlock"
+          :sentence="sentence"
+          :image="image"
+          :embed="embed"
+          :is-edit="true"
+          @close-dialog="handleCloseMemoBlockDialog"
+          @memoblock-submit="handleMemoBlockUpdate"
+        >
+          <template #title>
+            メモブロックの編集
+          </template>
+          <template #submit>
+            更新
+          </template>
+        </MemoBlockFormDialog>
+      </v-dialog>
+    </div>
+
+    <div class="justify-center">
+      <v-dialog
+        v-model="memoBlockDeleteDialog"
+        width="500px"
+      >
+        <v-card>
+          <v-card-title class="ma-2">
+            <span class="text-h5 font-weight-bold">メモブロックの削除</span>
+          </v-card-title>
           <v-card-text>
-            <template v-if="memoBlockItem.blockableType == 'Sentence'">
-              <p v-html="sanitizeHtml(memoBlockItem.blockable.body)" />
-            </template>
-            <template v-else-if="memoBlockItem.blockableType == 'Image'">
-              <v-img
-                :src="memoBlockItem.blockable.pictureUrl"
-                :width="memoBlockItem.blockable.pictureWidth"
-              />
-            </template>
-            <template v-else-if="memoBlockItem.blockableType == 'Embed'">
-              <EmbedYoutube
-                :youtube-url="memoBlockItem.blockable.identifier"
-              />
-            </template>
+            メモブロックを削除してもよろしいですか？
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn
-              color="error"
-              @click="handleOpenMemoBlockDeleteDialog(memoBlockItem)"
-            >
-              削除
+            <v-btn @click="handleCloseMemoBlockDialog">
+              キャンセル
             </v-btn>
             <v-btn
               class="mr-4"
-              @click="handleOpenMemoBlockEditDialog(memoBlockItem)"
+              color="error"
+              @click="handleMemoBlockDelete"
             >
-              編集
+              削除
             </v-btn>
           </v-card-actions>
         </v-card>
-      </template>
-      <v-btn
-        block
-        color="teal-accent-4"
-        class="mt-4"
-        @click="handleOpenMemoBlockCreateDialog"
-      >
-        メモブロックを追加する
-      </v-btn>
-    </v-col>
-    <v-col
-      cols="12"
-      md="4"
-      lg="4"
-      xl="4"
-    >
-      <MemoEditForm
-        :memo="memo"
-        :form-title-hint="pageInformation.formTitleHint"
-        @memo-submit="handleMemoUpdate"
-      />
-      <router-link
-        :to="{ name: pageInformation.showRouteName, params: { memoId: memoDetail.id } }"
-      >
-        <v-btn
-          block
-          class="mt-4"
-        >
-          メモ詳細画面へ進む
-        </v-btn>
-      </router-link>
-    </v-col>
-  </v-row>
-  <div class="justify-center">
-    <v-dialog
-      v-model="memoBlockCreateDialog"
-      width="700px"
-    >
-      <MemoBlockFormDialog
-        :memo-block="memoBlock"
-        :sentence="sentence"
-        :image="image"
-        :embed="embed"
-        :is-edit="false"
-        @close-dialog="handleCloseMemoBlockDialog"
-        @memoblock-submit="handleMemoBlockCreate"
-      >
-        <template #title>
-          メモブロックの追加
-        </template>
-        <template #submit>
-          作成
-        </template>
-      </MemoBlockFormDialog>
-    </v-dialog>
-  </div>
-
-  <div class="justify-center">
-    <v-dialog
-      v-model="memoBlockEditDialog"
-      width="700px"
-    >
-      <MemoBlockFormDialog
-        :memo-block="memoBlock"
-        :sentence="sentence"
-        :image="image"
-        :embed="embed"
-        :is-edit="true"
-        @close-dialog="handleCloseMemoBlockDialog"
-        @memoblock-submit="handleMemoBlockUpdate"
-      >
-        <template #title>
-          メモブロックの編集
-        </template>
-        <template #submit>
-          更新
-        </template>
-      </MemoBlockFormDialog>
-    </v-dialog>
-  </div>
-
-  <div class="justify-center">
-    <v-dialog
-      v-model="memoBlockDeleteDialog"
-      width="500px"
-    >
-      <v-card>
-        <v-card-title class="ma-2">
-          <span class="text-h5 font-weight-bold">メモブロックの削除</span>
-        </v-card-title>
-        <v-card-text>
-          メモブロックを削除してもよろしいですか？
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn @click="handleCloseMemoBlockDialog">
-            キャンセル
-          </v-btn>
-          <v-btn
-            class="mr-4"
-            color="error"
-            @click="handleMemoBlockDelete"
-          >
-            削除
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+      </v-dialog>
+    </div>
+  </template>
 </template>
 
 <script>
@@ -180,6 +204,10 @@ export default {
   },
   data() {
     return {
+      pageInformationTemplate: {
+        showRouteName: "",
+        formTitleHint: ""
+      },
       pageInformationMatchup: {
         showRouteName: "MatchupMemosShow",
         formTitleHint: "未入力の場合、下記の相手ファイター名が設定されます"
@@ -223,32 +251,53 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("memos", ["memoDetail"]),
+    ...mapGetters("memos", [
+      "isDataReceived",
+      "memoDetail"
+    ]),
+    isTemplate() {
+      return this.$route.name == "MatchupTemplate";
+    },
     isMatchup() {
-      return this.$route.name == "MatchupMemosEdit" ? true : false;
+      return this.$route.name == "MatchupMemosEdit";
     },
     pageInformation() {
-      return this.isMatchup ? this.pageInformationMatchup : this.pageInformationStrategy;
+      return this.isTemplate ? pageInformationTemplate
+        : this.isMatchup ? this.pageInformationMatchup
+        : this.pageInformationStrategy;
     },
     memoId() {
-      return this.$route.params.memoId;
+      return this.isTemplate ? this.memoDetail.id : this.$route.params.memoId;
     }
   },
   created() {
-    this.$store.dispatch("memos/fetchMemoDetail", this.$route.params.memoId)
-      .then(() => {
-        this.memo = Object.assign({}, this.memoDetail);
-      })
-      .catch(() => {
-        this.displayAlert({ alertStatus: serverErrorAlertStatus });
-        this.$router.push({ name: "TopIndex" });
-      });
+    if (this.isTemplate) {
+      this.fetchTemplate(this.$route.params.folderId)
+        .then(() => {
+          this.memo = Object.assign({}, this.memoDetail);
+        })
+        .catch(() => {
+          this.displayAlert({ alertStatus: serverErrorAlertStatus });
+          this.$router.push({ name: "TopIndex" });
+        });
+    } else {
+      this.fetchMemoDetail(this.memoId)
+        .then(() => {
+          this.memo = Object.assign({}, this.memoDetail);
+        })
+        .catch(() => {
+          this.displayAlert({ alertStatus: serverErrorAlertStatus });
+          this.$router.push({ name: "TopIndex" });
+        });
+    }
   },
   updated() {
     this.memo = Object.assign({}, this.memoDetail);
   },
   methods: {
     ...mapActions("memos", [
+      "fetchTemplate",
+      "fetchMemoDetail",
       "createMemoBlock",
       "updateMemo",
       "updateMemoBlock",

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :sessions, only: %i[create]
     resources :folders, only: %i[index create update destroy] do
       resources :memos, only: %i[index create]
+      get 'template', to: 'memos#template'
     end
     resources :memos, only: %i[show update destroy] do
       resources :memo_blocks, only: %i[create update destroy]

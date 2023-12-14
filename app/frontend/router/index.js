@@ -43,6 +43,12 @@ const routes = [
     meta: { requiredAuth: true }
   },
   {
+    path: "/matchup/:folderId/template",
+    name: "MatchupTemplate",
+    component: MemosEdit,
+    meta: { requiredAuth: true }
+  },
+  {
     path: "/matchup/:folderId/memos",
     name: "MatchupMemosIndex",
     component: MemosIndex,

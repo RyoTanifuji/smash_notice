@@ -1,0 +1,2 @@
+class TemplateMemo < Memo
+end
