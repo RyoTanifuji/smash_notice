@@ -193,7 +193,7 @@ import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
 import MemoEditForm from '../components/MemoEditForm';
 import EmbedYoutube from '../components/EmbedYoutube';
-import sanitizeText from '../../../plugins/sanitizeText';
+import { sanitizeText } from '../../../plugins/sanitizeText';
 
 export default {
   name: "MemosEdit",

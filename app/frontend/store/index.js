@@ -2,6 +2,7 @@ import { createStore } from 'vuex';
 import users from './modules/users';
 import folders from './modules/folders';
 import memos from './modules/memos';
+import shared from './modules/shared';
 import alert from './modules/alert';
 
 const store = createStore({
@@ -9,6 +10,7 @@ const store = createStore({
     users,
     folders,
     memos,
+    shared,
     alert
   }
 });

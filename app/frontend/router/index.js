@@ -8,6 +8,8 @@ import FoldersIndex from '../pages/memos/common/FoldersIndex';
 import MemosIndex from '../pages/memos/common/MemosIndex';
 import MemosShow from '../pages/memos/common/MemosShow';
 import MemosEdit from '../pages/memos/common/MemosEdit';
+import SharedMemosIndex from '../pages/memos/shared/SharedMemosIndex';
+import SharedMemosList from '../pages/memos/components/SharedMemosList';
 
 import { requireLoginAlertStatus } from '../constants/alertStatus';
 
@@ -83,6 +85,23 @@ const routes = [
     name: "StrategyMemosEdit",
     component: MemosEdit,
     meta: { requiredAuth: true }
+  },
+  {
+    path: "/shared",
+    component: SharedMemosIndex,
+    meta: { requiredAuth: false },
+    children: [
+      {
+        path: "",
+        name: "SharedStrategyMemosIndex",
+        component: SharedMemosList
+      },
+      {
+        path: "matchup",
+        name: "SharedMatchupMemosIndex",
+        component: SharedMemosList
+      }
+    ]
   },
   {
     path: "/null",

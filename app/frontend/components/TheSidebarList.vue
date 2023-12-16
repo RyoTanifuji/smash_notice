@@ -104,7 +104,7 @@ export default {
         shared: {
           id: 3,
           title: "みんなのメモ",
-          route: "Null",
+          route: "SharedStrategyMemosIndex",
           icon: mdiAccountMultiple
         }
       },

@@ -30,7 +30,7 @@
 
     <div class="text-body-1 font-weight-bold">
       <router-link
-        :to="{ name: 'Null' }"
+        :to="{ name: 'SharedStrategyMemosIndex' }"
         class="text-decoration-underline"
       >
         みんなのメモ
