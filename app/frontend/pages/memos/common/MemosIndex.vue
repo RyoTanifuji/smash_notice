@@ -125,12 +125,16 @@
                 メモの作成
               </v-btn>
               <template v-if="isMatchup">
-                <v-btn
-                  class="mb-2"
-                  color="teal-accent-4"
+                <router-link
+                  :to="{ name: 'MatchupTemplate', params: { folderId: folder.id } }"
                 >
-                  テンプレートの編集
-                </v-btn>
+                  <v-btn
+                    class="mb-2"
+                    color="teal-accent-4"
+                  >
+                    テンプレートの編集
+                  </v-btn>
+                </router-link>
               </template>
             </div>
           </v-layout>
@@ -317,6 +321,6 @@ export default {
 .list-item-memo-info {
   position: absolute;
   top: 25%;
-  right: 2%
+  right: 2%;
 }
 </style>

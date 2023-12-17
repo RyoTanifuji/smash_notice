@@ -307,6 +307,6 @@ export default {
 .list-item-folder-info {
   position: absolute;
   top: 25%;
-  right: 2%
+  right: 2%;
 }
 </style>
