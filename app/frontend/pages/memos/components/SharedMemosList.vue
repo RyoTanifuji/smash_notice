@@ -18,7 +18,10 @@
           class="d-flex flex-column memo-card"
         >
           <v-card-title class="mt-2 font-weight-bold">
-            <v-avatar :image="getImageUrl(memoItem.fighterId)" class="mr-2"/>
+            <v-avatar
+              :image="getImageUrl(memoItem.fighterId)"
+              class="mr-2"
+            />
             <span class="memo-card-link">
               {{ omittedText(memoItem.title, 12) }}
             </span>

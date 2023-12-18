@@ -1,5 +1,8 @@
 <template>
-  <div ref="memo" class="memo-text">
+  <div
+    ref="memo"
+    class="memo-text"
+  >
     {{ memoTextPreview }}
   </div>
 </template>
@@ -58,7 +61,7 @@ export default {
       return result;
     }
   }
-}
+};
 </script>
 
 <style scoped>

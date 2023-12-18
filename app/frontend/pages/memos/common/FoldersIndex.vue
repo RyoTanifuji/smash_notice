@@ -178,6 +178,9 @@ export default {
   components: {
     FolderFormDialog
   },
+  beforeRouteUpdate(){
+    this.isDataReceived = false;
+  },
   data() {
     return {
       pageInformationMatchup: {
@@ -231,9 +234,6 @@ export default {
       .then(() => {
           this.isDataReceived = true;
       });
-  },
-  beforeRouteUpdate(){
-    this.isDataReceived = false;
   },
   methods: {
     ...mapActions("folders", [

@@ -18,7 +18,7 @@ const actions = {
   fetchSharedMemos({ commit }) {
     return axios.get('shared')
       .then(res => {
-        commit("setSharedMemos", res.data)
+        commit("setSharedMemos", res.data);
       });
   }
 };

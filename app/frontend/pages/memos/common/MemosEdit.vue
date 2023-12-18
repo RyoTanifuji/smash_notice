@@ -70,7 +70,7 @@
             </div>
           </template>
 
-            <div class="my-8" />
+          <div class="my-8" />
         </template>
         <v-btn
           block

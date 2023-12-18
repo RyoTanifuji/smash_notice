@@ -49,7 +49,7 @@ import { mapGetters, mapActions } from 'vuex';
 import SharedMemosList from '../components/SharedMemosList';
 
 export default {
-  name: "sharedMemosIndex",
+  name: "SharedMemosIndex",
   components: {
     SharedMemosList
   },
