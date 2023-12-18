@@ -24,4 +24,12 @@ class Memo < ApplicationRecord
       memo_block.save!
     end
   end
+
+  def sentence_body
+    string = ""
+    sentences.each do |i|
+      string += i.body
+    end
+    string
+  end
 end

@@ -3,8 +3,6 @@
     みんなのメモ
   </div>
 
-  {{ sharedMemos }}
-
   <div class="my-6" />
 
   <v-tabs
@@ -29,22 +27,20 @@
     v-model="activeTab"
     class="mt-4"
   >
-    <v-window-item
-      value="/shared"
-      exact
+    <template
+      v-for="tab in tabs"
+      :key="tab.id"
     >
-      <SharedMemosList
-        :memos="strategyMemos"
-      />
-    </v-window-item>
-    <v-window-item
-      value="/shared/matchup"
-      exact
-    >
-      <SharedMemosList
-        :memos="matchupMemos"
-      />
-    </v-window-item>
+      <v-window-item
+        :value="tab.route"
+        exact
+      >
+        <SharedMemosList
+          :auth-user="authUser"
+          :memos="memosList(tab.memoType)"
+        />
+      </v-window-item>
+    </template>
   </v-window>
 </template>
 
@@ -64,34 +60,32 @@ export default {
         {
           id: 1,
           name: "攻略メモ",
-          route: '/shared'
+          route: '/shared',
+          memoType: "StrategyMemo"
         },
         {
           id: 2,
           name: "キャラ対メモ",
-          route: '/shared/matchup'
+          route: '/shared/matchup',
+          memoType: "MatchupMemo"
         }
       ]
     };
   },
   computed: {
-    ...mapGetters("shared", ["sharedMemos"]),
-    matchupMemos() {
-      return this.sharedMemos.filter(memo => {
-        return memo.type == "MatchupMemo";
-      });
-    },
-    strategyMemos() {
-      return this.sharedMemos.filter(memo => {
-        return memo.type == "StrategyMemo";
-      });
-    }
+    ...mapGetters("users", ["authUser"]),
+    ...mapGetters("shared", ["sharedMemos"])
   },
   created() {
     this.fetchSharedMemos();
   },
   methods: {
-    ...mapActions("shared", ["fetchSharedMemos"])
+    ...mapActions("shared", ["fetchSharedMemos"]),
+    memosList(memoType) {
+      return this.sharedMemos.filter(memo => {
+        return memo.type == memoType;
+      });
+    }
   }
 };
 </script>

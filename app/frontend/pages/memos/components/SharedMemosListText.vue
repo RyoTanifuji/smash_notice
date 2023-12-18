@@ -52,7 +52,7 @@ export default {
         lines++;
       }
       if (lines == this.maxLines && i < text.length) {
-        result = result.slice(0, -1);
+        result = result.slice(0, -2);
         result += "…";
       }
       return result;
