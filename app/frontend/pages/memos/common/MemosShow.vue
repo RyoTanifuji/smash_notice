@@ -184,7 +184,7 @@ export default {
       return this.$route.params.memoId;
     }
   },
-  created() {
+  mounted() {
     this.fetchMemoDetail(this.$route.params.memoId)
       .then(() => {
           this.isDataReceived = true;

@@ -165,7 +165,7 @@ export default {
       });
     }
   },
-  created() {
+  mounted() {
     if (this.authUser) this.$store.dispatch("folders/fetchFolders", ["MatchupFolder", "StrategyFolder"]);
   },
   methods: {

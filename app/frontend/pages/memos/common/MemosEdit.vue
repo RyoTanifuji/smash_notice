@@ -268,7 +268,7 @@ export default {
       return this.isTemplate ? this.memoDetail.id : this.$route.params.memoId;
     }
   },
-  created() {
+  mounted() {
     if (this.isTemplate) {
       this.fetchTemplate(this.$route.params.folderId)
         .then(() => {

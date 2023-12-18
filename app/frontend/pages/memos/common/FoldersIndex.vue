@@ -223,7 +223,7 @@ export default {
       });
     }
   },
-  created() {
+  mounted() {
     this.fetchFolders(this.pageInformation.folderType)
       .then(() => {
           this.isDataReceived = true;

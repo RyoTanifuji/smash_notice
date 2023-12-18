@@ -250,7 +250,7 @@ export default {
       });
     }
   },
-  created() {
+  mounted() {
     this.fetchMemos(this.folderId)
       .then(() => {
           this.isDataReceived = true;

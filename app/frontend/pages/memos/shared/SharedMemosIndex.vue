@@ -76,7 +76,7 @@ export default {
     ...mapGetters("users", ["authUser"]),
     ...mapGetters("shared", ["sharedMemos"])
   },
-  created() {
+  mounted() {
     this.fetchSharedMemos();
   },
   methods: {
