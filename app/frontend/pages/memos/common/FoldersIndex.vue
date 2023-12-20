@@ -16,7 +16,7 @@
       >
         <template v-if="folders.length">
           <div class="d-flex">
-            <span class="text-h5">
+            <span class="text-h6">
               フォルダ一覧
             </span>
             <v-spacer />

@@ -16,7 +16,7 @@
       >
         <template v-if="memos.length">
           <div class="d-flex align-end">
-            <span class="text-h5 mb-5">
+            <span class="text-h6 mb-5">
               メモ一覧
             </span>
             <v-spacer />
@@ -64,7 +64,7 @@
               <div class="list-item-memo">
                 <v-list-item
                   :title="memoItem.title"
-                  :subtitle="dateFormat(memoItem.updatedAt)"
+                  :subtitle="dateFormat(memoItem.updatedAt) + memoStateText(memoItem)"
                   :to="{ path: `/${pageInformation.pathPrefix}/memos/${memoItem.id}` }"
                   :prepend-icon="mdiFile"
                 />
@@ -86,6 +86,24 @@
                           </span>
                         </v-list-item-title>
                       </v-list-item>
+                      <template v-if="memoItem.state == 'local'">
+                        <v-list-item @click="handleMemoStateUpdate(memoItem.id, 'shared')">
+                          <v-list-item-title>
+                            <span>
+                              メモを公開する
+                            </span>
+                          </v-list-item-title>
+                        </v-list-item>
+                      </template>
+                      <template v-else>
+                        <v-list-item @click="handleMemoStateUpdate(memoItem.id, 'local')">
+                          <v-list-item-title>
+                            <span>
+                              メモを非公開にする
+                            </span>
+                          </v-list-item-title>
+                        </v-list-item>
+                      </template>
                       <v-list-item @click="handleOpenMemoDeleteDialog(memoItem)">
                         <v-list-item-title>
                           <span class="text-error">
@@ -264,6 +282,7 @@ export default {
     ...mapActions("memos", [
       "fetchMemos",
       "createMemo",
+      "updateMemoState",
       "deleteMemo"
     ]),
     ...mapActions("alert", [
@@ -298,6 +317,13 @@ export default {
         this.displayAlert({ alertStatus: serverErrorAlertStatus, isDialog: true });
       }
     },
+    async handleMemoStateUpdate(memoId, memoState) {
+      try {
+        await this.updateMemoState({ memoId: memoId, memoState: memoState });
+      } catch (error) {
+        this.displayAlert({ alertStatus: serverErrorAlertStatus });
+      }
+    },
     async handleMemoDelete() {
       try {
         await this.deleteMemo(this.memo);
@@ -308,6 +334,9 @@ export default {
     },
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");
+    },
+    memoStateText(memo) {
+      return memo.state == "shared" ? " | 公開中" : "";
     }
   }
 };
@@ -321,6 +350,6 @@ export default {
 .list-item-memo-info {
   position: absolute;
   top: 25%;
-  right: 2%;
+  right: 5%;
 }
 </style>

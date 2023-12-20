@@ -119,6 +119,13 @@ const actions = {
         commit("updateMemoBlock", res.data);
       });
   },
+  updateMemoState({ commit }, { memoId, memoState }) {
+    return axios.patch(`memos/${memoId}`, { memo: { state: memoState}})
+      .then(res => {
+        commit("removeKeysOfMemoDetail", res.data);
+        commit("updateMemo");
+      });
+  },
   deleteMemo({ commit }, memo) {
     return axios.delete(`memos/${memo.id}`)
       .then(res => {
