@@ -8,21 +8,15 @@
   </v-container>
 
   <v-list>
-    <router-link
-      v-slot="{ isActive }"
-      :to="{ name: 'TopIndex' }"
+    <v-list-item
+      :prepend-icon="mdiHome"
+      to="/"
+      class="mt-4"
     >
-      <v-list-item
-        link
-        :prepend-icon="mdiHome"
-        :active="isActive"
-        class="mt-4"
-      >
-        <span class="font-weight-bold">
-          TOPページ
-        </span>
-      </v-list-item>
-    </router-link>
+      <span class="font-weight-bold">
+        TOPページ
+      </span>
+    </v-list-item>
 
     <div class="my-12" />
 
@@ -30,21 +24,16 @@
       v-for="item in memoItems"
       :key="item.id"
     >
-      <router-link
-        v-slot="{ isActive }"
-        :to="{ name: item.route }"
+      <v-list-item
+        :prepend-icon="item.icon"
+        :to="item.route"
+        :active="isActive(item.route)"
+        class="mt-1"
       >
-        <v-list-item
-          link
-          :prepend-icon="item.icon"
-          :active="isActive"
-          class="mt-1"
-        >
-          <span class="font-weight-bold">
-            {{ item.title }}
-          </span>
-        </v-list-item>
-      </router-link>
+        <span class="font-weight-bold">
+          {{ item.title }}
+        </span>
+      </v-list-item>
     </template>
 
     <div class="my-12" />
@@ -53,21 +42,15 @@
       v-for="item in infoItems"
       :key="item.id"
     >
-      <router-link
-        v-slot="{ isActive }"
-        :to="{ name: item.route }"
+      <v-list-item
+        :prepend-icon="item.icon"
+        :to="item.route"
+        class="mt-1"
       >
-        <v-list-item
-          link
-          :prepend-icon="item.icon"
-          :active="isActive"
-          class="mt-1"
-        >
-          <span class="font-weight-bold">
-            {{ item.title }}
-          </span>
-        </v-list-item>
-      </router-link>
+        <span class="font-weight-bold">
+          {{ item.title }}
+        </span>
+      </v-list-item>
     </template>
   </v-list>
 </template>
@@ -92,19 +75,19 @@ export default {
         strategy: {
           id: 1,
           title: "攻略メモ",
-          route: "StrategyFoldersIndex",
+          route: "/strategy",
           icon: mdiChartBar
         },
         matchup: {
           id: 2,
           title: "キャラ対メモ",
-          route: "MatchupFoldersIndex",
+          route: "/matchup",
           icon: mdiSwordCross
         },
         shared: {
           id: 3,
           title: "みんなのメモ",
-          route: "Null",
+          route: "/shared",
           icon: mdiAccountMultiple
         }
       },
@@ -112,23 +95,29 @@ export default {
         contact: {
           id: 1,
           title: "お問い合わせ",
-          route: "Null",
+          route: "/null",
           icon: mdiTooltipTextOutline
         },
         terms: {
           id: 2,
           title: "利用規約",
-          route: "Null",
+          route: "/null",
           icon: mdiBookCheckOutline
         },
         policy: {
           id: 3,
           title: "プライバシーポリシー",
-          route: "Null",
+          route: "/null",
           icon: mdiShieldLockOutline
         }
       }
     };
+  },
+  methods: {
+    isActive(route) {
+      const reg = new RegExp(`^${route}`);
+      return reg.test(this.$route.path);
+    }
   }
 };
 </script>

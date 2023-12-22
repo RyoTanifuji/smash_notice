@@ -1,7 +1,6 @@
 import axios from '../../plugins/axios';
 
 const state = {
-  isDataReceived: false,
   folder: [],
   memos: [],
   memoRemovedKeys: [],
@@ -11,16 +10,12 @@ const state = {
 };
 
 const getters = {
-  isDataReceived: state => state.isDataReceived,
   folder: state => state.folder,
   memos: state => state.memos,
   memoDetail: state => state.memoDetail
 };
 
 const mutations = {
-  setDataComplete: (state) => {
-    state.isDataReceived = true;
-  },
   setFolder: (state, folder) => {
     state.folder = folder;
   },
@@ -75,21 +70,18 @@ const actions = {
       .then(res => {
         commit("setFolder", res.data);
         commit("setMemos", res.data.memosExcludedTemplate);
-        commit("setDataComplete");
       });
   },
   fetchTemplate({ commit }, folderId) {
     return axios.get(`folders/${folderId}/template`)
       .then(res => {
         commit("setMemoDetail", res.data);
-        commit("setDataComplete");
       });
   },
   fetchMemoDetail({ commit }, memoId) {
     return axios.get(`memos/${memoId}`)
       .then(res => {
         commit("setMemoDetail", res.data);
-        commit("setDataComplete");
       });
   },
   createMemo({ commit }, { memo, memoType, folderId, applyTemplate }) {
@@ -125,6 +117,13 @@ const actions = {
       })
       .then(res => {
         commit("updateMemoBlock", res.data);
+      });
+  },
+  updateMemoState({ commit }, { memoId, memoState }) {
+    return axios.patch(`memos/${memoId}`, { memo: { state: memoState}})
+      .then(res => {
+        commit("removeKeysOfMemoDetail", res.data);
+        commit("updateMemo");
       });
   },
   deleteMemo({ commit }, memo) {

@@ -70,7 +70,7 @@
             </div>
           </template>
 
-            <div class="my-8" />
+          <div class="my-8" />
         </template>
         <v-btn
           block
@@ -193,7 +193,7 @@ import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
 import MemoEditForm from '../components/MemoEditForm';
 import EmbedYoutube from '../components/EmbedYoutube';
-import sanitizeText from '../../../plugins/sanitizeText';
+import { sanitizeText } from '../../../plugins/sanitizeText';
 
 export default {
   name: "MemosEdit",
@@ -247,14 +247,12 @@ export default {
       memoBlock: {},
       sentence: {},
       image: {},
-      embed: {}
+      embed: {},
+      isDataReceived: false
     };
   },
   computed: {
-    ...mapGetters("memos", [
-      "isDataReceived",
-      "memoDetail"
-    ]),
+    ...mapGetters("memos", ["memoDetail"]),
     isTemplate() {
       return this.$route.name == "MatchupTemplate";
     },
@@ -270,11 +268,12 @@ export default {
       return this.isTemplate ? this.memoDetail.id : this.$route.params.memoId;
     }
   },
-  created() {
+  mounted() {
     if (this.isTemplate) {
       this.fetchTemplate(this.$route.params.folderId)
         .then(() => {
           this.memo = Object.assign({}, this.memoDetail);
+          this.isDataReceived = true;
         })
         .catch(() => {
           this.displayAlert({ alertStatus: serverErrorAlertStatus });
@@ -284,6 +283,7 @@ export default {
       this.fetchMemoDetail(this.memoId)
         .then(() => {
           this.memo = Object.assign({}, this.memoDetail);
+          this.isDataReceived = true;
         })
         .catch(() => {
           this.displayAlert({ alertStatus: serverErrorAlertStatus });

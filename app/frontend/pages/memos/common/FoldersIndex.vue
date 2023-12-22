@@ -16,7 +16,7 @@
       >
         <template v-if="folders.length">
           <div class="d-flex">
-            <span class="text-h5">
+            <span class="text-h6">
               フォルダ一覧
             </span>
             <v-spacer />
@@ -178,6 +178,9 @@ export default {
   components: {
     FolderFormDialog
   },
+  beforeRouteUpdate(){
+    this.isDataReceived = false;
+  },
   data() {
     return {
       pageInformationMatchup: {
@@ -199,15 +202,13 @@ export default {
         fighterId: null
       },
       folder: {},
+      isDataReceived: false,
       mdiFolder,
       mdiInformationOutline
     };
   },
   computed: {
-    ...mapGetters("folders", [
-      "isDataReceived",
-      "folders"
-    ]),
+    ...mapGetters("folders", ["folders"]),
     isMatchup() {
       return this.$route.name == "MatchupFoldersIndex";
     },
@@ -222,11 +223,17 @@ export default {
       });
     }
   },
-  created() {
-    this.fetchFolders(this.pageInformation.folderType);
+  mounted() {
+    this.fetchFolders(this.pageInformation.folderType)
+      .then(() => {
+          this.isDataReceived = true;
+      });
   },
   updated() {
-    this.fetchFolders(this.pageInformation.folderType);
+    this.fetchFolders(this.pageInformation.folderType)
+      .then(() => {
+          this.isDataReceived = true;
+      });
   },
   methods: {
     ...mapActions("folders", [
@@ -300,6 +307,6 @@ export default {
 .list-item-folder-info {
   position: absolute;
   top: 25%;
-  right: 2%
+  right: 2%;
 }
 </style>

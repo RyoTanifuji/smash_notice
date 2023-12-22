@@ -8,6 +8,8 @@ import FoldersIndex from '../pages/memos/common/FoldersIndex';
 import MemosIndex from '../pages/memos/common/MemosIndex';
 import MemosShow from '../pages/memos/common/MemosShow';
 import MemosEdit from '../pages/memos/common/MemosEdit';
+import SharedMemosIndex from '../pages/memos/shared/SharedMemosIndex';
+import SharedMemosList from '../pages/memos/components/SharedMemosList';
 
 import { requireLoginAlertStatus } from '../constants/alertStatus';
 
@@ -67,7 +69,7 @@ const routes = [
     meta: { requiredAuth: true }
   },
   {
-    path: "/Strategy/memos/:memoId",
+    path: "/strategy/memos/:memoId",
     name: "StrategyMemosShow",
     component: MemosShow,
     meta: { requiredAuth: true }
@@ -85,6 +87,23 @@ const routes = [
     meta: { requiredAuth: true }
   },
   {
+    path: "/shared",
+    component: SharedMemosIndex,
+    meta: { requiredAuth: false },
+    children: [
+      {
+        path: "",
+        name: "SharedStrategyMemosIndex",
+        component: SharedMemosList
+      },
+      {
+        path: "matchup",
+        name: "SharedMatchupMemosIndex",
+        component: SharedMemosList
+      }
+    ]
+  },
+  {
     path: "/null",
     name: "Null",
     component: TopIndex,
@@ -94,6 +113,15 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return {
+        top: 0
+      };
+    }
+  },
   routes
 });
 

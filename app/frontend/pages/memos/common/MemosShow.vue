@@ -26,7 +26,7 @@
               </template>
               <template v-if="memoBlockItem.blockableType == 'Sentence'">
                 <div
-                  class="ml-2 mt-n2 mb-4 sentence-body"
+                  class="ml-2 mt-n2 mb-4"
                   v-html="sanitizeHtml(memoBlockItem.blockable.body)"
                 />
               </template>
@@ -151,7 +151,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import EmbedYoutube from '../components/EmbedYoutube';
-import sanitizeText from '../../../plugins/sanitizeText';
+import { sanitizeText } from '../../../plugins/sanitizeText';
 
 export default {
   name: "MemosEdit",
@@ -169,13 +169,11 @@ export default {
         editRouteName: "StrategyMemosEdit"
       },
       memoDeleteDialog: false,
+      isDataReceived: false
     };
   },
   computed: {
-    ...mapGetters("memos", [
-      "isDataReceived",
-      "memoDetail"
-    ]),
+    ...mapGetters("memos", ["memoDetail"]),
     isMatchup() {
       return this.$route.name == "MatchupMemosShow";
     },
@@ -186,8 +184,11 @@ export default {
       return this.$route.params.memoId;
     }
   },
-  created() {
+  mounted() {
     this.fetchMemoDetail(this.$route.params.memoId)
+      .then(() => {
+          this.isDataReceived = true;
+      })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
         this.$router.push({ name: "TopIndex" });
@@ -224,9 +225,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.sentence-body {
-  line-height: 1.6em;
-}
-</style>
