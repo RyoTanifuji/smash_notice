@@ -162,13 +162,13 @@ import SharedMemosList from '../memos/components/SharedMemosList';
 
 export default {
   name: "TopIndex",
+  components: {
+    SharedMemosList
+  },
   data() {
     return {
       mdiFolder
     };
-  },
-  components: {
-    SharedMemosList
   },
   computed: {
     ...mapGetters("users", ["authUser"]),
