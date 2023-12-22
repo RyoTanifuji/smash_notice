@@ -165,6 +165,9 @@ export default {
   components: {
     SharedMemosList
   },
+  beforeRouteLeave(){
+    this.resetFolders();
+  },
   data() {
     return {
       mdiFolder
@@ -193,6 +196,7 @@ export default {
     this.fetchSharedMemos({ memoType: ["MatchupMemo", "StrategyMemo"], page: 1 });
   },
   methods: {
+    ...mapActions("folders", ["resetFolders"]),
     ...mapActions("shared", ["fetchSharedMemos"]),
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");

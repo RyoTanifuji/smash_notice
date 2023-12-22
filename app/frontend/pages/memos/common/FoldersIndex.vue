@@ -180,6 +180,7 @@ export default {
   },
   beforeRouteUpdate(){
     this.isDataReceived = false;
+    next();
   },
   data() {
     return {
