@@ -23,6 +23,14 @@
     </template>
   </v-tabs>
 
+  <div :class="{ 'd-flex flex-row justify-start overflow-x-auto' : $vuetify.display.xs, 'mt-2' : true }">
+    <v-pagination
+      v-model="page"
+      :length="totalPages"
+      total-visible="6"
+    />
+  </div>
+
   <v-window
     v-model="activeTab"
     class="mt-4"
@@ -37,11 +45,19 @@
       >
         <SharedMemosList
           :auth-user="authUser"
-          :memos="memosList(tab.memoType)"
+          :memos="sharedMemos"
         />
       </v-window-item>
     </template>
   </v-window>
+
+  <div :class="{ 'd-flex flex-row justify-start overflow-x-auto' : $vuetify.display.xs, 'mt-2' : true }">
+    <v-pagination
+      v-model="page"
+      :length="totalPages"
+      total-visible="6"
+    />
+  </div>
 </template>
 
 <script>
@@ -69,23 +85,54 @@ export default {
           route: '/shared/matchup',
           memoType: "MatchupMemo"
         }
-      ]
+      ],
+      page: 1,
+      tabFlag: false
     };
   },
   computed: {
     ...mapGetters("users", ["authUser"]),
-    ...mapGetters("shared", ["sharedMemos"])
+    ...mapGetters("shared", [
+      "sharedMemos",
+      "totalPages"
+    ]),
+    isMatchup() {
+      return this.$route.name == "SharedMatchupMemosIndex";
+    },
+    memoType() {
+      return this.isMatchup ? "MatchupMemo" : "StrategyMemo";
+    },
+    pageQuery() {
+      return this.$route.query.page ? Number(this.$route.query.page) : 1;
+    }
+  },
+  watch: {
+    memoType: function(newVal) {
+      if (this.page == 1) {
+        this.fetchSharedMemos({ memoType: newVal, page: this.page });
+        this.$router.push({ name: this.$route.name, query: { page: 1 }});
+      } else {
+        this.page = 1;
+      }
+    },
+    page: function(newVal) {
+      this.fetchSharedMemos({ memoType: this.memoType, page: newVal });
+      this.$router.push({ name: this.$route.name, query: { page: newVal }});
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    },
+    pageQuery: function(newVal) {
+      this.page = newVal;
+    }
   },
   mounted() {
-    this.fetchSharedMemos();
+    this.page = this.pageQuery;
+    this.fetchSharedMemos({ memoType: this.memoType, page: this.page });
   },
   methods: {
-    ...mapActions("shared", ["fetchSharedMemos"]),
-    memosList(memoType) {
-      return this.sharedMemos.filter(memo => {
-        return memo.type == memoType;
-      });
-    }
+    ...mapActions("shared", ["fetchSharedMemos"])
   }
 };
 </script>
