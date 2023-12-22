@@ -19,7 +19,7 @@
       まずは
       <router-link
         :to="{ name: 'Null' }"
-        class="text-decoration-underline"
+        class="top-page-link"
       >
         お試しログイン
       </router-link>
@@ -31,7 +31,7 @@
     <div class="text-body-1 font-weight-bold">
       <router-link
         :to="{ name: 'SharedStrategyMemosIndex' }"
-        class="text-decoration-underline"
+        class="top-page-link"
       >
         みんなのメモ
       </router-link>
@@ -57,7 +57,7 @@
     <div class="text-body-1 font-weight-bold">
       <router-link
         :to="{ name: 'StrategyFoldersIndex' }"
-        class="text-decoration-underline"
+        class="top-page-link"
       >
         攻略メモ
       </router-link>
@@ -95,7 +95,7 @@
     <div class="text-body-1 font-weight-bold">
       <router-link
         :to="{ name: 'MatchupFoldersIndex' }"
-        class="text-decoration-underline"
+        class="top-page-link"
       >
         キャラ対メモ
       </router-link>
@@ -132,12 +132,33 @@
       テンプレート機能を活用して、統一されたフォーマットで整理することも可能です。
     </div>
   </template>
+
+  <div class="my-16" />
+
+  <div class="text-h5 font-weight-bold mb-4">
+    みんなのメモ一覧
+  </div>
+
+  <SharedMemosList
+    :auth-user="authUser"
+    :memos="sharedMemos.slice(0, 6)"
+  />
+
+  <div class="d-flex flex-row justify-end mt-4">
+    <router-link
+      :to="{ name: 'SharedStrategyMemosIndex' }"
+      class="top-page-link"
+    >
+      もっと見る
+    </router-link>
+  </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { mdiFolder } from '@mdi/js';
 import dayjs from 'dayjs';
+import SharedMemosList from '../memos/components/SharedMemosList';
 
 export default {
   name: "TopIndex",
@@ -146,13 +167,15 @@ export default {
       mdiFolder
     };
   },
+  components: {
+    SharedMemosList
+  },
   computed: {
     ...mapGetters("users", ["authUser"]),
     ...mapGetters("folders", ["folders"]),
+    ...mapGetters("shared", ["sharedMemos"]),
     displayDescription() {
-      if (!this.authUser) return true;
-      if (!this.folders.length) return true;
-      return false;
+      return !this.authUser || !this.folders.length ? true : false;
     },
     matchupFolders() {
       return this.folders.filter(folder => {
@@ -167,8 +190,10 @@ export default {
   },
   mounted() {
     if (this.authUser) this.$store.dispatch("folders/fetchFolders", ["MatchupFolder", "StrategyFolder"]);
+    this.fetchSharedMemos({ memoType: ["MatchupMemo", "StrategyMemo"], page: 1 });
   },
   methods: {
+    ...mapActions("shared", ["fetchSharedMemos"]),
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");
     }
@@ -179,5 +204,10 @@ export default {
 <style>
 .text-body-1 {
   line-height: 1.7em;
+}
+
+.top-page-link {
+  text-decoration: underline;
+  color: #0099CC;
 }
 </style>

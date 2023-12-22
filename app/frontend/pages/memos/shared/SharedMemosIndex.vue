@@ -8,6 +8,7 @@
   <v-tabs
     v-model="activeTab"
     align-tabs="center"
+    :grow="$vuetify.display.xs"
   >
     <template
       v-for="tab in tabs"
@@ -23,7 +24,7 @@
     </template>
   </v-tabs>
 
-  <div :class="{ 'd-flex flex-row justify-start overflow-x-auto' : $vuetify.display.xs, 'mt-2' : true }">
+  <div :class="{ 'd-flex flex-row overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
     <v-pagination
       v-model="page"
       :length="totalPages"
@@ -41,7 +42,6 @@
     >
       <v-window-item
         :value="tab.route"
-        exact
       >
         <SharedMemosList
           :auth-user="authUser"
@@ -51,7 +51,7 @@
     </template>
   </v-window>
 
-  <div :class="{ 'd-flex flex-row justify-start overflow-x-auto' : $vuetify.display.xs, 'mt-2' : true }">
+  <div :class="{ 'd-flex flex-row overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
     <v-pagination
       v-model="page"
       :length="totalPages"
@@ -86,8 +86,7 @@ export default {
           memoType: "MatchupMemo"
         }
       ],
-      page: 1,
-      tabFlag: false
+      page: 1
     };
   },
   computed: {
@@ -118,10 +117,6 @@ export default {
     page: function(newVal) {
       this.fetchSharedMemos({ memoType: this.memoType, page: newVal });
       this.$router.push({ name: this.$route.name, query: { page: newVal }});
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
     },
     pageQuery: function(newVal) {
       this.page = newVal;
