@@ -69,7 +69,7 @@ const routes = [
     meta: { requiredAuth: true }
   },
   {
-    path: "/Strategy/memos/:memoId",
+    path: "/strategy/memos/:memoId",
     name: "StrategyMemosShow",
     component: MemosShow,
     meta: { requiredAuth: true }
