@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form @submit.prevent>
     <v-text-field
       v-model="v$.memo.title.$model"
       :error-messages="v$.memo.title.$errors.map(e => e.$message)"

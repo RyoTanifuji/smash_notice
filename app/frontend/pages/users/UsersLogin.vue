@@ -13,7 +13,7 @@
       lg="6"
       xl="6"
     >
-      <form id="login-form">
+      <form @submit.prevent id="login-form">
         <v-text-field
           v-model="v$.user.email.$model"
           :error-messages="v$.user.email.$errors.map(e => e.$message)"

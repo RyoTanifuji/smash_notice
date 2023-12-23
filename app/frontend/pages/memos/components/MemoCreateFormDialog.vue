@@ -5,7 +5,7 @@
     </v-card-title>
     <v-card-text>
       <TheAlert :is-dialog="true" />
-      <form>
+      <form @submit.prevent>
         <v-text-field
           v-model="v$.memo.title.$model"
           :error-messages="v$.memo.title.$errors.map(e => e.$message)"

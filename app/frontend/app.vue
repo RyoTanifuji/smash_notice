@@ -32,6 +32,10 @@ a {
   color: inherit;
 }
 
+ol, ul {
+  margin-left: 20px;
+}
+
 .main-contents {
   margin-bottom: 60px;
 }
