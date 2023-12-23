@@ -22,9 +22,11 @@
               :image="getImageUrl(memoItem.fighterId)"
               class="mr-2"
             />
-            <span class="memo-card-link">
-              {{ omittedText(memoItem.title, 12) }}
-            </span>
+            <router-link :to="{ name: showRouteName(memoItem.type), params: { memoId: memoItem.id }, query: {} }">
+              <span class="link-decoration">
+                {{ omittedText(memoItem.title, 12) }}
+              </span>
+            </router-link>
             <template v-if="authUser && !isMine(memoItem.userId)">
               <v-btn
                 icon
@@ -50,7 +52,7 @@
           <v-card-actions class="mt-n4">
             <v-spacer />
             <div class="justify-end mr-4">
-              <p class="text-right memo-card-link">
+              <p class="text-right link-decoration">
                 {{ sliceUserName(memoItem.user.name) }}
               </p>
               <p class="text-right text-caption font-weight-thin">
@@ -107,6 +109,9 @@ export default {
     isMine(userId) {
       return userId == this.authUser.id;
     },
+    showRouteName(memoType) {
+      return memoType == "MatchupMemo" ? "SharedMatchupMemosShow" : "SharedStrategyMemosShow";
+    },
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");
     },
@@ -119,11 +124,6 @@ export default {
 </script>
 
 <style scoped>
-.memo-card-link {
-  text-decoration: underline;
-  color: #0099CC;
-}
-
 .memo-card {
   position: relative;
 }

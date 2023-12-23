@@ -5,7 +5,7 @@
     </v-card-title>
     <v-card-text>
       <TheAlert :is-dialog="true" />
-      <form>
+      <form @submit.prevent>
         <v-text-field
           v-model="v$.folder.name.$model"
           :error-messages="v$.folder.name.$errors.map(e => e.$message)"
@@ -97,7 +97,7 @@ export default {
   validations () {
     return {
       folder: {
-        name: { 
+        name: {
           maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
         },
         fighterId: {

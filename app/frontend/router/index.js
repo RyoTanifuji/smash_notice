@@ -10,6 +10,7 @@ import MemosShow from '../pages/memos/common/MemosShow';
 import MemosEdit from '../pages/memos/common/MemosEdit';
 import SharedMemosIndex from '../pages/memos/shared/SharedMemosIndex';
 import SharedMemosList from '../pages/memos/components/SharedMemosList';
+import SharedMemosShow from '../pages/memos/shared/SharedMemosShow';
 
 import { requireLoginAlertStatus } from '../constants/alertStatus';
 
@@ -102,6 +103,18 @@ const routes = [
         component: SharedMemosList
       }
     ]
+  },
+  {
+    path: "/shared/matchup/:memoId",
+    name: "SharedMatchupMemosShow",
+    component: SharedMemosShow,
+    meta: { requiredAuth: false }
+  },
+  {
+    path: "/shared/strategy/:memoId",
+    name: "SharedStrategyMemosShow",
+    component: SharedMemosShow,
+    meta: { requiredAuth: false }
   },
   {
     path: "/null",

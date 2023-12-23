@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     resources :memos, only: %i[show update destroy] do
       resources :memo_blocks, only: %i[create update destroy]
     end
-    resources :shared, only: %i[index]
+    resources :shared, only: %i[index show]
   end
 
   get '*path', to: 'top#index', constraints: lambda { |req|

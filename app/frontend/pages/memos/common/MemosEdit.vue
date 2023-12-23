@@ -277,6 +277,7 @@ export default {
         })
         .catch(() => {
           this.displayAlert({ alertStatus: serverErrorAlertStatus });
+          this.applyTransition();
           this.$router.push({ name: "TopIndex" });
         });
     } else {
@@ -287,6 +288,7 @@ export default {
         })
         .catch(() => {
           this.displayAlert({ alertStatus: serverErrorAlertStatus });
+          this.applyTransition();
           this.$router.push({ name: "TopIndex" });
         });
     }
@@ -305,7 +307,8 @@ export default {
     ]),
     ...mapActions("alert", [
       "displayAlert",
-      "closeAlertWithCross"
+      "closeAlertWithCross",
+      "applyTransition"
     ]),
     handleOpenMemoBlockCreateDialog() {
       this.memoBlockInitialize();

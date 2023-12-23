@@ -5,7 +5,7 @@
     </v-card-title>
     <v-card-text>
       <TheAlert :is-dialog="true" />
-      <form>
+      <form @submit.prevent>
         <v-radio-group
           v-model="v$.memoBlock.blockableType.$model"
           inline

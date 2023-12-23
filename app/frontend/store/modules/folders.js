@@ -25,6 +25,9 @@ const mutations = {
     state.folders = state.folders.filter(folder => {
       return folder.id != deleteFolder.id;
     });
+  },
+  resetFolders: (state) => {
+    state.folders = [];
   }
 };
 
@@ -53,6 +56,9 @@ const actions = {
       .then(res => {
         commit("deleteFolder", res.data);
       });
+  },
+  resetFolders({ commit }) {
+    commit("resetFolders");
   }
 };
 
