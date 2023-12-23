@@ -51,7 +51,7 @@
     </template>
   </v-window>
 
-  <div :class="{ 'd-flex flex-row overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
+  <div :class="{ 'd-flex flex-row justify-start overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
     <v-pagination
       v-model="page"
       :length="totalPages"

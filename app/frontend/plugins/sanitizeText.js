@@ -5,7 +5,7 @@ export const sanitizeText = (html) => {
     allowedTags: ["p", "strong", "em", "u",
                   "h1", "h2", "h3", "h4", "h5", "h6",
                   "ol", "ul", "li",
-                  "sub", "sup", "span"
+                  "sub", "sup", "span", "br"
                   ],
     allowedAttributes: {
       span: [ "style" ]

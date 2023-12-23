@@ -399,3 +399,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+p :deep(ol), p :deep(ul) {
+  margin-left: 20px;
+}
+</style>
