@@ -76,17 +76,16 @@ export default {
         {
           id: 1,
           name: "攻略メモ",
-          route: '/shared',
-          memoType: "StrategyMemo"
+          route: '/shared'
         },
         {
           id: 2,
           name: "キャラ対メモ",
-          route: '/shared/matchup',
-          memoType: "MatchupMemo"
+          route: '/shared/matchup'
         }
       ],
-      page: 1
+      page: 1,
+      pushCancel: false
     };
   },
   computed: {
@@ -95,35 +94,36 @@ export default {
       "sharedMemos",
       "totalPages"
     ]),
-    isMatchup() {
-      return this.$route.name == "SharedMatchupMemosIndex";
-    },
-    memoType() {
-      return this.isMatchup ? "MatchupMemo" : "StrategyMemo";
+    routeName() {
+      return this.$route.name;
     },
     pageQuery() {
       return this.$route.query.page ? Number(this.$route.query.page) : 1;
     },
     isTransitionWithinSame() {
-      return ["SharedMatchupMemosIndex", "SharedStrategyMemosIndex"].includes(this.$route.name);
+      return [
+        "SharedMatchupMemosIndex",
+        "SharedStrategyMemosIndex"
+        ].includes(this.$route.name);
     }
   },
   watch: {
-    memoType: function(newVal) {
+    routeName: function(newVal) {
       if (this.isTransitionWithinSame) {
-        if (this.page == 1) {
-          this.fetchSharedMemos({ memoType: newVal, page: this.page });
-          this.$router.push({ name: this.$route.name, query: { page: 1 }});
-        } else {
+        if (this.page != 1) {
           this.page = 1;
+          this.pushCancel = true;
         }
+        this.handleFetchSharedMemos();
+        this.$router.replace({ name: newVal, query: { page: 1 }});
       }
     },
     page: function(newVal) {
-      if (this.isTransitionWithinSame) {
-        this.fetchSharedMemos({ memoType: this.memoType, page: newVal });
+      if (this.isTransitionWithinSame && !this.pushCancel) {
+        this.handleFetchSharedMemos();
         this.$router.push({ name: this.$route.name, query: { page: newVal }});
       }
+      this.pushCancel = false;
     },
     pageQuery: function(newVal) {
       this.page = newVal;
@@ -131,10 +131,15 @@ export default {
   },
   mounted() {
     this.page = this.pageQuery;
-    this.fetchSharedMemos({ memoType: this.memoType, page: this.page });
+    this.$router.replace({ name: this.routeName, query: { page: 1 }});
+    this.handleFetchSharedMemos();
   },
   methods: {
-    ...mapActions("shared", ["fetchSharedMemos"])
+    ...mapActions("shared", ["fetchSharedMemos"]),
+    handleFetchSharedMemos() {
+      const memoType = this.routeName == "SharedMatchupMemosIndex" ? "MatchupMemo" : "StrategyMemo";
+      this.fetchSharedMemos({ memoType: memoType, page: this.page });
+    }
   }
 };
 </script>

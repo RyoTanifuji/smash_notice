@@ -22,7 +22,7 @@
               :image="getImageUrl(memoItem.fighterId)"
               class="mr-2"
             />
-            <router-link :to="{ name: pageInformation.showRouteName, params: { memoId: memoItem.id }, query: {} }">
+            <router-link :to="{ name: showRouteName(memoItem.type), params: { memoId: memoItem.id }, query: {} }">
               <span class="link-decoration">
                 {{ omittedText(memoItem.title, 12) }}
               </span>
@@ -89,24 +89,10 @@ export default {
   },
   data() {
     return {
-      pageInformationMatchup: {
-        showRouteName: "SharedMatchupMemosShow"
-      },
-      pageInformationStrategy: {
-        showRouteName: "SharedStrategyMemosShow"
-      },
       mdiStarOutline,
       mdiStar,
       FIGHTERS_ARRAY
     };
-  },
-  computed: {
-    isMatchup() {
-      return this.$route.name == "SharedMatchupMemosIndex";
-    },
-    pageInformation() {
-      return this.isMatchup ? this.pageInformationMatchup : this.pageInformationStrategy;
-    }
   },
   methods: {
     omittedText(text, length) {
@@ -122,6 +108,9 @@ export default {
     },
     isMine(userId) {
       return userId == this.authUser.id;
+    },
+    showRouteName(memoType) {
+      return memoType == "MatchupMemo" ? "SharedMatchupMemosShow" : "SharedStrategyMemosShow";
     },
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");

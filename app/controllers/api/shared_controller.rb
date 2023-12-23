@@ -11,6 +11,6 @@ class Api::SharedController < ApplicationController
 
   def show
     @memo = Memo.shared.find(params[:id])
-    render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}, user: {only: :name}]
+    render json: @memo, methods: [:type], include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}, user: {only: :name}]
   end
 end

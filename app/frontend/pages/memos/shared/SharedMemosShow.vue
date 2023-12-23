@@ -124,7 +124,7 @@ export default {
     ...mapGetters("users", ["authUser"]),
     ...mapGetters("shared", ["memoDetail"]),
     isMatchup() {
-      return this.$route.name == "SharedMatchupMemosShow";
+      return this.memoDetail.type == "MatchupMemo";
     },
     memoId() {
       return this.$route.params.memoId;
