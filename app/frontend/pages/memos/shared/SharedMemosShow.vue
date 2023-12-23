@@ -46,9 +46,6 @@
               </template>
             </template>
           </div>
-          <div class="d-flex flex-row justify-end mt-8">
-            
-          </div>
         </template>
       </v-col>
 
