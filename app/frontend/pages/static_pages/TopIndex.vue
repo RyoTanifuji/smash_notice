@@ -19,7 +19,7 @@
       まずは
       <router-link
         :to="{ name: 'Null' }"
-        class="top-page-link"
+        class="link-decoration"
       >
         お試しログイン
       </router-link>
@@ -31,7 +31,7 @@
     <div class="text-body-1 font-weight-bold">
       <router-link
         :to="{ name: 'SharedStrategyMemosIndex' }"
-        class="top-page-link"
+        class="link-decoration"
       >
         みんなのメモ
       </router-link>
@@ -57,7 +57,7 @@
     <div class="text-body-1 font-weight-bold">
       <router-link
         :to="{ name: 'StrategyFoldersIndex' }"
-        class="top-page-link"
+        class="link-decoration"
       >
         攻略メモ
       </router-link>
@@ -95,7 +95,7 @@
     <div class="text-body-1 font-weight-bold">
       <router-link
         :to="{ name: 'MatchupFoldersIndex' }"
-        class="top-page-link"
+        class="link-decoration"
       >
         キャラ対メモ
       </router-link>
@@ -147,7 +147,7 @@
   <div class="d-flex flex-row justify-end mt-4">
     <router-link
       :to="{ name: 'SharedStrategyMemosIndex' }"
-      class="top-page-link"
+      class="link-decoration"
     >
       もっと見る
     </router-link>
@@ -208,10 +208,5 @@ export default {
 <style>
 .text-body-1 {
   line-height: 1.7em;
-}
-
-.top-page-link {
-  text-decoration: underline;
-  color: #0099CC;
 }
 </style>

@@ -103,20 +103,27 @@ export default {
     },
     pageQuery() {
       return this.$route.query.page ? Number(this.$route.query.page) : 1;
+    },
+    isTransitionWithinSame() {
+      return ["SharedMatchupMemosIndex", "SharedStrategyMemosIndex"].includes(this.$route.name);
     }
   },
   watch: {
     memoType: function(newVal) {
-      if (this.page == 1) {
-        this.fetchSharedMemos({ memoType: newVal, page: this.page });
-        this.$router.push({ name: this.$route.name, query: { page: 1 }});
-      } else {
-        this.page = 1;
+      if (this.isTransitionWithinSame) {
+        if (this.page == 1) {
+          this.fetchSharedMemos({ memoType: newVal, page: this.page });
+          this.$router.push({ name: this.$route.name, query: { page: 1 }});
+        } else {
+          this.page = 1;
+        }
       }
     },
     page: function(newVal) {
-      this.fetchSharedMemos({ memoType: this.memoType, page: newVal });
-      this.$router.push({ name: this.$route.name, query: { page: newVal }});
+      if (this.isTransitionWithinSame) {
+        this.fetchSharedMemos({ memoType: this.memoType, page: newVal });
+        this.$router.push({ name: this.$route.name, query: { page: newVal }});
+      }
     },
     pageQuery: function(newVal) {
       this.page = newVal;

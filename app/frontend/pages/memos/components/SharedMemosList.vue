@@ -22,9 +22,11 @@
               :image="getImageUrl(memoItem.fighterId)"
               class="mr-2"
             />
-            <span class="memo-card-link">
-              {{ omittedText(memoItem.title, 12) }}
-            </span>
+            <router-link :to="{ name: pageInformation.showRouteName, params: { memoId: memoItem.id }, query: {} }">
+              <span class="link-decoration">
+                {{ omittedText(memoItem.title, 12) }}
+              </span>
+            </router-link>
             <template v-if="authUser && !isMine(memoItem.userId)">
               <v-btn
                 icon
@@ -50,7 +52,7 @@
           <v-card-actions class="mt-n4">
             <v-spacer />
             <div class="justify-end mr-4">
-              <p class="text-right memo-card-link">
+              <p class="text-right link-decoration">
                 {{ sliceUserName(memoItem.user.name) }}
               </p>
               <p class="text-right text-caption font-weight-thin">
@@ -87,10 +89,24 @@ export default {
   },
   data() {
     return {
+      pageInformationMatchup: {
+        showRouteName: "SharedMatchupMemosShow"
+      },
+      pageInformationStrategy: {
+        showRouteName: "SharedStrategyMemosShow"
+      },
       mdiStarOutline,
       mdiStar,
       FIGHTERS_ARRAY
     };
+  },
+  computed: {
+    isMatchup() {
+      return this.$route.name == "SharedMatchupMemosIndex";
+    },
+    pageInformation() {
+      return this.isMatchup ? this.pageInformationMatchup : this.pageInformationStrategy;
+    }
   },
   methods: {
     omittedText(text, length) {
@@ -119,11 +135,6 @@ export default {
 </script>
 
 <style scoped>
-.memo-card-link {
-  text-decoration: underline;
-  color: #0099CC;
-}
-
 .memo-card {
   position: relative;
 }

@@ -2,12 +2,16 @@ import axios from '../../plugins/axios';
 
 const state = {
   sharedMemos: [],
-  totalPages: 1
+  totalPages: 1,
+  memoDetail: {
+    memoBlocks: []
+  }
 };
 
 const getters = {
   sharedMemos: state => state.sharedMemos,
-  totalPages: state => state.totalPages
+  totalPages: state => state.totalPages,
+  memoDetail: state => state.memoDetail
 };
 
 const mutations = {
@@ -16,6 +20,9 @@ const mutations = {
   },
   setTotalPages: (state, totalPages) => {
     state.totalPages = totalPages;
+  },
+  setMemoDetail: (state, memo) => {
+    state.memoDetail = memo;
   }
 };
 
@@ -25,6 +32,12 @@ const actions = {
       .then(res => {
         commit("setSharedMemos", res.data.memos);
         commit("setTotalPages", res.data.totalPages);
+      });
+  },
+  fetchMemoDetail({ commit }, memoId) {
+    return axios.get(`shared/${memoId}`)
+      .then(res => {
+        commit("setMemoDetail", res.data);
       });
   }
 };

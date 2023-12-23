@@ -35,4 +35,9 @@ a {
 .main-contents {
   margin-bottom: 60px;
 }
+
+.link-decoration {
+  text-decoration: underline;
+  color: #0099CC;
+}
 </style>
