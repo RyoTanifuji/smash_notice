@@ -35,6 +35,9 @@ const mutations = {
       state.isTransition = false;
     }
   },
+  isTransitionTrue: (state) => {
+    state.isTransition = true;
+  },
   isTransitionFalse: (state) => {
     state.isTransition = false;
   }
@@ -49,6 +52,9 @@ const actions = {
   },
   closeAlertWithCross({ commit }) {
     commit("resetAlert", true);
+  },
+  applyTransition({ commit }) {
+    commit("isTransitionTrue");
   },
   cancelTransition({ commit }) {
     commit("isTransitionFalse");

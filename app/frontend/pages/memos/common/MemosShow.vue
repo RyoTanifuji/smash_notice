@@ -87,6 +87,7 @@
           </v-layout>
         </template>
       </v-col>
+
       <template v-if="$vuetify.display.mdAndUp">
         <v-col
           md="4"
@@ -154,7 +155,7 @@ import EmbedYoutube from '../components/EmbedYoutube';
 import { sanitizeText } from '../../../plugins/sanitizeText';
 
 export default {
-  name: "MemosEdit",
+  name: "MemosShow",
   components: {
     EmbedYoutube
   },
@@ -185,12 +186,13 @@ export default {
     }
   },
   mounted() {
-    this.fetchMemoDetail(this.$route.params.memoId)
+    this.fetchMemoDetail(this.memoId)
       .then(() => {
           this.isDataReceived = true;
       })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
+        this.applyTransition();
         this.$router.push({ name: "TopIndex" });
       });
   },
@@ -201,7 +203,8 @@ export default {
     ]),
     ...mapActions("alert", [
       "displayAlert",
-      "closeAlertWithCross"
+      "closeAlertWithCross",
+      "applyTransition"
     ]),
     handleOpenMemoDeleteDialog() {
       this.memoDeleteDialog = true;

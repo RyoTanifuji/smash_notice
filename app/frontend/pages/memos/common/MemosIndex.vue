@@ -275,6 +275,7 @@ export default {
       })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
+        this.applyTransition();
         this.$router.push({ name: "TopIndex" });
       });
   },
@@ -287,7 +288,8 @@ export default {
     ]),
     ...mapActions("alert", [
       "displayAlert",
-      "closeAlertWithCross"
+      "closeAlertWithCross",
+      "applyTransition"
     ]),
     handleOpenMemoCreateDialog() {
       this.memo = Object.assign({}, this.memoDefault);

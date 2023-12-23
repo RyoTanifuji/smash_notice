@@ -136,14 +136,17 @@ export default {
           this.isDataReceived = true;
       })
       .catch(() => {
-        console.log("a");
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
+        this.applyTransition();
         this.$router.push({ name: "SharedStrategyMemosIndex" });
       });
   },
   methods: {
     ...mapActions("shared", ["fetchMemoDetail"]),
-    ...mapActions("alert", ["displayAlert"]),
+    ...mapActions("alert", [
+      "displayAlert",
+      "applyTransition"
+    ]),
     isMine(userId) {
       return userId == this.authUser.id;
     },
