@@ -8,6 +8,7 @@
   <v-tabs
     v-model="activeTab"
     align-tabs="center"
+    center-active
     :grow="$vuetify.display.xs"
   >
     <template
@@ -85,6 +86,11 @@ export default {
           id: 2,
           name: "キャラ対メモ",
           route: '/shared/matchup'
+        },
+        {
+          id: 3,
+          name: "ブックマーク",
+          route: '/shared/bookmarks'
         }
       ],
       page: 1,
@@ -107,7 +113,8 @@ export default {
     isTransitionWithinSame() {
       return [
         "SharedMatchupMemosIndex",
-        "SharedStrategyMemosIndex"
+        "SharedStrategyMemosIndex",
+        "BookmarkMemosIndex"
         ].includes(this.$route.name);
     }
   },
@@ -141,12 +148,17 @@ export default {
   methods: {
     ...mapActions("shared", [
       "fetchSharedMemos",
+      "fetchBookmarkMemos",
       "createBookmark",
       "deleteBookmark"
     ]),
     handleFetchSharedMemos() {
-      const memoType = this.routeName == "SharedMatchupMemosIndex" ? "MatchupMemo" : "StrategyMemo";
-      this.fetchSharedMemos({ memoType: memoType, page: this.page });
+      if (this.routeName == "BookmarkMemosIndex") {
+        this.fetchBookmarkMemos(this.page);
+      } else {
+        const memoType = this.routeName == "SharedMatchupMemosIndex" ? "MatchupMemo" : "StrategyMemo";
+        this.fetchSharedMemos({ memoType: memoType, page: this.page });
+      }
     },
     handleCreateBookmark(memoId) {
       this.createBookmark(memoId);

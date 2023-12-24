@@ -101,6 +101,11 @@ const routes = [
         path: "matchup",
         name: "SharedMatchupMemosIndex",
         component: SharedMemosList
+      },
+      {
+        path: "bookmarks",
+        name: "BookmarkMemosIndex",
+        component: SharedMemosList
       }
     ]
   },

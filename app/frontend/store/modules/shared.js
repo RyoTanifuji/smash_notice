@@ -48,6 +48,14 @@ const actions = {
         commit("setBookmarkMemoIds", res.data.bookmarkMemoIds);
       });
   },
+  fetchBookmarkMemos({ commit }, page) {
+    return axios.get('shared/bookmarks', { params: { page: page }})
+      .then(res => {
+        commit("setSharedMemos", res.data.memos);
+        commit("setTotalPages", res.data.totalPages);
+        commit("setBookmarkMemoIds", res.data.bookmarkMemoIds);
+      });
+  },
   fetchMemoDetail({ commit }, memoId) {
     return axios.get(`shared/${memoId}`)
       .then(res => {

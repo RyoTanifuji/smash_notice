@@ -19,4 +19,14 @@ class Api::SharedController < ApplicationController
       bookmark_memo_ids: @bookmark_memo_ids
     }
   end
+
+  def bookmarks
+    @memos = current_user.bookmark_memos.order(updated_at: :desc).page(params[:page]).per(12)
+    @bookmark_memo_ids = current_user.bookmark_memo_ids
+    render json: {
+      memos: @memos.as_json(methods: [:type, :sentence_body], include: [user: {only: :name}]),
+      total_pages: @memos.total_pages,
+      bookmark_memo_ids: @bookmark_memo_ids
+    }
+  end
 end
