@@ -45,7 +45,10 @@
       >
         <SharedMemosList
           :auth-user="authUser"
-          :memos="sharedMemos"
+          :shared-memos="sharedMemos"
+          :bookmark-memo-ids="bookmarkMemoIds"
+          @create-bookmark="handleCreateBookmark"
+          @delete-bookmark="handleDeleteBookmark"
         />
       </v-window-item>
     </template>
@@ -92,7 +95,8 @@ export default {
     ...mapGetters("users", ["authUser"]),
     ...mapGetters("shared", [
       "sharedMemos",
-      "totalPages"
+      "totalPages",
+      "bookmarkMemoIds"
     ]),
     routeName() {
       return this.$route.name;
@@ -135,10 +139,20 @@ export default {
     this.handleFetchSharedMemos();
   },
   methods: {
-    ...mapActions("shared", ["fetchSharedMemos"]),
+    ...mapActions("shared", [
+      "fetchSharedMemos",
+      "createBookmark",
+      "deleteBookmark"
+    ]),
     handleFetchSharedMemos() {
       const memoType = this.routeName == "SharedMatchupMemosIndex" ? "MatchupMemo" : "StrategyMemo";
       this.fetchSharedMemos({ memoType: memoType, page: this.page });
+    },
+    handleCreateBookmark(memoId) {
+      this.createBookmark(memoId);
+    },
+    handleDeleteBookmark(memoId) {
+      this.deleteBookmark(memoId);
     }
   }
 };
