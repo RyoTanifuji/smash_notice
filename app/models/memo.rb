@@ -8,6 +8,7 @@ class Memo < ApplicationRecord
   has_many :sentences, through: :memo_blocks, source: :blockable, source_type: 'Sentence'
   has_many :images, through: :memo_blocks, source: :blockable, source_type: 'Image'
   has_many :embeds, through: :memo_blocks, source: :blockable, source_type: 'Embed'
+  has_many :bookmarks, dependent: :destroy
 
   validates :title, presence: true, length: { maximum: 30 }
 
