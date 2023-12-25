@@ -16,12 +16,13 @@ class Memo < ApplicationRecord
 
   def apply_template!
     return nil if folder.type != "MatchupFolder"
+
     template_memo_blocks = folder.template_memo.memo_blocks
     template_memo_blocks.each do |template_memo_block|
       blockable = template_memo_block.blockable.dup
       blockable.save!
       memo_block = template_memo_block.dup
-      memo_block.attributes = { blockable: blockable, memo: self }
+      memo_block.attributes = { blockable:, memo: self }
       memo_block.save!
     end
   end

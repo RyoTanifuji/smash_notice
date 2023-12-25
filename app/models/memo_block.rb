@@ -28,7 +28,7 @@ class MemoBlock < ApplicationRecord
       self.blockable = Sentence.create!(blockable_params)
     when "Image"
       self.blockable = Image.create!(blockable_params)
-      self.blockable.parse_base64(blockable_params[:file])
+      blockable.parse_base64(blockable_params[:file])
     when "Embed"
       self.blockable = Embed.create!(blockable_params)
     else
