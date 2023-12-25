@@ -6,7 +6,7 @@ class User < ApplicationRecord
   has_many :matchup_folders, dependent: :destroy
   has_many :strategy_folders, dependent: :destroy
   has_many :memos, dependent: :destroy
-  has_many :bookmarks, dependent: :destroy
+  has_many :bookmarks, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :bookmark_memos, through: :bookmarks, source: :memo
 
   validates :password, length: { minimum: 3 }, if: -> { new_record? || changes[:crypted_password] }

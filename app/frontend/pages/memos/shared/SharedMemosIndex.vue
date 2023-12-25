@@ -25,43 +25,84 @@
     </template>
   </v-tabs>
 
-  <div :class="{ 'd-flex flex-row overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
-    <v-pagination
-      v-model="page"
-      :length="totalPages"
-      total-visible="6"
-    />
-  </div>
+  <template v-if="totalPages">
+    <div :class="{ 'd-flex flex-row overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
+      <v-pagination
+        v-model="page"
+        :length="totalPages"
+        :total-visible="totalVisible"
+      />
+    </div>
+  </template>
 
-  <v-window
-    v-model="activeTab"
-    class="mt-4"
-  >
-    <template
-      v-for="tab in tabs"
-      :key="tab.id"
+  <template v-if="isDataReceived">
+    <v-window
+      v-model="activeTab"
+      class="mt-4"
     >
-      <v-window-item
-        :value="tab.route"
+      <template
+        v-for="tab in tabs"
+        :key="tab.id"
       >
-        <SharedMemosList
-          :auth-user="authUser"
-          :shared-memos="sharedMemos"
-          :bookmark-memo-ids="bookmarkMemoIds"
-          @create-bookmark="handleCreateBookmark"
-          @delete-bookmark="handleDeleteBookmark"
-        />
-      </v-window-item>
-    </template>
-  </v-window>
+        <v-window-item
+          :value="tab.route"
+        >
+          <SharedMemosList
+            :auth-user="authUser"
+            :shared-memos="sharedMemos"
+            :bookmark-memo-ids="bookmarkMemoIds"
+            @create-bookmark="handleCreateBookmark"
+            @delete-bookmark="handleDeleteBookmark"
+          />
+        </v-window-item>
+      </template>
+    </v-window>
+  </template>
 
-  <div :class="{ 'd-flex flex-row justify-start overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
-    <v-pagination
-      v-model="page"
-      :length="totalPages"
-      total-visible="6"
-    />
-  </div>
+  <template v-if="routeName == 'BookmarkMemosIndex' && !totalPages">
+    <div class="d-flex flex-row justify-center">
+      <template v-if="authUser">
+        <div class="font-weight-bold mt-10">
+          ここにブックマークしたメモの一覧が表示されます。
+
+          <div class="my-4" />
+
+          参考にしたいメモなどをブックマークしてみましょう。
+        </div>
+      </template>
+      <template v-else>
+        <div class="font-weight-bold mt-16">
+          ログインすることで、ブックマーク機能を利用できるようになります。
+
+          <div class="my-4" />
+
+          ログイン・ユーザー登録は以下のリンクから行えます。
+
+          <div class="d-flex flex-row justify-center mt-8">
+            <v-btn
+              :to="{ name: 'UsersLogin' }"
+              class="mr-8"
+            >
+              ログイン
+            </v-btn>
+            <v-btn :to="{ name: 'UsersRegister' }">
+              新規登録
+            </v-btn>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
+
+  <template v-if="totalPages">
+    <div :class="{ 'd-flex flex-row justify-start overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
+      <v-pagination
+        v-model="page"
+        :length="totalPages"
+        :total-visible="totalVisible"
+      />
+    </div>
+  </template>
 </template>
 
 <script>
@@ -94,6 +135,8 @@ export default {
         }
       ],
       page: 1,
+      totalVisible: 6,
+      isDataReceived: false,
       pushCancel: false
     };
   },
@@ -153,11 +196,18 @@ export default {
       "deleteBookmark"
     ]),
     handleFetchSharedMemos() {
+      this.isDataReceived = false;
       if (this.routeName == "BookmarkMemosIndex") {
-        this.fetchBookmarkMemos(this.page);
+        this.fetchBookmarkMemos(this.page)
+          .then(() => {
+            this.isDataReceived = true;
+          });
       } else {
         const memoType = this.routeName == "SharedMatchupMemosIndex" ? "MatchupMemo" : "StrategyMemo";
-        this.fetchSharedMemos({ memoType: memoType, page: this.page });
+        this.fetchSharedMemos({ memoType: memoType, page: this.page })
+          .then(() => {
+            this.isDataReceived = true;
+          });
       }
     },
     handleCreateBookmark(memoId) {
