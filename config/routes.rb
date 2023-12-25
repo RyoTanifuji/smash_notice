@@ -14,7 +14,12 @@ Rails.application.routes.draw do
     resources :memos, only: %i[show update destroy] do
       resources :memo_blocks, only: %i[create update destroy]
     end
-    resources :shared, only: %i[index show]
+    resources :shared, only: %i[index show] do
+      collection do
+        get 'bookmarks'
+      end
+    end
+    resource :bookmarks, only: %i[create destroy]
   end
 
   get '*path', to: 'top#index', constraints: lambda { |req|

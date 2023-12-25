@@ -8,20 +8,16 @@ class Api::MemoBlocksController < ApplicationController
 
       blockable_type = params.dig(:memo_block, :blockable_type)
 
-      if blockable_type.blank? || !MemoBlock.valid_blockable_type?(blockable_type)
-        return head :bad_request
-      end
+      return head :bad_request if blockable_type.blank? || !MemoBlock.valid_blockable_type?(blockable_type)
 
       @memo_block.create_blockable!(blockable_type, blockable_params)
 
-      if @memo_block.invalid?(:insert)
-        return head :bad_request
-      end
+      return head :bad_request if @memo_block.invalid?(:insert)
 
       @memo_block.insert_and_save!
     end
 
-    render json: @memo_block, include: [{blockable: {methods: :picture_url}}]
+    render json: @memo_block, include: [{ blockable: { methods: :picture_url } }]
   end
 
   def update
@@ -29,7 +25,7 @@ class Api::MemoBlocksController < ApplicationController
 
     if @blockable.update(blockable_params)
       @blockable.parse_base64(image_params[:file]) if params.key?(:image)
-      render json: @memo_block, include: [{blockable: {methods: :picture_url}}]
+      render json: @memo_block, include: [{ blockable: { methods: :picture_url } }]
     else
       render json: @blockable.errors.full_messages, status: :bad_request
     end

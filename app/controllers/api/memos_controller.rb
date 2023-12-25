@@ -9,9 +9,9 @@ class Api::MemosController < ApplicationController
   def create
     Memo.transaction do
       @memo = current_user.memos.build(memo_params.merge(
-        folder: @folder,
-        fighter: @folder.fighter
-      ))
+                                         folder: @folder,
+                                         fighter: @folder.fighter
+                                       ))
       @memo.title = @memo.opponent.name if @memo.title.blank? && @memo.type == "MatchupMemo"
 
       @memo.save!
@@ -19,11 +19,11 @@ class Api::MemosController < ApplicationController
       @memo.apply_template! if apply_template?
     end
 
-    render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
+    render json: @memo, include: [{ memo_blocks: { include: [blockable: { methods: :picture_url }] } }]
   end
 
   def show
-    render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
+    render json: @memo, include: [{ memo_blocks: { include: [blockable: { methods: :picture_url }] } }]
   end
 
   def update
@@ -31,7 +31,7 @@ class Api::MemosController < ApplicationController
     @memo.title = @memo.opponent.name if @memo.title.blank? && @memo.type == "MatchupMemo"
 
     if @memo.save
-      render json: @memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
+      render json: @memo, include: [{ memo_blocks: { include: [blockable: { methods: :picture_url }] } }]
     else
       render json: @memo.errors.full_messages, status: :bad_request
     end
@@ -44,7 +44,7 @@ class Api::MemosController < ApplicationController
 
   def template
     @template_memo = @folder.template_memo
-    render json: @template_memo, include: [{memo_blocks: {include: [blockable: {methods: :picture_url}]}}]
+    render json: @template_memo, include: [{ memo_blocks: { include: [blockable: { methods: :picture_url }] } }]
   end
 
   private

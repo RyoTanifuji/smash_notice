@@ -228,3 +228,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+:deep(ol), :deep(ul) {
+  margin-left: 20px;
+}
+</style>

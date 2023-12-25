@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <template
-      v-for="memoItem in memos"
+      v-for="memoItem in sharedMemos"
       :key="memoItem.id"
     >
       <v-col
@@ -24,22 +24,41 @@
             />
             <router-link :to="{ name: showRouteName(memoItem.type), params: { memoId: memoItem.id }, query: {} }">
               <span class="link-decoration">
-                {{ omittedText(memoItem.title, 12) }}
+                {{ omittedText(memoItem.title, 8) }}
               </span>
             </router-link>
-            <template v-if="authUser && !isMine(memoItem.userId)">
-              <v-btn
-                icon
-                :ripple="false"
-                density="compact"
-                size="small"
-                variant="plain"
-                class="memo-bookmark"
-              >
-                <v-icon
-                  :icon="mdiStarOutline"
-                />
-              </v-btn>
+            <template v-if="isBookmarkDisplay(memoItem.userId)">
+              <template v-if="!isBookmark(memoItem.id)">
+                <v-btn
+                  icon
+                  :ripple="false"
+                  density="compact"
+                  size="small"
+                  variant="plain"
+                  class="memo-bookmark"
+                  @click="handleCreateBookmark(memoItem.id)"
+                >
+                  <v-icon
+                    :icon="mdiStarOutline"
+                  />
+                </v-btn>
+              </template>
+              <template v-else>
+                <v-btn
+                  icon
+                  :ripple="false"
+                  density="compact"
+                  size="small"
+                  variant="plain"
+                  class="memo-bookmark"
+                  @click="handleDeleteBookmark(memoItem.id)"
+                >
+                  <v-icon
+                    :icon="mdiStar"
+                    color="green-accent-4"
+                  />
+                </v-btn>
+              </template>
             </template>
           </v-card-title>
           
@@ -53,7 +72,7 @@
             <v-spacer />
             <div class="justify-end mr-4">
               <p class="text-right link-decoration">
-                {{ sliceUserName(memoItem.user.name) }}
+                {{ omittedText(memoItem.user.name, 10) }}
               </p>
               <p class="text-right text-caption font-weight-thin">
                 {{ dateFormat(memoItem.updatedAt) }}
@@ -82,11 +101,21 @@ export default {
       type: Object,
       default: null
     },
-    memos: {
+    sharedMemos: {
       type: Array,
       required: true
+    },
+    bookmarkMemoIds: {
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
+  emits: [
+    "create-bookmark",
+    "delete-bookmark"
+  ],
   data() {
     return {
       mdiStarOutline,
@@ -102,12 +131,14 @@ export default {
       const fighterData = this.FIGHTERS_ARRAY.find((fighter) => fighter.id == fighterId);
       return fighterData.name;
     },
-    sliceUserName(name) {
-      if (name.length <= 10) return name;
-      return name.slice(0, 10) + "…";
-    },
     isMine(userId) {
       return userId == this.authUser.id;
+    },
+    isBookmark(memoId) {
+      return this.bookmarkMemoIds.includes(memoId);
+    },
+    isBookmarkDisplay(userId) {
+      return this.authUser && !this.isMine(userId) && this.$route.name != "TopIndex";
     },
     showRouteName(memoType) {
       return memoType == "MatchupMemo" ? "SharedMatchupMemosShow" : "SharedStrategyMemosShow";
@@ -118,6 +149,12 @@ export default {
     getImageUrl(fighterId) {
       const fighterData = this.FIGHTERS_ARRAY.find((fighter) => fighter.id == fighterId);
       return new URL(`../../../../assets/images/character_icon/${fighterData.image}`, import.meta.url).href;
+    },
+    handleCreateBookmark(memoId) {
+      this.$emit("create-bookmark", memoId);
+    },
+    handleDeleteBookmark(memoId) {
+      this.$emit("delete-bookmark", memoId);
     }
   }
 };

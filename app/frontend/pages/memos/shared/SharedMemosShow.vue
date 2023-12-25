@@ -73,16 +73,32 @@
         <div class="my-6" />
 
         <template v-if="authUser && !isMine(memoDetail.userId)">
-          <div class="d-flex flex-row justify-end mb-2">
-            <v-btn
-              variant="elevated"
-              elevation="2"
-              :prepend-icon="mdiStarOutline"
-              color="teal-accent-4"
-            >
-              ブックマーク
-            </v-btn>
-          </div>
+          <template v-if="!isBookmark(memoDetail.id)">
+            <div class="d-flex flex-row justify-end mb-2">
+              <v-btn
+                variant="elevated"
+                elevation="2"
+                :prepend-icon="mdiStarOutline"
+                color="teal-accent-4"
+                @click="handleCreateBookmark"
+              >
+                ブックマーク
+              </v-btn>
+            </div>
+          </template>
+          <template v-else>
+            <div class="d-flex flex-row justify-end mb-2">
+              <v-btn
+                variant="elevated"
+                elevation="2"
+                :prepend-icon="mdiStar"
+                color="teal-accent-4"
+                @click="handleDeleteBookmark"
+              >
+                ブックマーク済み
+              </v-btn>
+            </div>
+          </template>
         </template>
         <p class="text-right link-decoration">
           {{ memoDetail.user.name }}
@@ -119,7 +135,10 @@ export default {
   },
   computed: {
     ...mapGetters("users", ["authUser"]),
-    ...mapGetters("shared", ["memoDetail"]),
+    ...mapGetters("shared", [
+      "memoDetail",
+      "bookmarkMemoIds"
+    ]),
     isMatchup() {
       return this.memoDetail.type == "MatchupMemo";
     },
@@ -139,13 +158,20 @@ export default {
       });
   },
   methods: {
-    ...mapActions("shared", ["fetchMemoDetail"]),
+    ...mapActions("shared", [
+      "fetchMemoDetail",
+      "createBookmark",
+      "deleteBookmark"
+    ]),
     ...mapActions("alert", [
       "displayAlert",
       "applyTransition"
     ]),
     isMine(userId) {
       return userId == this.authUser.id;
+    },
+    isBookmark(memoId) {
+      return this.bookmarkMemoIds.includes(memoId);
     },
     getImageUrl(fighterId) {
       const fighterData = this.FIGHTERS_ARRAY.find((fighter) => fighter.id == fighterId);
@@ -156,7 +182,19 @@ export default {
     },
     dateFormat(date) {
       return dayjs(date).format("YYYY-MM-DD");
+    },
+    handleCreateBookmark() {
+      this.createBookmark(this.memoDetail.id);
+    },
+    handleDeleteBookmark() {
+      this.deleteBookmark(this.memoDetail.id);
     }
   }
 };
 </script>
+
+<style scoped>
+:deep(ol), :deep(ul) {
+  margin-left: 20px;
+}
+</style>

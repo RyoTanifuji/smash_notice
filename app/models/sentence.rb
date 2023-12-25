@@ -3,7 +3,7 @@ class Sentence < ApplicationRecord
   has_one :memo, through: :memo_block
 
   validates :subtitle, length: { maximum: 30 }
-  validates :body, length: { maximum: 65535 }
+  validates :body, length: { maximum: 65_535 }
 
   def picture_url
     nil

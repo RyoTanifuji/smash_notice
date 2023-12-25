@@ -8,6 +8,7 @@ class Memo < ApplicationRecord
   has_many :sentences, through: :memo_blocks, source: :blockable, source_type: 'Sentence'
   has_many :images, through: :memo_blocks, source: :blockable, source_type: 'Image'
   has_many :embeds, through: :memo_blocks, source: :blockable, source_type: 'Embed'
+  has_many :bookmarks, dependent: :destroy
 
   validates :title, presence: true, length: { maximum: 30 }
 
@@ -15,12 +16,13 @@ class Memo < ApplicationRecord
 
   def apply_template!
     return nil if folder.type != "MatchupFolder"
+
     template_memo_blocks = folder.template_memo.memo_blocks
     template_memo_blocks.each do |template_memo_block|
       blockable = template_memo_block.blockable.dup
       blockable.save!
       memo_block = template_memo_block.dup
-      memo_block.attributes = { blockable: blockable, memo: self }
+      memo_block.attributes = { blockable:, memo: self }
       memo_block.save!
     end
   end

@@ -141,7 +141,7 @@
 
   <SharedMemosList
     :auth-user="authUser"
-    :memos="sharedMemos.slice(0, 6)"
+    :shared-memos="sharedMemos.slice(0, 6)"
   />
 
   <div class="d-flex flex-row justify-end mt-4">
