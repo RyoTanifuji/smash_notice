@@ -3,7 +3,7 @@
     <v-text-field
       v-model="v$.memo.title.$model"
       :error-messages="v$.memo.title.$errors.map(e => e.$message)"
-      :counter="30"
+      :counter="titleMaxLength"
       name="タイトル"
       label="タイトル"
       :hint="formTitleHint"
@@ -87,6 +87,7 @@ export default {
   },
   data() {
     return {
+      titleMaxLength: 25,
       memoStates: {
         local: "非公開",
         shared: "公開"
@@ -107,7 +108,7 @@ export default {
       memo: {
         title: { 
           required: helpers.withMessage(requiredMessage("タイトル"), requiredIf(!this.isMatchup)),
-          maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
+          maxLength: helpers.withMessage(maxLengthMessage(this.titleMaxLength), maxLength(this.titleMaxLength))
         },
         opponentId: {
           required: helpers.withMessage(requiredMessage("相手ファイター"), requiredIf(this.isMatchup))

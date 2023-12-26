@@ -9,7 +9,7 @@
         <v-text-field
           v-model="v$.folder.name.$model"
           :error-messages="v$.folder.name.$errors.map(e => e.$message)"
-          :counter="30"
+          :counter="nameMaxLength"
           name="フォルダ名"
           label="フォルダ名"
           hint="未入力の場合、下記の使用ファイター名が設定されます"
@@ -91,6 +91,7 @@ export default {
   },
   data() {
     return {
+      nameMaxLength: 25,
       fightersArray: FIGHTERS_ARRAY
     };
   },
@@ -98,7 +99,7 @@ export default {
     return {
       folder: {
         name: {
-          maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
+          maxLength: helpers.withMessage(maxLengthMessage(this.nameMaxLength), maxLength(this.nameMaxLength))
         },
         fighterId: {
           required: helpers.withMessage(requiredMessage("使用ファイター"), required)

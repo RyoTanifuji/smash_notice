@@ -29,7 +29,7 @@
           <v-text-field
             v-model="v$.sentence.subtitle.$model"
             :error-messages="v$.sentence.subtitle.$errors.map(e => e.$message)"
-            :counter="30"
+            :counter="subtitleMaxLength"
             name="見出し"
             label="見出し"
             hint="未入力にすることも可能です"
@@ -55,7 +55,7 @@
           <v-text-field
             v-model="v$.image.subtitle.$model"
             :error-messages="v$.image.subtitle.$errors.map(e => e.$message)"
-            :counter="30"
+            :counter="subtitleMaxLength"
             name="見出し"
             label="見出し"
             hint="未入力にすることも可能です"
@@ -99,7 +99,7 @@
           <v-text-field
             v-model="v$.embed.subtitle.$model"
             :error-messages="v$.embed.subtitle.$errors.map(e => e.$message)"
-            :counter="30"
+            :counter="subtitleMaxLength"
             name="見出し"
             label="見出し"
             hint="未入力にすることも可能です"
@@ -265,6 +265,7 @@ export default {
   },
   data() {
     return {
+      subtitleMaxLength: 25,
       formPreviewUrl: "",
       embedYoutubeHelp: false,
       mdiHelpCircleOutline
@@ -287,7 +288,7 @@ export default {
       },
       sentence: {
         subtitle: { 
-          maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
+          maxLength: helpers.withMessage(maxLengthMessage(this.subtitleMaxLength), maxLength(this.subtitleMaxLength))
         },
         body: {
           maxLength: helpers.withMessage("保存できる文字数を超えています", maxLength(65535))
@@ -295,7 +296,7 @@ export default {
       },
       image: {
         subtitle: { 
-          maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
+          maxLength: helpers.withMessage(maxLengthMessage(this.subtitleMaxLength), maxLength(this.subtitleMaxLength))
         },
         file: {
           image: helpers.withMessage("無効なファイル形式です", image)
@@ -304,7 +305,7 @@ export default {
       },
       embed: {
         subtitle: { 
-          maxLength: helpers.withMessage(maxLengthMessage(30), maxLength(30))
+          maxLength: helpers.withMessage(maxLengthMessage(this.subtitleMaxLength), maxLength(this.subtitleMaxLength))
         },
         embedType: {},
         identifier: {
