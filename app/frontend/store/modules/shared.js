@@ -23,8 +23,9 @@ const mutations = {
   setTotalPages: (state, totalPages) => {
     state.totalPages = totalPages;
   },
-  setMemoDetail: (state, memo) => {
+  setMemoDetail: (state, { memo, memoBlocks }) => {
     state.memoDetail = memo;
+    state.memoDetail.memoBlocks = memoBlocks;
   },
   setBookmarkMemoIds: (state, bookmarkMemoIds) => {
     state.bookmarkMemoIds = bookmarkMemoIds;
@@ -59,7 +60,7 @@ const actions = {
   fetchMemoDetail({ commit }, memoId) {
     return axios.get(`shared/${memoId}`)
       .then(res => {
-        commit("setMemoDetail", res.data.memo);
+        commit("setMemoDetail", { memo: res.data.memo, memoBlocks: res.data.memoBlocks });
         commit("setBookmarkMemoIds", res.data.bookmarkMemoIds);
       });
   },
