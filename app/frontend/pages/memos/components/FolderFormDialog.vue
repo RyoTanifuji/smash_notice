@@ -21,7 +21,9 @@
           :items="fightersArray"
           item-value="id"
           item-title="name"
+          :custom-filter="autocompleteCustomFilter"
           clearable
+          :menu-props="{ location: 'top', scrollStrategy: 'none' }"
           name="使用ファイター"
           label="使用ファイター"
           hint="自分の使用ファイターを選択してください"
@@ -53,6 +55,7 @@ import {
   helpers
 } from '@vuelidate/validators';
 import { requiredMessage, maxLengthMessage } from '../../../constants/validationCustom';
+import { textConversion } from '../../../constants/textConversion';
 import { FIGHTERS_ARRAY } from '../../../constants/fightersArray';
 import TheAlert from '../../../components/TheAlert';
 
@@ -117,6 +120,12 @@ export default {
       if (!result) return;
 
       this.$emit("folder-submit", this.folder);
+    },
+    autocompleteCustomFilter(itemTitle, queryText, item) {
+      const fighterName = textConversion(item.raw.name);
+      const searchText = textConversion(queryText);
+
+      return fighterName.indexOf(searchText) > -1;
     }
   }
 };
