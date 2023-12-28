@@ -17,24 +17,18 @@
   <template v-if="!authUser">
     <div class="text-body-1 font-weight-bold">
       まずは
-      <router-link
-        :to="{ name: 'Null' }"
-        class="link-decoration"
-      >
+      <TopPageButton :path="'Null'">
         お試しログイン
-      </router-link>
+      </TopPageButton>
       でメモの作成を試してみましょう。
     </div>
 
     <div class="my-8" />
 
     <div class="text-body-1 font-weight-bold">
-      <router-link
-        :to="{ name: 'SharedStrategyMemosIndex' }"
-        class="link-decoration"
-      >
+      <TopPageButton :path="'SharedStrategyMemosIndex'">
         みんなのメモ
-      </router-link>
+      </TopPageButton>
       から他のユーザーが公開しているメモを見ることもできます。
     </div>
 
@@ -43,11 +37,15 @@
     <div>
       <v-btn
         :to="{ name: 'UsersLogin' }"
+        color="teal-accent-4"
         class="mx-8"
       >
         ログイン
       </v-btn>
-      <v-btn :to="{ name: 'UsersRegister' }">
+      <v-btn
+        :to="{ name: 'UsersRegister' }"
+        color="teal-accent-4"
+      >
         新規登録
       </v-btn>
     </div>
@@ -55,12 +53,9 @@
 
   <template v-else>
     <div class="text-body-1 font-weight-bold">
-      <router-link
-        :to="{ name: 'StrategyFoldersIndex' }"
-        class="link-decoration"
-      >
+      <TopPageButton :path="'StrategyFoldersIndex'">
         攻略メモ
-      </router-link>
+      </TopPageButton>
       では自分の使用しているファイターに関する立ち回りやコンボなどをまとめることができます。
     </div>
 
@@ -93,12 +88,9 @@
     <div class="my-6" />
 
     <div class="text-body-1 font-weight-bold">
-      <router-link
-        :to="{ name: 'MatchupFoldersIndex' }"
-        class="link-decoration"
-      >
+      <TopPageButton :path="'MatchupFoldersIndex'">
         キャラ対メモ
-      </router-link>
+      </TopPageButton>
       では相手ファイターの対策をファイターごとにまとめることができます。
 
       <template v-if="matchupFolders.length">
@@ -159,11 +151,13 @@ import { mapGetters, mapActions } from 'vuex';
 import { mdiFolder } from '@mdi/js';
 import dayjs from 'dayjs';
 import SharedMemosList from '../memos/components/SharedMemosList';
+import TopPageButton from '../../components/TopPageButton';
 
 export default {
   name: "TopIndex",
   components: {
-    SharedMemosList
+    SharedMemosList,
+    TopPageButton
   },
   beforeRouteLeave(){
     this.resetFolders();

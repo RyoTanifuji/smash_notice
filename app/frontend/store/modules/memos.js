@@ -21,8 +21,9 @@ const mutations = {
   setMemos: (state, memos) => {
     state.memos = memos;
   },
-  setMemoDetail: (state, memo) => {
+  setMemoDetail: (state, { memo: memo, memoBlocks: memoBlocks }) => {
     state.memoDetail = memo;
+    state.memoDetail.memoBlocks = memoBlocks;
   },
   addMemo: (state, memo) => {
     state.memos.push(memo);
@@ -65,20 +66,20 @@ const actions = {
   fetchTemplate({ commit }, folderId) {
     return axios.get(`folders/${folderId}/template`)
       .then(res => {
-        commit("setMemoDetail", res.data);
+        commit("setMemoDetail", { memo: res.data.memo, memoBlocks: res.data.memoBlocks });
       });
   },
   fetchMemoDetail({ commit }, memoId) {
     return axios.get(`memos/${memoId}`)
       .then(res => {
-        commit("setMemoDetail", res.data);
+        commit("setMemoDetail", { memo: res.data.memo, memoBlocks: res.data.memoBlocks });
       });
   },
   createMemo({ commit }, { memo, memoType, folderId, applyTemplate }) {
     return axios.post(`folders/${folderId}/memos?apply_template=${applyTemplate}`,
                {...memo, type: memoType})
       .then(res => {
-        commit("addMemo", res.data);
+        commit("addMemo", res.data.memo);
       });
   },
   createMemoBlock({ commit }, { memoId, memoBlockParams }) {
@@ -94,7 +95,7 @@ const actions = {
   updateMemo({ commit }, memo) {
     return axios.patch(`memos/${memo.id}`, memo)
       .then(res => {
-        commit("updateMemo", res.data);
+        commit("updateMemo", res.data.memo);
       });
   },
   updateMemoBlock({ commit }, { memoId, memoBlockId, memoBlockParams }) {
@@ -110,7 +111,7 @@ const actions = {
   updateMemoState({ commit }, { memoId, memoState }) {
     return axios.patch(`memos/${memoId}`, { memo: { state: memoState}})
       .then(res => {
-        commit("updateMemo", res.data);
+        commit("updateMemo", res.data.memo);
       });
   },
   deleteMemo({ commit }, memo) {
