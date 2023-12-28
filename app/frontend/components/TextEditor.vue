@@ -71,3 +71,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.ql-editor {
+  font-size: 16px;
+}
+</style>

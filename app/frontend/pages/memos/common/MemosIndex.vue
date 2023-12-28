@@ -56,9 +56,24 @@
               </template>
             </div>
           </div>
+
+          <div class="d-flex flex-row ml-5 mb-n4">
+            <v-icon :icon="mdiMagnify" class="mt-4 mr-4" />
+            <v-text-field
+              v-model="titleSearchText"
+              label="タイトル"
+              variant="underlined"
+              clearable
+              density="compact"
+              single-line
+              class="mr-8"
+            />
+            <v-spacer v-if="!$vuetify.display.xs" />
+          </div>
+
           <v-list lines="two">
             <template
-              v-for="memoItem in sortedMemos"
+              v-for="memoItem in filteredMemos"
               :key="memoItem.id"
             >
               <div class="list-item-memo">
@@ -207,8 +222,9 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { mdiFile, mdiInformationOutline } from '@mdi/js';
+import { mdiFile, mdiInformationOutline, mdiMagnify } from '@mdi/js';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
+import { textConversion } from '../../../constants/textConversion';
 import MemoCreateFormDialog from '../components/MemoCreateFormDialog';
 import dayjs from 'dayjs';
 
@@ -239,11 +255,13 @@ export default {
         opponentId: null
       },
       memo: {},
+      titleSearchText: "",
       memoCreateDialog: false,
       memoDeleteDialog: false,
       isDataReceived: false,
       mdiFile,
-      mdiInformationOutline
+      mdiInformationOutline,
+      mdiMagnify
     };
   },
   computed: {
@@ -260,12 +278,19 @@ export default {
     folderId() {
       return this.$route.params.folderId;
     },
-    sortedMemos() {
-      return this.memos.slice().sort((a, b) => {
+    filteredMemos() {
+      let result = this.memos.filter((memo) =>
+        textConversion(memo.title).includes(textConversion(this.titleSearchText)) ||
+        !this.titleSearchText
+        );
+
+      result = result.slice().sort((a, b) => {
         if (a.updatedAt > b.updatedAt) return -1;
         if (a.updatedAt < b.updatedAt) return 1;
         return 0;
       });
+
+      return result;
     }
   },
   mounted() {

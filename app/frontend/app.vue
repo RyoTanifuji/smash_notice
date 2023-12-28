@@ -38,6 +38,6 @@ a {
 
 .link-decoration {
   text-decoration: underline;
-  color: #FF9900;
+  color: #00B8D4;
 }
 </style>

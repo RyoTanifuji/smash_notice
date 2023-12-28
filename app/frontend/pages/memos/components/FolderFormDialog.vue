@@ -22,7 +22,6 @@
           item-value="id"
           item-title="name"
           clearable
-          :menu-props="{ location: 'top', scrollStrategy: 'none' }"
           name="使用ファイター"
           label="使用ファイター"
           hint="自分の使用ファイターを選択してください"
