@@ -25,6 +25,66 @@
     </template>
   </v-tabs>
 
+  <div class="mb-n4">
+    <v-row no-gutters>
+      <v-icon
+        :icon="mdiMagnify"
+      />
+      <v-col
+        cols="12"
+        sm="4"
+        md="4"
+        lg="4"
+        xl="4"
+      >
+        <v-autocomplete
+          v-model="queryParams.fighter_id_eq"
+          :items="FIGHTERS_ARRAY"
+          item-value="id"
+          item-title="name"
+          :custom-filter="autocompleteCustomFilter"
+          :menu-props="{ location: 'bottom', scrollStrategy: 'none' }"
+          name="使用ファイター"
+          label="使用ファイター"
+          density="compact"
+          single-line
+          clearable
+          variant="underlined"
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        sm="4"
+        md="4"
+        lg="4"
+        xl="4"
+      >
+        <template v-if="routeName != 'SharedStrategyMemosIndex'">
+          <v-autocomplete
+            v-model="queryParams.opponent_id_eq"
+            :items="FIGHTERS_ARRAY"
+            item-value="id"
+            item-title="name"
+            :custom-filter="autocompleteCustomFilter"
+            :menu-props="{ location: 'bottom', scrollStrategy: 'none' }"
+            name="相手ファイター"
+            label="相手ファイター"
+            density="compact"
+            single-line
+            clearable
+            variant="underlined"
+          />
+        </template>
+      </v-col>
+      <v-btn
+        color="teal-accent-4"
+        @click="handleFetchSharedMemos"
+      >
+        検索
+      </v-btn>
+    </v-row>
+  </div>
+
   <template v-if="totalPages">
     <div :class="{ 'd-flex flex-row overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
       <v-pagination
@@ -107,7 +167,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { mdiMagnify } from '@mdi/js';
 import SharedMemosList from '../components/SharedMemosList';
+import { textConversion } from '../../../constants/textConversion';
+import { FIGHTERS_ARRAY } from '../../../constants/fightersArray';
 
 export default {
   name: "SharedMemosIndex",
@@ -134,10 +197,20 @@ export default {
           route: '/shared/bookmarks'
         }
       ],
+      queryParams: {
+        fighter_id_eq: null,
+        opponent_id_eq: null
+      },
+      queryParamsDefault: {
+        fighter_id_eq: null,
+        opponent_id_eq: null
+      },
       page: 1,
       totalVisible: 6,
       isDataReceived: false,
-      pushCancel: false
+      pushCancel: false,
+      FIGHTERS_ARRAY,
+      mdiMagnify
     };
   },
   computed: {
@@ -168,6 +241,7 @@ export default {
           this.page = 1;
           this.pushCancel = true;
         }
+        this.queryParams = Object.assign({}, this.queryParamsDefault);
         this.handleFetchSharedMemos();
         this.$router.replace({ name: newVal, query: { page: 1 }});
       }
@@ -198,13 +272,13 @@ export default {
     handleFetchSharedMemos() {
       this.isDataReceived = false;
       if (this.routeName == "BookmarkMemosIndex") {
-        this.fetchBookmarkMemos(this.page)
+        this.fetchBookmarkMemos({ page: this.page, queryParams: this.queryParams })
           .then(() => {
             this.isDataReceived = true;
           });
       } else {
         const memoType = this.routeName == "SharedMatchupMemosIndex" ? "MatchupMemo" : "StrategyMemo";
-        this.fetchSharedMemos({ memoType: memoType, page: this.page })
+        this.fetchSharedMemos({ memoType: memoType, page: this.page, queryParams: this.queryParams })
           .then(() => {
             this.isDataReceived = true;
           });
@@ -215,6 +289,12 @@ export default {
     },
     handleDeleteBookmark(memoId) {
       this.deleteBookmark(memoId);
+    },
+    autocompleteCustomFilter(itemTitle, queryText, item) {
+      const fighterName = textConversion(item.raw.name);
+      const searchText = textConversion(queryText);
+
+      return fighterName.indexOf(searchText) > -1;
     }
   }
 };

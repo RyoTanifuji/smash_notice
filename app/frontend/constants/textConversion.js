@@ -4,4 +4,4 @@ export function textConversion(str) {
 		var chr = match.charCodeAt(0) - 0x60;
 		return String.fromCharCode(chr);
 	});
-};
+}

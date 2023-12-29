@@ -58,7 +58,10 @@
           </div>
 
           <div class="d-flex flex-row ml-5 mb-n4">
-            <v-icon :icon="mdiMagnify" class="mt-4 mr-4" />
+            <v-icon
+              :icon="mdiMagnify"
+              class="mt-4 mr-4"
+            />
             <v-text-field
               v-model="titleSearchText"
               label="タイトル"
