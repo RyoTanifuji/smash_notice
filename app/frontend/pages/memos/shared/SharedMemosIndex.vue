@@ -29,73 +29,87 @@
     <v-row no-gutters>
       <v-icon
         :icon="mdiMagnify"
+        class="mt-6"
       />
       <v-col
-        cols="12"
-        sm="4"
-        md="4"
-        lg="4"
-        xl="4"
+        cols="8"
       >
-        <v-autocomplete
-          v-model="queryParams.fighter_id_eq"
-          :items="FIGHTERS_ARRAY"
-          item-value="id"
-          item-title="name"
-          :custom-filter="autocompleteCustomFilter"
-          :menu-props="{ location: 'bottom', scrollStrategy: 'none' }"
-          name="使用ファイター"
-          label="使用ファイター"
-          density="compact"
-          single-line
-          clearable
-          variant="underlined"
-        />
+        <v-row no-gutters>
+          <v-col
+            cols="12"
+            sm="6"
+            md="6"
+            lg="6"
+            xl="6"
+          >
+            <v-autocomplete
+              v-model="queryParamsModel.fighter_id_eq"
+              :items="FIGHTERS_ARRAY"
+              item-value="id"
+              item-title="name"
+              :custom-filter="autocompleteCustomFilter"
+              :menu-props="{ location: 'bottom', scrollStrategy: 'none' }"
+              name="使用ファイター"
+              label="使用ファイター"
+              density="compact"
+              single-line
+              clearable
+              variant="underlined"
+              class="ma-2"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            sm="6"
+            md="6"
+            lg="6"
+            xl="6"
+          >
+            <template v-if="routeName != 'SharedStrategyMemosIndex'">
+              <v-autocomplete
+                v-model="queryParamsModel.opponent_id_eq"
+                :items="FIGHTERS_ARRAY"
+                item-value="id"
+                item-title="name"
+                :custom-filter="autocompleteCustomFilter"
+                :menu-props="{ location: 'bottom', scrollStrategy: 'none' }"
+                name="相手ファイター"
+                label="相手ファイター"
+                density="compact"
+                single-line
+                clearable
+                variant="underlined"
+                :class="{ 'ma-2': true, 'mt-n6': $vuetify.display.xs }"
+              />
+            </template>
+          </v-col>
+        </v-row>
       </v-col>
       <v-col
-        cols="12"
-        sm="4"
-        md="4"
-        lg="4"
-        xl="4"
+        cols="1"
       >
-        <template v-if="routeName != 'SharedStrategyMemosIndex'">
-          <v-autocomplete
-            v-model="queryParams.opponent_id_eq"
-            :items="FIGHTERS_ARRAY"
-            item-value="id"
-            item-title="name"
-            :custom-filter="autocompleteCustomFilter"
-            :menu-props="{ location: 'bottom', scrollStrategy: 'none' }"
-            name="相手ファイター"
-            label="相手ファイター"
-            density="compact"
-            single-line
-            clearable
-            variant="underlined"
-          />
-        </template>
+        <v-btn
+          color="teal-accent-4"
+          class="mt-4 ml-2"
+          @click="handleSearchMemos"
+        >
+          検索
+        </v-btn>
       </v-col>
-      <v-btn
-        color="teal-accent-4"
-        @click="handleFetchSharedMemos"
-      >
-        検索
-      </v-btn>
     </v-row>
   </div>
 
-  <template v-if="totalPages">
-    <div :class="{ 'd-flex flex-row overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
-      <v-pagination
-        v-model="page"
-        :length="totalPages"
-        :total-visible="totalVisible"
-      />
-    </div>
-  </template>
-
   <template v-if="isDataReceived">
+    <template v-if="totalPages">
+      <div :class="{ 'd-flex flex-row overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
+        <v-pagination
+          v-model="page"
+          :length="totalPages"
+          :total-visible="totalVisible"
+        />
+      </div>
+    </template>
+
     <v-window
       v-model="activeTab"
       class="mt-4"
@@ -117,9 +131,30 @@
         </v-window-item>
       </template>
     </v-window>
+
+    <template v-if="totalPages">
+      <div :class="{ 'd-flex flex-row justify-start overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
+        <v-pagination
+          v-model="page"
+          :length="totalPages"
+          :total-visible="totalVisible"
+        />
+      </div>
+    </template>
   </template>
 
-  <template v-if="routeName == 'BookmarkMemosIndex' && !totalPages">
+  <template v-if="isNoSearchResult">
+    <div class="d-flex flex-row justify-center">
+      <div class="font-weight-bold mt-10">
+        該当するメモが見つかりませんでした。
+
+        <div class="my-4" />
+
+        別の検索条件でお試しください。
+      </div>
+    </div>
+  </template>
+  <template v-else-if="isNoBookmark">
     <div class="d-flex flex-row justify-center">
       <template v-if="authUser">
         <div class="font-weight-bold mt-10">
@@ -131,7 +166,7 @@
         </div>
       </template>
       <template v-else>
-        <div class="font-weight-bold mt-16">
+        <div class="font-weight-bold mt-10">
           ログインすることで、ブックマーク機能を利用できるようになります。
 
           <div class="my-4" />
@@ -151,16 +186,6 @@
           </div>
         </div>
       </template>
-    </div>
-  </template>
-
-  <template v-if="totalPages">
-    <div :class="{ 'd-flex flex-row justify-start overflow-x-auto' : ($vuetify.display.xs && totalPages > 4), 'mt-2' : true }">
-      <v-pagination
-        v-model="page"
-        :length="totalPages"
-        :total-visible="totalVisible"
-      />
     </div>
   </template>
 </template>
@@ -201,6 +226,10 @@ export default {
         fighter_id_eq: null,
         opponent_id_eq: null
       },
+      queryParamsModel: {
+        fighter_id_eq: null,
+        opponent_id_eq: null
+      },
       queryParamsDefault: {
         fighter_id_eq: null,
         opponent_id_eq: null
@@ -226,6 +255,15 @@ export default {
     pageQuery() {
       return this.$route.query.page ? Number(this.$route.query.page) : 1;
     },
+    isQueryParamsDefault() {
+      return JSON.stringify(this.queryParams) != JSON.stringify(this.queryParamsDefault);
+    },
+    isNoSearchResult() {
+      return this.isQueryParamsDefault && !this.totalPages;
+    },
+    isNoBookmark() {
+      return this.routeName == "BookmarkMemosIndex" && !this.totalPages;
+    },
     isTransitionWithinSame() {
       return [
         "SharedMatchupMemosIndex",
@@ -241,7 +279,7 @@ export default {
           this.page = 1;
           this.pushCancel = true;
         }
-        this.queryParams = Object.assign({}, this.queryParamsDefault);
+        this.queryParamsInitialize();
         this.handleFetchSharedMemos();
         this.$router.replace({ name: newVal, query: { page: 1 }});
       }
@@ -289,6 +327,19 @@ export default {
     },
     handleDeleteBookmark(memoId) {
       this.deleteBookmark(memoId);
+    },
+    handleSearchMemos() {
+      this.queryParams = Object.assign({}, this.queryParamsModel);
+      if (this.page != 1) {
+        this.page = 1;
+        this.pushCancel = true;
+      }
+      this.handleFetchSharedMemos();
+      this.$router.push({ name: this.$route.name, query: { page: 1 }});
+    },
+    queryParamsInitialize() {
+      this.queryParams = Object.assign({}, this.queryParamsDefault);
+      this.queryParamsModel = Object.assign({}, this.queryParamsDefault);
     },
     autocompleteCustomFilter(itemTitle, queryText, item) {
       const fighterName = textConversion(item.raw.name);
