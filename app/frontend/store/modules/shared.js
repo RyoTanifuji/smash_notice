@@ -41,16 +41,16 @@ const mutations = {
 };
 
 const actions = {
-  fetchSharedMemos({ commit }, { memoType, page, queryParams }) {
-    return axios.get('shared', { params: { type: memoType, page: page, q: queryParams }})
+  fetchSharedMemos({ commit }, { memoType, page, searchQuery }) {
+    return axios.get('shared', { params: { type: memoType, page: page, q: searchQuery }})
       .then(res => {
         commit("setSharedMemos", res.data.memos);
         commit("setTotalPages", res.data.totalPages);
         commit("setBookmarkMemoIds", res.data.bookmarkMemoIds);
       });
   },
-  fetchBookmarkMemos({ commit }, { page, queryParams }) {
-    return axios.get('shared/bookmarks', { params: { page: page, q: queryParams }})
+  fetchBookmarkMemos({ commit }, { page, searchQuery }) {
+    return axios.get('shared/bookmarks', { params: { page: page, q: searchQuery }})
       .then(res => {
         commit("setSharedMemos", res.data.memos);
         commit("setTotalPages", res.data.totalPages);

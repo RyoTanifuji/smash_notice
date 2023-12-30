@@ -43,7 +43,7 @@
             xl="6"
           >
             <v-autocomplete
-              v-model="queryParamsModel.fighter_id_eq"
+              v-model="searchQueryModel.fighter_id_eq"
               :items="FIGHTERS_ARRAY"
               item-value="id"
               item-title="name"
@@ -67,7 +67,7 @@
           >
             <template v-if="routeName != 'SharedStrategyMemosIndex'">
               <v-autocomplete
-                v-model="queryParamsModel.opponent_id_eq"
+                v-model="searchQueryModel.opponent_id_eq"
                 :items="FIGHTERS_ARRAY"
                 item-value="id"
                 item-title="name"
@@ -222,15 +222,15 @@ export default {
           route: '/shared/bookmarks'
         }
       ],
-      queryParams: {
+      searchQuerySubmit: {
         fighter_id_eq: null,
         opponent_id_eq: null
       },
-      queryParamsModel: {
+      searchQueryModel: {
         fighter_id_eq: null,
         opponent_id_eq: null
       },
-      queryParamsDefault: {
+      searchQueryDefault: {
         fighter_id_eq: null,
         opponent_id_eq: null
       },
@@ -255,11 +255,31 @@ export default {
     pageQuery() {
       return this.$route.query.page ? Number(this.$route.query.page) : 1;
     },
-    isQueryParamsDefault() {
-      return JSON.stringify(this.queryParams) != JSON.stringify(this.queryParamsDefault);
+    searchQuery() {
+      const searchQuery = Object.assign({}, this.searchQueryDefault);
+      searchQuery.fighter_id_eq = this.fighterQuery;
+      searchQuery.opponent_id_eq = this.opponentQuery;
+      return searchQuery;
+    },
+    fighterQuery() {
+      return this.$route.query.fighter ? Number(this.$route.query.fighter) : null;
+    },
+    opponentQuery() {
+      return this.$route.query.opponent ? Number(this.$route.query.opponent) : null;
+    },
+    routerState() {
+      return JSON.stringify({
+        routeName: this.routeName,
+        page: this.pageQuery,
+        fighter: this.fighterQuery,
+        opponent: this.opponentQuery
+      })
+    },
+    isSearchQueryDefault() {
+      return JSON.stringify(this.searchQuerySubmit) != JSON.stringify(this.searchQueryDefault);
     },
     isNoSearchResult() {
-      return this.isQueryParamsDefault && !this.totalPages;
+      return this.isSearchQueryDefault && !this.totalPages;
     },
     isNoBookmark() {
       return this.routeName == "BookmarkMemosIndex" && !this.totalPages;
@@ -279,25 +299,39 @@ export default {
           this.page = 1;
           this.pushCancel = true;
         }
-        this.queryParamsInitialize();
+        this.searchQueryInitialize();
         this.handleFetchSharedMemos();
-        this.$router.replace({ name: newVal, query: { page: 1 }});
+        this.$router.replace({ name: newVal, query: {
+          page: 1,
+          fighter: this.searchQuerySubmit.fighter_id_eq,
+          opponent: this.searchQuerySubmit.opponent_id_eq
+        }});
       }
     },
     page: function(newVal) {
       if (this.isTransitionWithinSame && !this.pushCancel) {
         this.handleFetchSharedMemos();
-        this.$router.push({ name: this.$route.name, query: { page: newVal }});
+        this.$router.push({ name: this.$route.name, query: {
+          page: newVal,
+          fighter: this.searchQuerySubmit.fighter_id_eq,
+          opponent: this.searchQuerySubmit.opponent_id_eq
+        }});
       }
       this.pushCancel = false;
     },
-    pageQuery: function(newVal) {
-      this.page = newVal;
+    routerState: function(newVal) {
+      this.page = this.pageQuery;
+      this.setSearchQuery();
     }
   },
   mounted() {
     this.page = this.pageQuery;
-    this.$router.replace({ name: this.routeName, query: { page: 1 }});
+    this.setSearchQuery();
+    this.$router.replace({ name: this.routeName, query: {
+      page: 1,
+      fighter: this.searchQuerySubmit.fighter_id_eq,
+      opponent: this.searchQuerySubmit.opponent_id_eq
+    }});
     this.handleFetchSharedMemos();
   },
   methods: {
@@ -310,13 +344,13 @@ export default {
     handleFetchSharedMemos() {
       this.isDataReceived = false;
       if (this.routeName == "BookmarkMemosIndex") {
-        this.fetchBookmarkMemos({ page: this.page, queryParams: this.queryParams })
+        this.fetchBookmarkMemos({ page: this.page, searchQuery: this.searchQuerySubmit })
           .then(() => {
             this.isDataReceived = true;
           });
       } else {
         const memoType = this.routeName == "SharedMatchupMemosIndex" ? "MatchupMemo" : "StrategyMemo";
-        this.fetchSharedMemos({ memoType: memoType, page: this.page, queryParams: this.queryParams })
+        this.fetchSharedMemos({ memoType: memoType, page: this.page, searchQuery: this.searchQuerySubmit })
           .then(() => {
             this.isDataReceived = true;
           });
@@ -329,17 +363,25 @@ export default {
       this.deleteBookmark(memoId);
     },
     handleSearchMemos() {
-      this.queryParams = Object.assign({}, this.queryParamsModel);
+      this.searchQuerySubmit = Object.assign({}, this.searchQueryModel);
       if (this.page != 1) {
         this.page = 1;
         this.pushCancel = true;
       }
       this.handleFetchSharedMemos();
-      this.$router.push({ name: this.$route.name, query: { page: 1 }});
+      this.$router.push({ name: this.$route.name, query: {
+        page: 1,
+        fighter: this.searchQuerySubmit.fighter_id_eq,
+        opponent: this.searchQuerySubmit.opponent_id_eq
+      }});
     },
-    queryParamsInitialize() {
-      this.queryParams = Object.assign({}, this.queryParamsDefault);
-      this.queryParamsModel = Object.assign({}, this.queryParamsDefault);
+    searchQueryInitialize() {
+      this.searchQuerySubmit = Object.assign({}, this.searchQueryDefault);
+      this.searchQueryModel = Object.assign({}, this.searchQueryDefault);
+    },
+    setSearchQuery() {
+      this.searchQuerySubmit = this.searchQuery;
+      this.searchQueryModel = this.searchQuery;
     },
     autocompleteCustomFilter(itemTitle, queryText, item) {
       const fighterName = textConversion(item.raw.name);
