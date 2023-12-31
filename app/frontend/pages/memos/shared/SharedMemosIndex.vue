@@ -16,9 +16,10 @@
       :key="tab.id"
     >
       <v-tab
-        :to="tab.route"
+        :value="tab.route"
         exact
         class="w-25"
+        @click="isTabChange = true"
       >
         {{ tab.name }}
       </v-tab>
@@ -204,22 +205,22 @@ export default {
   },
   data() {
     return {
-      activeTab: '/shared',
+      activeTab: "SharedStrategyMemosIndex",
       tabs: [
         {
           id: 1,
           name: "攻略メモ",
-          route: '/shared'
+          route: "SharedStrategyMemosIndex"
         },
         {
           id: 2,
           name: "キャラ対メモ",
-          route: '/shared/matchup'
+          route: "SharedMatchupMemosIndex"
         },
         {
           id: 3,
           name: "ブックマーク",
-          route: '/shared/bookmarks'
+          route: "BookmarkMemosIndex"
         }
       ],
       searchQuerySubmit: {
@@ -238,6 +239,9 @@ export default {
       totalVisible: 6,
       isDataReceived: false,
       pushCancel: false,
+      pushStateFlag: true,
+      searchQueryFlag: true,
+      isTabChange: false,
       FIGHTERS_ARRAY,
       mdiMagnify
     };
@@ -273,7 +277,7 @@ export default {
         page: this.pageQuery,
         fighter: this.fighterQuery,
         opponent: this.opponentQuery
-      })
+      });
     },
     isSearchQueryDefault() {
       return JSON.stringify(this.searchQuerySubmit) != JSON.stringify(this.searchQueryDefault);
@@ -282,7 +286,7 @@ export default {
       return this.isSearchQueryDefault && !this.totalPages;
     },
     isNoBookmark() {
-      return this.routeName == "BookmarkMemosIndex" && !this.totalPages;
+      return this.$route.name == "BookmarkMemosIndex" && !this.totalPages;
     },
     isTransitionWithinSame() {
       return [
@@ -293,41 +297,66 @@ export default {
     }
   },
   watch: {
-    routeName: function(newVal) {
+    activeTab: function(newVal) {
       if (this.isTransitionWithinSame) {
-        if (this.page != 1) {
-          this.page = 1;
-          this.pushCancel = true;
+        if (this.isTabChange) {
+          if (this.page != 1) {
+            this.page = 1;
+            this.pushCancel = true;
+          }
+          this.searchQueryInitialize();
+          this.isTabChange = false;
         }
-        this.searchQueryInitialize();
-        this.handleFetchSharedMemos();
-        this.$router.replace({ name: newVal, query: {
-          page: 1,
-          fighter: this.searchQuerySubmit.fighter_id_eq,
-          opponent: this.searchQuerySubmit.opponent_id_eq
-        }});
+        if (this.pushStateFlag) {
+          this.$router.push({ name: newVal, query: {
+            page: 1,
+            fighter: this.searchQuerySubmit.fighter_id_eq,
+            opponent: this.searchQuerySubmit.opponent_id_eq
+          }});
+          this.pushStateFlag = false;
+        } else {
+          this.pushStateFlag = true;
+        }
+        this.searchQueryFlag = true;
       }
+      console.log("tab");
     },
     page: function(newVal) {
       if (this.isTransitionWithinSame && !this.pushCancel) {
-        this.handleFetchSharedMemos();
-        this.$router.push({ name: this.$route.name, query: {
-          page: newVal,
-          fighter: this.searchQuerySubmit.fighter_id_eq,
-          opponent: this.searchQuerySubmit.opponent_id_eq
-        }});
+        if (this.pushStateFlag) {
+          this.$router.push({ name: this.routeName, query: {
+            page: newVal,
+            fighter: this.searchQuerySubmit.fighter_id_eq,
+            opponent: this.searchQuerySubmit.opponent_id_eq
+          }});
+          this.pushStateFlag = false;
+        } else {
+          this.pushStateFlag = true;
+        }
       }
       this.pushCancel = false;
+      this.searchQueryFlag = false;
+    },
+    "searchQuerySubmit.fighter_id_eq": function(newVal) {
+      if (this.searchQueryFlag) this.pushStateFlag = !this.pushStateFlag;
+      console.log("fighter");
+    },
+    "searchQuerySubmit.opponent_id_eq": function(newVal) {
+      if (this.searchQueryFlag) this.pushStateFlag = !this.pushStateFlag;
     },
     routerState: function(newVal) {
+      this.activeTab = this.routeName;
       this.page = this.pageQuery;
       this.setSearchQuery();
+      this.handleFetchSharedMemos();
+      this.pushStateFlag = !this.pushStateFlag;
+      this.searchQueryFlag = true;
     }
   },
   mounted() {
     this.page = this.pageQuery;
     this.setSearchQuery();
-    this.$router.replace({ name: this.routeName, query: {
+    this.$router.replace({ name: this.$route.name, query: {
       page: 1,
       fighter: this.searchQuerySubmit.fighter_id_eq,
       opponent: this.searchQuerySubmit.opponent_id_eq
@@ -356,32 +385,31 @@ export default {
           });
       }
     },
-    handleCreateBookmark(memoId) {
-      this.createBookmark(memoId);
-    },
-    handleDeleteBookmark(memoId) {
-      this.deleteBookmark(memoId);
-    },
     handleSearchMemos() {
       this.searchQuerySubmit = Object.assign({}, this.searchQueryModel);
       if (this.page != 1) {
         this.page = 1;
         this.pushCancel = true;
       }
-      this.handleFetchSharedMemos();
       this.$router.push({ name: this.$route.name, query: {
         page: 1,
         fighter: this.searchQuerySubmit.fighter_id_eq,
         opponent: this.searchQuerySubmit.opponent_id_eq
       }});
     },
+    handleCreateBookmark(memoId) {
+      this.createBookmark(memoId);
+    },
+    handleDeleteBookmark(memoId) {
+      this.deleteBookmark(memoId);
+    },
     searchQueryInitialize() {
       this.searchQuerySubmit = Object.assign({}, this.searchQueryDefault);
       this.searchQueryModel = Object.assign({}, this.searchQueryDefault);
     },
     setSearchQuery() {
-      this.searchQuerySubmit = this.searchQuery;
-      this.searchQueryModel = this.searchQuery;
+      this.searchQuerySubmit = Object.assign({}, this.searchQuery);
+      this.searchQueryModel = Object.assign({}, this.searchQuery);
     },
     autocompleteCustomFilter(itemTitle, queryText, item) {
       const fighterName = textConversion(item.raw.name);
