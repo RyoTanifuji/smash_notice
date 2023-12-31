@@ -22,8 +22,9 @@
             :items="fightersArray"
             item-value="id"
             item-title="name"
+            :custom-filter="autocompleteCustomFilter"
             clearable
-            :menu-props="{ location: 'top', scrollStrategy: 'none' }"
+            :menu-props="{ location: 'top', scrollStrategy: 'none', height: '250px' }"
             name="相手ファイター"
             label="相手ファイター"
             hint="対策するファイターを選択してください"
@@ -61,6 +62,7 @@ import {
   helpers
 } from '@vuelidate/validators';
 import { requiredMessage, maxLengthMessage } from '../../../constants/validationCustom';
+import { textConversion } from '../../../constants/textConversion';
 import { FIGHTERS_ARRAY } from '../../../constants/fightersArray';
 import TheAlert from '../../../components/TheAlert';
 
@@ -136,6 +138,12 @@ export default {
       if (!result) return;
 
       this.$emit("memo-submit", this.memo, this.applyTemplate);
+    },
+    autocompleteCustomFilter(itemTitle, queryText, item) {
+      const fighterName = textConversion(item.raw.name);
+      const searchText = textConversion(queryText);
+
+      return fighterName.indexOf(searchText) > -1;
     }
   }
 };

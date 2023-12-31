@@ -14,6 +14,10 @@ class Memo < ApplicationRecord
 
   enum state: { local: 0, shared: 1 }
 
+  def self.ransackable_attributes(auth_object = nil)
+    ["fighter_id", "opponent_id"]
+  end
+
   def apply_template!
     return nil if folder.type != "MatchupFolder"
 
