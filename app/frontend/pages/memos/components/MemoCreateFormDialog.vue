@@ -24,7 +24,7 @@
             item-title="name"
             :custom-filter="autocompleteCustomFilter"
             clearable
-            :menu-props="{ location: 'top', scrollStrategy: 'none' }"
+            :menu-props="{ location: 'top', scrollStrategy: 'none', height: '250px' }"
             name="相手ファイター"
             label="相手ファイター"
             hint="対策するファイターを選択してください"

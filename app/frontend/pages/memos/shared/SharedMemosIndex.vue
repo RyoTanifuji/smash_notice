@@ -49,7 +49,7 @@
               item-value="id"
               item-title="name"
               :custom-filter="autocompleteCustomFilter"
-              :menu-props="{ location: 'bottom', scrollStrategy: 'none' }"
+              :menu-props="{ location: 'bottom', scrollStrategy: 'none', width: '200px', height: '250px' }"
               name="使用ファイター"
               label="使用ファイター"
               density="compact"
@@ -73,7 +73,7 @@
                 item-value="id"
                 item-title="name"
                 :custom-filter="autocompleteCustomFilter"
-                :menu-props="{ location: 'bottom', scrollStrategy: 'none' }"
+                :menu-props="{ location: 'bottom', scrollStrategy: 'none', width: '200px', height: '250px' }"
                 name="相手ファイター"
                 label="相手ファイター"
                 density="compact"
@@ -319,7 +319,6 @@ export default {
         }
         this.searchQueryFlag = true;
       }
-      console.log("tab");
     },
     page: function(newVal) {
       if (this.isTransitionWithinSame && !this.pushCancel) {
@@ -339,7 +338,6 @@ export default {
     },
     "searchQuerySubmit.fighter_id_eq": function(newVal) {
       if (this.searchQueryFlag) this.pushStateFlag = !this.pushStateFlag;
-      console.log("fighter");
     },
     "searchQuerySubmit.opponent_id_eq": function(newVal) {
       if (this.searchQueryFlag) this.pushStateFlag = !this.pushStateFlag;
