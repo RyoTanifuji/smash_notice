@@ -163,7 +163,7 @@ export default {
   },
   computed: {
     feedbackCategory() {
-      return this.feedbackCategories[this.feedback.category - 1].name
+      return this.feedbackCategories[this.feedback.category - 1].name;
     },
     feedbackAttention() {
       let result = "";
