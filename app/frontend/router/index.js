@@ -11,6 +11,7 @@ import MemosEdit from '../pages/memos/common/MemosEdit';
 import SharedMemosIndex from '../pages/memos/shared/SharedMemosIndex';
 import SharedMemosList from '../pages/memos/components/SharedMemosList';
 import SharedMemosShow from '../pages/memos/shared/SharedMemosShow';
+import FeedbacksIndex from '../pages/static_pages/FeedbacksIndex';
 
 import { requireLoginAlertStatus } from '../constants/alertStatus';
 
@@ -120,6 +121,12 @@ const routes = [
     name: "SharedStrategyMemosShow",
     component: SharedMemosShow,
     meta: { requiredAuth: false }
+  },
+  {
+    path: "/feedbacks",
+    name: "FeedbacksIndex",
+    component: FeedbacksIndex,
+    meta: { requiredAuth: true }
   },
   {
     path: "/null",

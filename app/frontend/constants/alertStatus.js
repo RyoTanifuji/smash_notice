@@ -36,6 +36,12 @@ export const requireLoginAlertStatus = {
   isTransition: true
 };
 
+export const successFeedBackAlertStatus = {
+  alertType: "success",
+  alertTextArray: ["お問い合わせの送信が完了しました"],
+  isTransition: false
+};
+
 export const serverErrorAlertStatus = {
   alertType: "error",
   alertTextArray: ["エラーが発生しました  時間を置いてもう一度お試しください"],

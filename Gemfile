@@ -43,27 +43,27 @@ gem "ransack"
 
 gem "kaminari"
 
-gem 'meta-tags'
+gem "meta-tags"
 
-gem 'rails-i18n'
+gem "rails-i18n"
 
-gem 'aws-sdk-s3', require: false
+gem "aws-sdk-s3", require: false
 
-gem 'dotenv-rails'
+gem "dotenv-rails"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
 
   # Code analyze
-  gem 'rubocop', require: false
-  gem 'rubocop-performance', require: false
-  gem 'rubocop-rails', require: false
-  gem 'rubocop-rspec', require: false
+  gem "rubocop", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-rspec", require: false
 
   # Test
-  gem 'factory_bot_rails'
-  gem 'rspec-rails'
+  gem "factory_bot_rails"
+  gem "rspec-rails"
 end
 
 group :development do
@@ -82,5 +82,5 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-  gem 'faker'
+  gem "faker"
 end

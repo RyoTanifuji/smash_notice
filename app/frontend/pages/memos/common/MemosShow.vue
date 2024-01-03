@@ -20,7 +20,7 @@
               :key="memoBlockItem.id"
             >
               <template v-if="!(memoBlockItem.blockable.subtitle == '')">
-                <div class="text-md-h5 text-h6 mb-4">
+                <div class="text-h5 mb-4">
                   {{ memoBlockItem.blockable.subtitle }}
                 </div>
               </template>

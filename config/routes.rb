@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       end
     end
     resource :bookmarks, only: %i[create destroy]
+    resources :feedbacks, only: %i[create]
   end
 
   get '*path', to: 'top#index', constraints: lambda { |req|
