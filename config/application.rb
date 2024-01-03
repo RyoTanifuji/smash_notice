@@ -24,7 +24,6 @@ module SmashNotice
     config.active_model.i18n_customize_full_message = true
 
     config.generators do |g|
-      g.template_engine false
       g.skip_routes true
       g.helper false
       g.test_framework false
