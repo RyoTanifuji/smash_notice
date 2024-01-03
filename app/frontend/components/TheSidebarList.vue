@@ -95,7 +95,7 @@ export default {
         contact: {
           id: 1,
           title: "お問い合わせ",
-          route: "/null",
+          route: "/feedbacks",
           icon: mdiTooltipTextOutline
         },
         terms: {
