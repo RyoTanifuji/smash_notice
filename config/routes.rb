@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :users, only: %i[create] do
       collection do
         get 'me'
+        post 'create_demo'
       end
     end
     resources :sessions, only: %i[create]

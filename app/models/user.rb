@@ -15,6 +15,22 @@ class User < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 20 }
   validates :email, uniqueness: true, presence: true
+  validates :role, presence: true
+
+  enum role: { general: 0, demo: 1 }
+
+  class << self
+    def unused_demo_email
+      i = 1
+      address = ""
+      loop do
+        address = "demo-user-#{i}@example.com"
+        break if !find_by(email: address)
+        i += 1
+      end
+      address
+    end
+  end
 
   def bookmark(memo)
     bookmark_memos << memo
