@@ -69,6 +69,14 @@
             登録済みの方はこちら
           </router-link>
         </div>
+        <div class="d-flex flex-row justify-center mt-2">
+          <router-link
+            :to="{ name: 'DemoUsersLogin' }"
+            class="text-decoration-underline text-body-2"
+          >
+            お試しログインについて
+          </router-link>
+        </div>
       </form>
     </v-col>
   </v-row>

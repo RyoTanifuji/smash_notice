@@ -46,9 +46,17 @@
         <div class="d-flex flex-row justify-center mt-5">
           <router-link
             :to="{ name: 'UsersRegister' }"
-            class="text-decoration-underline text-body-2"
+            class="text-decoration-underline text-body-2 mr-2"
           >
             新規登録はこちら
+          </router-link>
+        </div>
+        <div class="d-flex flex-row justify-center mt-2">
+          <router-link
+            :to="{ name: 'DemoUsersLogin' }"
+            class="text-decoration-underline text-body-2"
+          >
+            お試しログインについて
           </router-link>
         </div>
       </form>

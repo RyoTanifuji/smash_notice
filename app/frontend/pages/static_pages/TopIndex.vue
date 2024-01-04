@@ -17,7 +17,7 @@
   <template v-if="!authUser">
     <div class="text-body-1 font-weight-bold">
       まずは
-      <TopPageButton :path="'Null'">
+      <TopPageButton :path="'DemoUsersLogin'">
         お試しログイン
       </TopPageButton>
       でメモの作成を試してみましょう。
