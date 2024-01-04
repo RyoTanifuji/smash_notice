@@ -17,63 +17,39 @@
       lg="10"
       xl="10"
     >
-      <v-row>
-        <v-col
-          cols="12"
-          sm="6"
-          md="6"
-          lg="6"
-          xl="6"
+      <v-row class="mt-4">
+        <template
+          v-for="item in authorizedActions"
+          :key="item.id"
         >
-          <v-sheet
-            elevation="4"
-            rounded="lg"
-            class="px-4 pt-2 pb-6 mt-4 bg-blue-grey-lighten-5"
+          <v-col
+            cols="12"
+            sm="6"
+            md="6"
+            lg="6"
+            xl="6"
           >
-            <div class="text-h6">
-              お試しログインでできること
-            </div>
-            <ul class="ml-6">
-              <li class="my-1">
-                フォルダの作成
-              </li>
-              <li class="mb-1">
-                メモの作成
-              </li>
-              <li>
-                キャラ対メモのテンプレート機能
-              </li>
-            </ul>
-          </v-sheet>
-        </v-col>
-        <v-col
-          cols="12"
-          sm="6"
-          md="6"
-          lg="6"
-          xl="6"
-        >
-          <v-sheet
-            elevation="4"
-            rounded="lg"
-            class="px-4 pt-2 pb-6 mt-4"
-          >
-            <div class="text-h6">
-              一般ユーザーのみできること
-            </div>
-            <ul class="ml-6">
-              <li class="my-1">
-                メモの公開
-              </li>
-              <li class="mb-1">
-                メモのブックマーク
-              </li>
-              <li>
-                お問い合わせ
-              </li>
-            </ul>
-          </v-sheet>
-        </v-col>
+            <v-sheet
+              elevation="4"
+              rounded="lg"
+              class="px-4 pt-2 pb-4"
+              :class="{ 'bg-blue-grey-lighten-5': item.bgColor }"
+            >
+              <div class="text-h6">
+                {{ item.title }}
+              </div>
+              <ul
+                v-for="action in item.actions"
+                :key="action"
+                class="ml-6"
+              >
+                <li class="mb-1">
+                  {{ action }}
+                </li>
+              </ul>
+            </v-sheet>
+          </v-col>
+        </template>
       </v-row>
       <div class="mt-4">
         ※注意事項
@@ -112,6 +88,26 @@ export default {
         email: "",
         password: "password",
         password_confirmation: "password"
+      },
+      authorizedActions: {
+        demo: {
+          title: "お試しログインでできること",
+          actions: [
+            "フォルダの作成",
+            "メモの作成",
+            "キャラ対メモのテンプレート機能"
+          ],
+          bgColor: true
+        },
+        general: {
+          title: "一般ユーザーのみできること",
+          actions: [
+            "メモの公開",
+            "メモのブックマーク",
+            "お問い合わせ"
+          ],
+          bgColor: false
+        }
       }
     };
   },

@@ -205,6 +205,7 @@ export default {
         body: this.feedback.body
       } })
         .then(res => {
+          this.resetFeedbackForm();
           this.displayAlert({ alertStatus: successFeedBackAlertStatus });
           this.isLoading = false;
         })
@@ -215,6 +216,11 @@ export default {
     },
     handleCloseFeedbackConfirmDialog() {
       this.feedbackConfirmDialog = false;
+    },
+    resetFeedbackForm() {
+      this.feedback.category = 1;
+      this.feedback.body = "";
+      this.v$.$reset();
     }
   }
 };

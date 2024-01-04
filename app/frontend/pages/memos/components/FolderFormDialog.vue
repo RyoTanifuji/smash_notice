@@ -23,7 +23,7 @@
           item-title="name"
           :custom-filter="autocompleteCustomFilter"
           clearable
-          :menu-props="{ location: 'top', scrollStrategy: 'none', height: '250px' }"
+          :menu-props="{ location: 'top', scrollStrategy: 'none', maxHeight: '250px' }"
           name="使用ファイター"
           label="使用ファイター"
           hint="自分の使用ファイターを選択してください"
