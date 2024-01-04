@@ -124,6 +124,7 @@
         >
           <SharedMemosList
             :auth-user="authUser"
+            :is-general="isGeneral"
             :shared-memos="sharedMemos"
             :bookmark-memo-ids="bookmarkMemoIds"
             @create-bookmark="handleCreateBookmark"
@@ -247,7 +248,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("users", ["authUser"]),
+    ...mapGetters("users", [
+      "authUser",
+      "isGeneral"
+    ]),
     ...mapGetters("shared", [
       "sharedMemos",
       "totalPages",

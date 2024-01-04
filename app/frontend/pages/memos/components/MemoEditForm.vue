@@ -25,13 +25,15 @@
         variant="underlined"
       />
     </template>
-    <v-switch
-      v-model="v$.memo.state.$model"
-      true-value="shared"
-      false-value="local"
-      :label="`ステータス: ${memoStateLabel}`"
-      color="teal-accent-4"
-    />
+    <template v-if="isGeneral">
+      <v-switch
+        v-model="v$.memo.state.$model"
+        true-value="shared"
+        false-value="local"
+        :label="`ステータス: ${memoStateLabel}`"
+        color="teal-accent-4"
+      />
+    </template>
   </form>
   <v-btn
     block
@@ -78,6 +80,10 @@ export default {
     },
     formTitleHint: {
       type: String,
+      required: true
+    },
+    isGeneral: {
+      type: Boolean,
       required: true
     }
   },

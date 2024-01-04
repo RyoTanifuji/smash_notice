@@ -72,7 +72,7 @@
 
         <div class="my-6" />
 
-        <template v-if="authUser && !isMine(memoDetail.userId)">
+        <template v-if="isGeneral && !isMine(memoDetail.userId)">
           <template v-if="!isBookmark(memoDetail.id)">
             <div class="d-flex flex-row justify-end mb-2">
               <v-btn
@@ -134,7 +134,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("users", ["authUser"]),
+    ...mapGetters("users", [
+      "authUser",
+      "isGeneral"
+    ]),
     ...mapGetters("shared", [
       "memoDetail",
       "bookmarkMemoIds"

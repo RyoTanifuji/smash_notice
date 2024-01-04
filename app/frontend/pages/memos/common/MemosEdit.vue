@@ -92,6 +92,7 @@
           <MemoEditForm
             :memo="memo"
             :form-title-hint="pageInformation.formTitleHint"
+            :is-general="isGeneral"
             @memo-submit="handleMemoUpdate"
           />
           <router-link
@@ -252,6 +253,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("users", ["isGeneral"]),
     ...mapGetters("memos", ["memoDetail"]),
     isTemplate() {
       return this.$route.name == "MatchupTemplate";
