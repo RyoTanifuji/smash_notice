@@ -34,7 +34,7 @@
           variant="underlined"
         />
 
-        <v-row class="justify-center mt-5">
+        <div class="d-flex flex-row justify-center mt-5">
           <v-btn
             color="teal-accent-4"
             class="font-weight-bold"
@@ -42,8 +42,8 @@
           >
             ログイン
           </v-btn>
-        </v-row>
-        <div class="mt-10 d-flex flex-row justify-center">
+        </div>
+        <div class="d-flex flex-row justify-center mt-5">
           <router-link
             :to="{ name: 'UsersRegister' }"
             class="text-decoration-underline text-body-2"
