@@ -158,7 +158,7 @@
   </template>
   <template v-else-if="isNoBookmark">
     <div class="d-flex flex-row justify-center">
-      <template v-if="authUser">
+      <template v-if="isGeneral">
         <div class="font-weight-bold mt-10">
           ここにブックマークしたメモの一覧が表示されます。
 

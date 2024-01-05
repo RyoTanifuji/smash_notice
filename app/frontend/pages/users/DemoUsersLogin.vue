@@ -33,7 +33,7 @@
               elevation="4"
               rounded="lg"
               class="px-4 pt-2 pb-4"
-              :class="{ 'bg-blue-grey-lighten-5': item.bgColor }"
+              :class="{ 'bg-original-color': item.bgColor }"
             >
               <div class="text-h6">
                 {{ item.title }}
@@ -136,3 +136,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.bg-original-color {
+  background-color: #F6F8FF;
+}
+</style>

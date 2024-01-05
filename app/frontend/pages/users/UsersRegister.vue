@@ -74,7 +74,7 @@
             :to="{ name: 'DemoUsersLogin' }"
             class="text-decoration-underline text-body-2"
           >
-            お試しログインについて
+            お試しログイン
           </router-link>
         </div>
       </form>
