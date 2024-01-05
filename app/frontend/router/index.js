@@ -4,6 +4,7 @@ import store from '../store';
 import TopIndex from '../pages/static_pages/TopIndex';
 import UsersRegister from '../pages/users/UsersRegister';
 import UsersLogin from '../pages/users/UsersLogin';
+import DemoUsersLogin from '../pages/users/DemoUsersLogin';
 import FoldersIndex from '../pages/memos/common/FoldersIndex';
 import MemosIndex from '../pages/memos/common/MemosIndex';
 import MemosShow from '../pages/memos/common/MemosShow';
@@ -32,6 +33,12 @@ const routes = [
     path: "/login",
     name: "UsersLogin",
     component: UsersLogin,
+    meta: { requiredAuth: false }
+  },
+  {
+    path: "/demo_login",
+    name: "DemoUsersLogin",
+    component: DemoUsersLogin,
     meta: { requiredAuth: false }
   },
   {

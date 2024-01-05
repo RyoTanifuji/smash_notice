@@ -49,7 +49,7 @@
               item-value="id"
               item-title="name"
               :custom-filter="autocompleteCustomFilter"
-              :menu-props="{ location: 'bottom', scrollStrategy: 'none', width: '200px', height: '250px' }"
+              :menu-props="{ location: 'bottom', scrollStrategy: 'none', width: '200px', maxHeight: '250px' }"
               name="使用ファイター"
               label="使用ファイター"
               density="compact"
@@ -73,7 +73,7 @@
                 item-value="id"
                 item-title="name"
                 :custom-filter="autocompleteCustomFilter"
-                :menu-props="{ location: 'bottom', scrollStrategy: 'none', width: '200px', height: '250px' }"
+                :menu-props="{ location: 'bottom', scrollStrategy: 'none', width: '200px', maxHeight: '250px' }"
                 name="相手ファイター"
                 label="相手ファイター"
                 density="compact"
@@ -124,6 +124,7 @@
         >
           <SharedMemosList
             :auth-user="authUser"
+            :is-general="isGeneral"
             :shared-memos="sharedMemos"
             :bookmark-memo-ids="bookmarkMemoIds"
             @create-bookmark="handleCreateBookmark"
@@ -157,7 +158,7 @@
   </template>
   <template v-else-if="isNoBookmark">
     <div class="d-flex flex-row justify-center">
-      <template v-if="authUser">
+      <template v-if="isGeneral">
         <div class="font-weight-bold mt-10">
           ここにブックマークしたメモの一覧が表示されます。
 
@@ -247,7 +248,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("users", ["authUser"]),
+    ...mapGetters("users", [
+      "authUser",
+      "isGeneral"
+    ]),
     ...mapGetters("shared", [
       "sharedMemos",
       "totalPages",

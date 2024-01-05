@@ -5,7 +5,11 @@ const state = {
 };
 
 const getters =  {
-  authUser: state => state.authUser
+  authUser: state => state.authUser,
+  isGeneral: (state) => {
+    if (!state.authUser) return false;
+    return state.authUser.role == "general";
+  }
 };
 
 const mutations = {

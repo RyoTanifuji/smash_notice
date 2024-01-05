@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import {
   required,
@@ -121,6 +121,7 @@ import {
 } from '../../constants/validationCustom';
 import {
   successFeedBackAlertStatus,
+  notAuthorizedForDemoAlertStatus,
   serverErrorAlertStatus
 } from '../../constants/alertStatus';
 
@@ -162,6 +163,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("users", ["isGeneral"]),
     feedbackCategory() {
       return this.feedbackCategories[this.feedback.category - 1].name;
     },
@@ -191,6 +193,11 @@ export default {
   methods: {
     ...mapActions("alert", ["displayAlert"]),
     async handleOpenFeedbackConfirmDialog() {
+      if (!this.isGeneral) {
+        this.displayAlert({ alertStatus: notAuthorizedForDemoAlertStatus });
+        return;
+      }
+
       const result = await this.v$.$validate();
 
       if (!result) return;
@@ -205,6 +212,7 @@ export default {
         body: this.feedback.body
       } })
         .then(res => {
+          this.resetFeedbackForm();
           this.displayAlert({ alertStatus: successFeedBackAlertStatus });
           this.isLoading = false;
         })
@@ -215,6 +223,11 @@ export default {
     },
     handleCloseFeedbackConfirmDialog() {
       this.feedbackConfirmDialog = false;
+    },
+    resetFeedbackForm() {
+      this.feedback.category = 1;
+      this.feedback.body = "";
+      this.v$.$reset();
     }
   }
 };

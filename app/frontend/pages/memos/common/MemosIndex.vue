@@ -226,7 +226,10 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { mdiFile, mdiInformationOutline, mdiMagnify } from '@mdi/js';
-import { serverErrorAlertStatus } from '../../../constants/alertStatus';
+import {
+  notAuthorizedForDemoAlertStatus,
+  serverErrorAlertStatus
+} from '../../../constants/alertStatus';
 import { textConversion } from '../../../constants/textConversion';
 import MemoCreateFormDialog from '../components/MemoCreateFormDialog';
 import dayjs from 'dayjs';
@@ -268,6 +271,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("users", ["isGeneral"]),
     ...mapGetters("memos", [
       "folder",
       "memos"
@@ -348,6 +352,11 @@ export default {
       }
     },
     async handleMemoStateUpdate(memoId, memoState) {
+      if (!this.isGeneral) {
+        this.displayAlert({ alertStatus: notAuthorizedForDemoAlertStatus });
+        return;
+      }
+
       try {
         await this.updateMemoState({ memoId: memoId, memoState: memoState });
       } catch (error) {

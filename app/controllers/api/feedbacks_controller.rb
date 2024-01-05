@@ -1,5 +1,7 @@
 class Api::FeedbacksController < ApplicationController
   def create
+    authorize(Feedback)
+
     @feedback = Feedback.new(feedback_params)
 
     if @feedback.valid?

@@ -101,6 +101,10 @@ export default {
       type: Object,
       default: null
     },
+    isGeneral: {
+      type: Boolean,
+      required: true
+    },
     sharedMemos: {
       type: Array,
       required: true
@@ -138,7 +142,7 @@ export default {
       return this.bookmarkMemoIds.includes(memoId);
     },
     isBookmarkDisplay(userId) {
-      return this.authUser && !this.isMine(userId) && this.$route.name != "TopIndex";
+      return this.isGeneral && !this.isMine(userId) && this.$route.name != "TopIndex";
     },
     showRouteName(memoType) {
       return memoType == "MatchupMemo" ? "SharedMatchupMemosShow" : "SharedStrategyMemosShow";

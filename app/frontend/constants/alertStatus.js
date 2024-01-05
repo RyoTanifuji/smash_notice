@@ -36,6 +36,12 @@ export const requireLoginAlertStatus = {
   isTransition: true
 };
 
+export const notAuthorizedForDemoAlertStatus = {
+  alertType: "warning",
+  alertTextArray: ["この機能はお試しログインでは使えません"],
+  isTransition: false
+};
+
 export const successFeedBackAlertStatus = {
   alertType: "success",
   alertTextArray: ["お問い合わせの送信が完了しました"],

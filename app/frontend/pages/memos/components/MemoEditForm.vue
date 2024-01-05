@@ -18,20 +18,22 @@
         item-title="name"
         :custom-filter="autocompleteCustomFilter"
         clearable
-        :menu-props="{ location: 'top', scrollStrategy: 'none', height: '250px' }"
+        :menu-props="{ location: 'top', scrollStrategy: 'none', maxHeight: '250px' }"
         name="相手ファイター"
         label="相手ファイター"
         hint="対策するファイターを選択してください"
         variant="underlined"
       />
     </template>
-    <v-switch
-      v-model="v$.memo.state.$model"
-      true-value="shared"
-      false-value="local"
-      :label="`ステータス: ${memoStateLabel}`"
-      color="teal-accent-4"
-    />
+    <template v-if="isGeneral">
+      <v-switch
+        v-model="v$.memo.state.$model"
+        true-value="shared"
+        false-value="local"
+        :label="`ステータス: ${memoStateLabel}`"
+        color="teal-accent-4"
+      />
+    </template>
   </form>
   <v-btn
     block
@@ -78,6 +80,10 @@ export default {
     },
     formTitleHint: {
       type: String,
+      required: true
+    },
+    isGeneral: {
+      type: Boolean,
       required: true
     }
   },
