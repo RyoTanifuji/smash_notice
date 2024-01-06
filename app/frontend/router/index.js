@@ -13,6 +13,8 @@ import SharedMemosIndex from '../pages/memos/shared/SharedMemosIndex';
 import SharedMemosList from '../pages/memos/components/SharedMemosList';
 import SharedMemosShow from '../pages/memos/shared/SharedMemosShow';
 import FeedbacksIndex from '../pages/static_pages/FeedbacksIndex';
+import TermsIndex from '../pages/static_pages/TermsIndex';
+import PrivacyPolicyIndex from '../pages/static_pages/PrivacyPolicyIndex';
 
 import { requireLoginAlertStatus } from '../constants/alertStatus';
 
@@ -136,9 +138,15 @@ const routes = [
     meta: { requiredAuth: true }
   },
   {
-    path: "/null",
-    name: "Null",
-    component: TopIndex,
+    path: "/terms",
+    name: "TermsIndex",
+    component: TermsIndex,
+    meta: { requiredAuth: false }
+  },
+  {
+    path: "/privacy_policy",
+    name: "PrivacyPolicyIndex",
+    component: PrivacyPolicyIndex,
     meta: { requiredAuth: false }
   }
 ];

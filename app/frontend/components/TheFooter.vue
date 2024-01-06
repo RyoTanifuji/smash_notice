@@ -6,6 +6,21 @@
     class="d-flex justify-center"
   >
     <div class="pt-0 text-center footer-text">
+      <div class="mb-1">
+        <router-link
+          :to="{ name: 'TermsIndex' }"
+          class="text-decoration-underline mr-2"
+        >
+          利用規約
+        </router-link>
+        <router-link
+          :to="{ name: 'PrivacyPolicyIndex' }"
+          class="text-decoration-underline"
+        >
+          プライバシーポリシー
+        </router-link>
+      </div>
+
       当サイトは
       <a
         href="https://www.smashbros.com/ja_JP/"

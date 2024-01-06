@@ -52,32 +52,62 @@
           variant="underlined"
         />
 
-        <div class="d-flex flex-row justify-center mt-5">
-          <v-btn
-            color="teal-accent-4"
-            class="font-weight-bold"
-            @click="handleRegister"
-          >
-            登録
-          </v-btn>
+        <div class="d-flex justify-center text-body-2">
+          ユーザーの新規登録には、利用規約への同意が必要です。
         </div>
-        <div class="d-flex flex-row justify-center mt-5">
+
+        <div class="d-flex justify-center mt-2">
           <router-link
-            :to="{ name: 'UsersLogin' }"
+            :to="{ name: 'TermsIndex' }"
             class="text-decoration-underline text-body-2"
           >
-            登録済みの方はこちら
+            利用規約はこちら
           </router-link>
         </div>
-        <div class="d-flex flex-row justify-center mt-2">
-          <router-link
-            :to="{ name: 'DemoUsersLogin' }"
-            class="text-decoration-underline text-body-2"
-          >
-            お試しログイン
-          </router-link>
-        </div>
+
+        <v-layout>
+          <div class="mx-auto mb-n6">
+            <v-checkbox
+              v-model="v$.termsAccepted.$model"
+              label="利用規約に同意する"
+            />
+          </div>
+        </v-layout>
+
+        <template v-if="v$.termsAccepted.$errors[0]">
+          <div class="d-flex justify-center mt-n2 ml-2 mb-2">
+            <p class="text-error text-caption">
+              {{ v$.termsAccepted.$errors.map(e => e.$message)[0] }}
+            </p>
+          </div>
+        </template>
       </form>
+
+      <div class="d-flex flex-row justify-center">
+        <v-btn
+          color="teal-accent-4"
+          class="font-weight-bold"
+          @click="handleRegister"
+        >
+          登録
+        </v-btn>
+      </div>
+      <div class="d-flex flex-row justify-center mt-5">
+        <router-link
+          :to="{ name: 'UsersLogin' }"
+          class="text-decoration-underline text-body-2"
+        >
+          登録済みの方はこちら
+        </router-link>
+      </div>
+      <div class="d-flex flex-row justify-center mt-2">
+        <router-link
+          :to="{ name: 'DemoUsersLogin' }"
+          class="text-decoration-underline text-body-2"
+        >
+          お試しログイン
+        </router-link>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -121,7 +151,8 @@ export default {
         email: "",
         password: "",
         password_confirmation: ""
-      }
+      },
+      termsAccepted: false
     };
   },
   validations () {
@@ -142,6 +173,9 @@ export default {
         password_confirmation: {
           sameAs: helpers.withMessage(sameAsMessage("パスワード"), sameAs(this.user.password))
         }
+      },
+      termsAccepted: {
+        sameAs: helpers.withMessage("利用規約への同意が必要です", sameAs(true))
       }
     };
   },
