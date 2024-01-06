@@ -103,7 +103,7 @@ export default {
     },
     isGeneral: {
       type: Boolean,
-      required: true
+      default: false
     },
     sharedMemos: {
       type: Array,

@@ -283,11 +283,11 @@ export default {
         opponent: this.opponentQuery
       });
     },
-    isSearchQueryDefault() {
+    isSearchQueryNotDefault() {
       return JSON.stringify(this.searchQuerySubmit) != JSON.stringify(this.searchQueryDefault);
     },
     isNoSearchResult() {
-      return this.isSearchQueryDefault && !this.totalPages;
+      return this.isSearchQueryNotDefault && !this.totalPages;
     },
     isNoBookmark() {
       return this.$route.name == "BookmarkMemosIndex" && !this.totalPages;
@@ -317,11 +317,11 @@ export default {
             fighter: this.searchQuerySubmit.fighter_id_eq,
             opponent: this.searchQuerySubmit.opponent_id_eq
           }});
-          this.pushStateFlag = false;
         } else {
-          this.pushStateFlag = true;
+          this.pushCancel = true;
         }
-        this.searchQueryFlag = true;
+        this.pushStateFlag = !this.pushStateFlag;
+        this.searchQueryFlag = false;
       }
     },
     page: function(newVal) {
@@ -332,10 +332,8 @@ export default {
             fighter: this.searchQuerySubmit.fighter_id_eq,
             opponent: this.searchQuerySubmit.opponent_id_eq
           }});
-          this.pushStateFlag = false;
-        } else {
-          this.pushStateFlag = true;
         }
+        this.pushStateFlag = !this.pushStateFlag;
       }
       this.pushCancel = false;
       this.searchQueryFlag = false;
@@ -356,10 +354,14 @@ export default {
     }
   },
   mounted() {
+    this.activeTab = this.$route.name;
     this.page = this.pageQuery;
     this.setSearchQuery();
+    if (this.activeTab != "SharedStrategyMemosIndex") this.pushStateFlag = false;
+    if (this.page != 1) this.pushCancel = true;
+    if (this.isSearchQueryNotDefault) this.searchQueryFlag = false;
     this.$router.replace({ name: this.$route.name, query: {
-      page: 1,
+      page: this.page,
       fighter: this.searchQuerySubmit.fighter_id_eq,
       opponent: this.searchQuerySubmit.opponent_id_eq
     }});

@@ -101,13 +101,13 @@ export default {
         terms: {
           id: 2,
           title: "利用規約",
-          route: "/null",
+          route: "/terms",
           icon: mdiBookCheckOutline
         },
         policy: {
           id: 3,
           title: "プライバシーポリシー",
-          route: "/null",
+          route: "/privacy_policy",
           icon: mdiShieldLockOutline
         }
       }

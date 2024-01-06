@@ -40,7 +40,7 @@
             :value="v$.sentence.body.$model"
             @update:model-value="updateContent"
           />
-          <template v-if="v$.sentence.body.$errors">
+          <template v-if="v$.sentence.body.$errors[0]">
             <p class="text-error text-caption ml-4 mt-n3">
               {{ v$.sentence.body.$errors.map(e => e.$message)[0] }}
             </p>
@@ -77,7 +77,7 @@
             class="w-75 ml-4"
             @change="handleFileChange"
           />
-          <template v-if="v$.image.file.$errors">
+          <template v-if="v$.image.file.$errors[0]">
             <p class="text-error text-caption ml-4 mt-n4">
               {{ v$.image.file.$errors.map(e => e.$message)[0] }}
             </p>

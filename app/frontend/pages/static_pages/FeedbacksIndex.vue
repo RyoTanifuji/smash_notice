@@ -48,6 +48,18 @@
           </v-btn>
         </v-row>
       </form>
+
+      <div class="text-body-2 mt-8">
+        お問い合わせはこのフォームだけでなく、
+        <a
+          href="https://twitter.com/SmashNotice"
+          target="_blank"
+          class="link-decoration"
+        >
+          SmashNotice運営Twitter
+        </a>
+        にリプライやダイレクトメッセージで送っていただいても構いません。
+      </div>
     </v-col>
   </v-row>
 
