@@ -13,7 +13,9 @@ Rails.application.routes.draw do
       get 'template', to: 'memos#template'
     end
     resources :memos, only: %i[show update destroy] do
-      resources :memo_blocks, only: %i[create update destroy]
+      resources :memo_blocks, only: %i[create update destroy] do
+        patch :swap_level
+      end
     end
     resources :shared, only: %i[index show] do
       collection do
