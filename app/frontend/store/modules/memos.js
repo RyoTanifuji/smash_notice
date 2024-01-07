@@ -21,7 +21,7 @@ const mutations = {
   setMemos: (state, memos) => {
     state.memos = memos;
   },
-  setMemoDetail: (state, { memo: memo, memoBlocks: memoBlocks }) => {
+  setMemoDetail: (state, { memo, memoBlocks }) => {
     state.memoDetail = memo;
     state.memoDetail.memoBlocks = memoBlocks;
   },
@@ -29,6 +29,7 @@ const mutations = {
     state.memos.push(memo);
   },
   addMemoBlock: (state, memoBlock) => {
+    state.memoDetail.memoBlocks.map((memoBlock) => memoBlock.level += 1);
     state.memoDetail.memoBlocks.push(memoBlock);
   },
   updateMemo: (state, updateMemo) => {
@@ -42,6 +43,12 @@ const mutations = {
       return memoBlock.id == updateMemoBlock.id;
     });
     state.memoDetail.memoBlocks.splice(index, 1, updateMemoBlock);
+  },
+  swapLevelMemoBlock: (state, { memoBlockId, level }) => {
+    const memoBlock1 = state.memoDetail.memoBlocks.find((memoBlock) => memoBlock.id == memoBlockId);
+    const memoBlock2 = state.memoDetail.memoBlocks.find((memoBlock) => memoBlock.level == level);
+    memoBlock2.level = memoBlock1.level;
+    memoBlock1.level = level;
   },
   deleteMemo: (state, deleteMemo) => {
     state.memos = state.memos.filter(memo => {
@@ -109,10 +116,14 @@ const actions = {
       });
   },
   updateMemoState({ commit }, { memoId, memoState }) {
-    return axios.patch(`memos/${memoId}`, { memo: { state: memoState}})
+    return axios.patch(`memos/${memoId}`, { memo: { state: memoState } })
       .then(res => {
         commit("updateMemo", res.data.memo);
       });
+  },
+  swapLevelMemoBlock({ commit }, { memoId, memoBlockId, level }) {
+    commit("swapLevelMemoBlock", { memoBlockId: memoBlockId, level: level });
+    axios.patch(`memos/${memoId}/memo_blocks/${memoBlockId}/swap_level`, { memoBlock: { level: level }});
   },
   deleteMemo({ commit }, memo) {
     return axios.delete(`memos/${memo.id}`)
