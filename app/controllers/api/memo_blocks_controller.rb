@@ -1,5 +1,5 @@
 class Api::MemoBlocksController < ApplicationController
-  before_action :set_memo, only: %i[create update destroy]
+  before_action :set_memo
   before_action :set_memo_block, only: %i[update destroy]
 
   def create
@@ -34,6 +34,26 @@ class Api::MemoBlocksController < ApplicationController
   def destroy
     @memo_block.destroy!
     render json: @memo_block
+  end
+
+  def swap_level
+    memo_block1 = @memo.memo_blocks.find(params[:memo_block_id])
+
+    level = memo_block_params[:level]
+
+    memo_block2 = @memo.memo_blocks.find_by(level: level)
+
+    return head :bad_request if !memo_block2 || memo_block1 == memo_block2
+
+    memo_block2.level = memo_block1.level
+    memo_block1.level = level
+
+    MemoBlock.transaction do
+      memo_block1.save!(context: :swap_level)
+      memo_block2.save!(context: :swap_level)
+    end
+
+    head :ok
   end
 
   private

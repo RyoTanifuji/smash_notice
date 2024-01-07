@@ -289,9 +289,9 @@ export default {
       let result = this.memos.filter((memo) =>
         textConversion(memo.title).includes(textConversion(this.titleSearchText)) ||
         !this.titleSearchText
-        );
+      );
 
-      result = result.slice().sort((a, b) => {
+      result = result.sort((a, b) => {
         if (a.updatedAt > b.updatedAt) return -1;
         if (a.updatedAt < b.updatedAt) return 1;
         return 0;

@@ -15,13 +15,41 @@
       >
         <template v-if="memoDetail.memoBlocks.length">
           <template
-            v-for="memoBlockItem in memoDetail.memoBlocks"
+            v-for="(memoBlockItem, index) in sortedMemoBlocks"
             :key="memoBlockItem.id"
           >
-            <v-card
-              :title="memoBlockItem.blockable.subtitle"
-              class="mb-2"
-            >
+            <v-card class="mb-2">
+              <v-card-title>
+                <div class="d-flex flex-row">
+                  <div>
+                    {{ memoBlockItem.blockable.subtitle }}
+                  </div>
+                  <v-spacer />
+                  <div class="mr-4">
+                    <v-btn
+                      :disabled="index == 0"
+                      :ripple="false"
+                      icon
+                      density="compact"
+                      variant="plain"
+                      class="mr-1"
+                      @click="handleMemoBlockSwapLevel(memoBlockItem.id, index - 1)"
+                    >
+                      <v-icon :icon="mdiChevronUp" />
+                    </v-btn>
+                    <v-btn
+                      :disabled="index == memoDetail.memoBlocks.length - 1"
+                      :ripple="false"
+                      icon
+                      density="compact"
+                      variant="plain"
+                      @click="handleMemoBlockSwapLevel(memoBlockItem.id, index + 1)"
+                    >
+                      <v-icon :icon="mdiChevronDown" />
+                    </v-btn>
+                  </div>
+                </div>
+              </v-card-title>
               <v-card-text>
                 <template v-if="memoBlockItem.blockableType == 'Sentence'">
                   <p v-html="sanitizeHtml(memoBlockItem.blockable.body)" />
@@ -195,6 +223,7 @@ import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
 import MemoEditForm from '../components/MemoEditForm';
 import EmbedYoutube from '../components/EmbedYoutube';
 import { sanitizeText } from '../../../plugins/sanitizeText';
+import { mdiChevronUp, mdiChevronDown } from '@mdi/js';
 
 export default {
   name: "MemosEdit",
@@ -249,7 +278,9 @@ export default {
       sentence: {},
       image: {},
       embed: {},
-      isDataReceived: false
+      isDataReceived: false,
+      mdiChevronUp,
+      mdiChevronDown
     };
   },
   computed: {
@@ -268,6 +299,13 @@ export default {
     },
     memoId() {
       return this.isTemplate ? this.memoDetail.id : this.$route.params.memoId;
+    },
+    sortedMemoBlocks() {
+      return this.memoDetail.memoBlocks.slice().sort((a, b) => {
+        if (a.level > b.level) return -1;
+        if (a.level < b.level) return 1;
+        return 0;
+      });
     }
   },
   mounted() {
@@ -305,6 +343,7 @@ export default {
       "createMemoBlock",
       "updateMemo",
       "updateMemoBlock",
+      "swapLevelMemoBlock",
       "deleteMemoBlock"
     ]),
     ...mapActions("alert", [
@@ -383,6 +422,10 @@ export default {
       } catch (error) {
         this.displayAlert({ alertStatus: serverErrorAlertStatus, isDialog: true });
       }
+    },
+    handleMemoBlockSwapLevel(memoBlockId, index) {
+      const level = this.sortedMemoBlocks[index].level;
+      this.swapLevelMemoBlock({ memoId: this.memoId, memoBlockId: memoBlockId, level: level });
     },
     async handleMemoBlockDelete() {
       try {
