@@ -132,7 +132,7 @@ import {
 } from '../../constants/validationCustom';
 import {
   successRegisterAlertStatus,
-  failAlertStatus,
+  failRegisterAlertStatus,
   serverErrorAlertStatus
 } from '../../constants/alertStatus';
 
@@ -197,8 +197,8 @@ export default {
         .catch(err => {
           // responseが帰ってきたときは格納されているエラーを、返ってこないときはサーバーエラーを表示
           if (err.response) {
-            failAlertStatus.alertTextArray = err.response.data;
-            this.displayAlert({ alertStatus: failAlertStatus });
+            failRegisterAlertStatus.alertTextArray = err.response.data;
+            this.displayAlert({ alertStatus: failRegisterAlertStatus });
           } else {
             this.displayAlert({ alertStatus: serverErrorAlertStatus });
           }

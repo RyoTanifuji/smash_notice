@@ -8,7 +8,6 @@ Rails.application.routes.draw do
       end
     end
     resources :sessions, only: %i[create]
-    patch 'profile', to: 'profile#update'
     resources :folders, only: %i[index create update destroy] do
       resources :memos, only: %i[index create]
       get 'template', to: 'memos#template'

@@ -18,7 +18,7 @@
         <v-autocomplete
           v-model="v$.folder.fighterId.$model"
           :error-messages="v$.folder.fighterId.$errors.map(e => e.$message)"
-          :items="FIGHTERS_ARRAY"
+          :items="fightersArray"
           item-value="id"
           item-title="name"
           :custom-filter="autocompleteCustomFilter"
@@ -94,7 +94,7 @@ export default {
   data() {
     return {
       nameMaxLength: 25,
-      FIGHTERS_ARRAY
+      fightersArray: FIGHTERS_ARRAY
     };
   },
   validations () {

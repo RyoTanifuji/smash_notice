@@ -23,40 +23,7 @@
     </v-app-bar-title>
 
     <template #append>
-      <template v-if="authUser">
-        <v-btn
-          icon
-          variant="plain"
-          class="mr-2"
-        >
-          <v-icon
-            :icon="mdiAccount"
-            size="x-large"
-          />
-          <v-menu activator="parent">
-            <v-list density="compact">
-              <v-list-item
-                :to="{ name: 'ProfileEdit' }"
-                :active="false"
-              >
-                <v-list-item-title>
-                  <span>
-                    プロフィールを編集
-                  </span>
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="handleLogout">
-                <v-list-item-title>
-                  <span class="text-error">
-                    ログアウト
-                  </span>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn>
-      </template>
-      <template v-else>
+      <template v-if="!authUser">
         <v-btn
           :to="{ name: 'UsersLogin' }"
           :active="false"
@@ -76,13 +43,22 @@
           </span>
         </v-btn>
       </template>
+      <template v-else>
+        <v-btn
+          :active="false"
+          @click="handleLogout"
+        >
+          <span class="text-body-1">
+            ログアウト
+          </span>
+        </v-btn>
+      </template>
     </template>
   </v-app-bar>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { mdiAccount } from '@mdi/js';
 import {
   successLogoutAlertStatus,
   serverErrorAlertStatus
@@ -96,8 +72,7 @@ export default {
   },
   data() {
     return {
-      drawer: null,
-      mdiAccount
+      drawer: null
     };
   },
   computed: {

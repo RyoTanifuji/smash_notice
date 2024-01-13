@@ -5,7 +5,6 @@ import TopIndex from '../pages/static_pages/TopIndex';
 import UsersRegister from '../pages/users/UsersRegister';
 import UsersLogin from '../pages/users/UsersLogin';
 import DemoUsersLogin from '../pages/users/DemoUsersLogin';
-import ProfileEdit from '../pages/users/ProfileEdit';
 import FoldersIndex from '../pages/memos/common/FoldersIndex';
 import MemosIndex from '../pages/memos/common/MemosIndex';
 import MemosShow from '../pages/memos/common/MemosShow';
@@ -43,12 +42,6 @@ const routes = [
     name: "DemoUsersLogin",
     component: DemoUsersLogin,
     meta: { requiredAuth: false }
-  },
-  {
-    path: "/profile",
-    name: "ProfileEdit",
-    component: ProfileEdit,
-    meta: { requiredAuth: true }
   },
   {
     path: "/matchup",
