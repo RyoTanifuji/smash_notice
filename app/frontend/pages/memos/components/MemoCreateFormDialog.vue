@@ -19,7 +19,7 @@
           <v-autocomplete
             v-model="v$.memo.opponentId.$model"
             :error-messages="v$.memo.opponentId.$errors.map(e => e.$message)"
-            :items="fightersArray"
+            :items="FIGHTERS_ARRAY"
             item-value="id"
             item-title="name"
             :custom-filter="autocompleteCustomFilter"
@@ -106,7 +106,7 @@ export default {
     return {
       titleMaxLength: 25,
       applyTemplate: false,
-      fightersArray: FIGHTERS_ARRAY
+      FIGHTERS_ARRAY
     };
   },
   computed: {
