@@ -6,6 +6,12 @@ export const successRegisterAlertStatus = {
   isTransition: true
 };
 
+export const failRegisterAlertStatus = {
+  alertType: "error",
+  alertTextArray: [],
+  isTransition: false
+};
+
 export const successLoginAlertStatus = {
   alertType: "success",
   alertTextArray: ["ログインに成功しました"],
@@ -39,18 +45,6 @@ export const notAuthorizedForDemoAlertStatus = {
 export const successFeedBackAlertStatus = {
   alertType: "success",
   alertTextArray: ["お問い合わせの送信が完了しました"],
-  isTransition: false
-};
-
-export const successProfileEditAlertStatus = {
-  alertType: "success",
-  alertTextArray: ["プロフィールが更新されました"],
-  isTransition: false
-};
-
-export const failAlertStatus = {
-  alertType: "error",
-  alertTextArray: [],
   isTransition: false
 };
 

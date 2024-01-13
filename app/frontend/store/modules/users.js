@@ -50,12 +50,6 @@ const actions = {
       commit("setUser", null);
       return null;
     }
-  },
-  updateUser({ commit }, user) {
-    return axios.patch('profile', { user: user })
-      .then(res => {
-        commit("setUser", res.data);
-      });
   }
 };
 
