@@ -1,5 +1,9 @@
 <template>
   <template v-if="isDataReceived">
+    <BreadCrumbs
+      :bread-crumbs="breadCrumbs"
+    />
+
     <div class="text-md-h3 text-h4 font-weight-bold">
       {{ memoDetail.title }}
     </div>
@@ -222,6 +226,7 @@ import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import MemoBlockFormDialog from '../components/MemoBlockFormDialog';
 import MemoEditForm from '../components/MemoEditForm';
 import EmbedYoutube from '../components/EmbedYoutube';
+import BreadCrumbs from '../../../components/BreadCrumbs';
 import { sanitizeText } from '../../../plugins/sanitizeText';
 import { mdiChevronUp, mdiChevronDown } from '@mdi/js';
 
@@ -230,7 +235,8 @@ export default {
   components: {
     MemoBlockFormDialog,
     MemoEditForm,
-    EmbedYoutube
+    EmbedYoutube,
+    BreadCrumbs
   },
   data() {
     return {
@@ -278,6 +284,7 @@ export default {
       sentence: {},
       image: {},
       embed: {},
+      breadCrumbs: [],
       isDataReceived: false,
       mdiChevronUp,
       mdiChevronDown
@@ -291,6 +298,15 @@ export default {
     },
     isMatchup() {
       return this.$route.name == "MatchupMemosEdit";
+    },
+    urlMemoType() {
+      return this.isMatchup ? "matchup" : "strategy";
+    },
+    memosIndexPath() {
+      return `/${this.urlMemoType}/${this.memoDetail.folderInformation.id}/memos`;
+    },
+    memosShowPath() {
+      return `/${this.urlMemoType}/memos/${this.memoDetail.id}`;
     },
     pageInformation() {
       return this.isTemplate ? pageInformationTemplate
@@ -314,6 +330,16 @@ export default {
         .then(() => {
           this.memo = Object.assign({}, this.memoDetail);
           this.isDataReceived = true;
+          this.breadCrumbs = [
+            {
+              title: this.memoDetail.folderInformation.name,
+              to: `/matchup/${this.memoDetail.folderInformation.id}/memos`,
+            },
+            {
+              title: "テンプレート編集",
+              notOmit: true
+            }
+          ];
         })
         .catch(() => {
           this.displayAlert({ alertStatus: serverErrorAlertStatus });
@@ -325,6 +351,19 @@ export default {
         .then(() => {
           this.memo = Object.assign({}, this.memoDetail);
           this.isDataReceived = true;
+          this.breadCrumbs = [
+            {
+              title: this.memoDetail.folderInformation.name,
+              to: this.memosIndexPath
+            },
+            {
+              title: this.memoDetail.title,
+              to: this.memosShowPath
+            },
+            {
+              title: "編集"
+            }
+          ];
         })
         .catch(() => {
           this.displayAlert({ alertStatus: serverErrorAlertStatus });

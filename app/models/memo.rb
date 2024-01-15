@@ -38,4 +38,11 @@ class Memo < ApplicationRecord
     end
     string
   end
+
+  def folder_information
+    {
+      id: folder.id,
+      name: folder.name
+    }
+  end
 end

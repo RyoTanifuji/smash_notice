@@ -1,5 +1,9 @@
 <template>
   <template v-if="isDataReceived">
+    <BreadCrumbs
+      :bread-crumbs="breadCrumbs"
+    />
+
     <div class="text-md-h3 text-h4 font-weight-bold">
       {{ memoDetail.title }}
     </div>
@@ -152,12 +156,14 @@
 import { mapGetters, mapActions } from 'vuex';
 import { serverErrorAlertStatus } from '../../../constants/alertStatus';
 import EmbedYoutube from '../components/EmbedYoutube';
+import BreadCrumbs from '../../../components/BreadCrumbs';
 import { sanitizeText } from '../../../plugins/sanitizeText';
 
 export default {
   name: "MemosShow",
   components: {
-    EmbedYoutube
+    EmbedYoutube,
+    BreadCrumbs
   },
   data() {
     return {
@@ -169,6 +175,7 @@ export default {
         indexRouteName: "StrategyMemosIndex",
         editRouteName: "StrategyMemosEdit"
       },
+      breadcrumbs: [],
       memoDeleteDialog: false,
       isDataReceived: false
     };
@@ -177,6 +184,10 @@ export default {
     ...mapGetters("memos", ["memoDetail"]),
     isMatchup() {
       return this.$route.name == "MatchupMemosShow";
+    },
+    memosIndexPath() {
+      const memoType = this.isMatchup ? "matchup" : "strategy";
+      return `/${memoType}/${this.memoDetail.folderInformation.id}/memos`;
     },
     pageInformation() {
       return this.isMatchup ? this.pageInformationMatchup : this.pageInformationStrategy;
@@ -189,6 +200,15 @@ export default {
     this.fetchMemoDetail(this.memoId)
       .then(() => {
           this.isDataReceived = true;
+          this.breadCrumbs = [
+            {
+              title: this.memoDetail.folderInformation.name,
+              to: this.memosIndexPath
+            },
+            {
+              title: this.memoDetail.title
+            }
+          ];
       })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });

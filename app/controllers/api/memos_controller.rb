@@ -31,7 +31,7 @@ class Api::MemosController < ApplicationController
     @memo_blocks = @memo.memo_blocks.includes(:blockable)
 
     render json: {
-      memo: @memo,
+      memo: @memo.as_json(methods: :folder_information),
       memo_blocks: @memo_blocks.as_json(include: [blockable: { methods: :picture_url }])
     }
   end
@@ -44,7 +44,7 @@ class Api::MemosController < ApplicationController
       @memo_blocks = @memo.memo_blocks.includes(:blockable)
 
       render json: {
-        memo: @memo,
+        memo: @memo.as_json(methods: :folder_information),
         memo_blocks: @memo_blocks.as_json(include: [blockable: { methods: :picture_url }])
       }
     else
@@ -62,7 +62,7 @@ class Api::MemosController < ApplicationController
     @memo_blocks = @template_memo.memo_blocks.includes(:blockable)
 
     render json: {
-      memo: @template_memo,
+      memo: @template_memo.as_json(methods: :folder_information),
       memo_blocks: @memo_blocks.as_json(include: [blockable: { methods: :picture_url }])
     }
   end

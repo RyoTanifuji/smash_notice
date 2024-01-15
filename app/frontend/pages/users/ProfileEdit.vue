@@ -151,7 +151,7 @@ export default {
           } else {
             this.displayAlert({ alertStatus: serverErrorAlertStatus });
           }
-        })
+        });
     }
   }
 };
