@@ -249,7 +249,7 @@ export default {
         formTitleHint: "未入力の場合、下記の相手ファイター名が設定されます"
       },
       pageInformationStrategy: {
-        memoCategory: "攻略メモ",
+        memoCategory: "自キャラメモ",
         memoType: "StrategyMemo",
         pathPrefix: "strategy",
         editRouteName: "StrategyMemosEdit",

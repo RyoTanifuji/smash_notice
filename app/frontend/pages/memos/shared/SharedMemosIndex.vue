@@ -210,7 +210,7 @@ export default {
       tabs: [
         {
           id: 1,
-          name: "攻略メモ",
+          name: "自キャラメモ",
           route: "SharedStrategyMemosIndex"
         },
         {

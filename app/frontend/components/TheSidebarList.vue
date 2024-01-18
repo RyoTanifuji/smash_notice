@@ -74,7 +74,7 @@ export default {
       memoItems: {
         strategy: {
           id: 1,
-          title: "攻略メモ",
+          title: "自キャラメモ",
           route: "/strategy",
           icon: mdiChartBar
         },

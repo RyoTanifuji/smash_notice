@@ -54,7 +54,7 @@
   <template v-else>
     <div class="text-body-1 font-weight-bold">
       <TopPageButton :path="'StrategyFoldersIndex'">
-        攻略メモ
+        自キャラメモ
       </TopPageButton>
       では自分の使用しているファイターに関する立ち回りやコンボなどをまとめることができます。
     </div>
@@ -65,7 +65,7 @@
         class="mt-2"
       >
         <v-card-title>
-          攻略メモフォルダ一覧
+          自キャラメモフォルダ一覧
         </v-card-title>
         <v-card-text>
           <v-list max-height="120">

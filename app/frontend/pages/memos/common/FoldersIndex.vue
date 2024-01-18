@@ -190,7 +190,7 @@ export default {
         folderType: "MatchupFolder"
       },
       pageInformationStrategy: {
-        pageTitle: "攻略メモ",
+        pageTitle: "自キャラメモ",
         pathPrefix: "strategy",
         folderType: "StrategyFolder"
       },
