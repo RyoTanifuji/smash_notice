@@ -140,7 +140,7 @@
         <template v-else>
           <div class="text-body-1 font-weight-bold">
             まだ、メモがありません。
-            メモの作成から{{ pageInformation.memoCategory }}を追加しましょう。
+            「メモの作成」ボタンをクリックして、{{ pageInformation.memoCategory }}を追加しましょう。
 
             <template v-if="isMatchup">
               <div class="my-8" />
@@ -303,7 +303,7 @@ export default {
   mounted() {
     this.fetchMemos(this.folderId)
       .then(() => {
-          this.isDataReceived = true;
+        this.isDataReceived = true;
       })
       .catch(() => {
         this.displayAlert({ alertStatus: serverErrorAlertStatus });
@@ -339,17 +339,18 @@ export default {
       this.memoDeleteDialog = false;
     },
     async handleMemoCreate(memo, applyTemplate) {
-      try {
-        await this.createMemo({
-          memo: memo,
-          memoType: this.pageInformation.memoType,
-          folderId: this.folderId,
-          applyTemplate: applyTemplate
+      this.createMemo({
+        memo: memo,
+        memoType: this.pageInformation.memoType,
+        folderId: this.folderId,
+        applyTemplate: applyTemplate
+      })
+        .then(() => {
+          this.$router.push({ name: this.pageInformation.editRouteName, params: { memoId: this.memos.slice(-1)[0].id } });
+        })
+        .catch(() => {
+          this.displayAlert({ alertStatus: serverErrorAlertStatus, isDialog: true });
         });
-        this.handleCloseMemoDialog();
-      } catch (error) {
-        this.displayAlert({ alertStatus: serverErrorAlertStatus, isDialog: true });
-      }
     },
     async handleMemoStateUpdate(memoId, memoState) {
       if (!this.isGeneral) {
