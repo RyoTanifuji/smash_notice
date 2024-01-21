@@ -73,11 +73,11 @@
 
         <template v-else>
           <div class="text-body-1 font-weight-bold">
-            まだ、フォルダがありません。
+            まずは、メモを整理するためのフォルダを作成しましょう。
 
             <div class="my-8" />
 
-            フォルダの追加から自分の使用ファイターを選択して、フォルダを追加しましょう。
+            「フォルダの追加」ボタンをクリックし、自分の使用しているファイターを選択することでファイターごとのフォルダが作成できます。
           </div>
 
           <div class="my-8" />
@@ -190,7 +190,7 @@ export default {
         folderType: "MatchupFolder"
       },
       pageInformationStrategy: {
-        pageTitle: "攻略メモ",
+        pageTitle: "自キャラメモ",
         pathPrefix: "strategy",
         folderType: "StrategyFolder"
       },

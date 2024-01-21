@@ -71,8 +71,7 @@
         </template>
         <template v-else>
           <div class="text-body-1 font-weight-bold">
-            まだ、メモブロックがありません。
-            メモの編集からメモブロックを追加しましょう。
+            「メモの編集」ボタンをクリックし、メモブロックを追加することで、メモに内容を追加していくことができます。
           </div>
 
           <div class="my-8" />

@@ -97,8 +97,11 @@
           </template>
           <template v-else>
             <div class="text-body-1 font-weight-bold">
-              まだ、メモブロックがありません。
-              メモブロックを追加しましょう。
+              メモブロックを作成することで、メモに内容を追加していくことができます。
+
+              <div class="my-8" />
+
+              メモブロックの種類には文章・画像・YouTubeの埋め込みの三種類を指定できます。
             </div>
           </template>
 
