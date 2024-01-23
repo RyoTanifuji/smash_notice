@@ -48,7 +48,10 @@
               </v-list-item>
               <v-list-item @click="handleLogout">
                 <v-list-item-title>
-                  <span id="logout-button" class="text-error">
+                  <span
+                    id="logout-button"
+                    class="text-error"
+                  >
                     ログアウト
                   </span>
                 </v-list-item-title>
