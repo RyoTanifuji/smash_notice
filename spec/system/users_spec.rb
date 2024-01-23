@@ -14,10 +14,9 @@ RSpec.describe "ユーザー機能", type: :system do
 
     it "ログイン状態でヘッダーの「ログアウト」のボタンからログアウトできる" do
       login_as(user)
-      within("header") do
-        expect(page).to have_button("ログアウト"), "ログイン状態でヘッダーに「ログアウト」のボタンが表示されていません"
-        click_on("ログアウト")
-      end
+      find("#auth-user-icon").click
+      expect(page).to have_content("ログアウト"), "ログイン状態でヘッダーに「ログアウト」のボタンが表示されていません"
+      find("#logout-button").click
       expect(page).to have_content("ログアウトしました"), "ログアウト成功のアラートが表示されていません"
       expect(page).to have_current_path('/'), "トップページに遷移できていません"
     end
@@ -37,10 +36,11 @@ RSpec.describe "ユーザー機能", type: :system do
         find("input[name='メールアドレス']", visible: :all).set("test@example.com")
         find("input[name='パスワード']", visible: :all).set("password")
         find("input[name='パスワード（確認）']", visible: :all).set("password")
+        find("input[name='利用規約']", visible: :all).set(true)
         click_on("登録")
       end
       expect(page).to have_content("ユーザーの登録が完了しました"), "ユーザー登録成功のアラートが表示されていません"
-      expect(page).to have_button("ログアウト"), "ユーザー登録後に、ログインされていません"
+      expect(page).to have_css("#auth-user-icon"), "ユーザー登録後に、ログインされていません"
       expect(page).to have_current_path('/'), "ユーザー登録後に、トップページに遷移できていません"
     end
 
@@ -62,6 +62,7 @@ RSpec.describe "ユーザー機能", type: :system do
         find("input[name='パスワード（確認）']", visible: :all).set("error")
         expect(page).to have_content("パスワードと一致していません"), "パスワード一致のバリデーションエラーが表示されていません"
         click_on("登録")
+        expect(page).to have_selector("p", text: "利用規約への同意が必要です"), "利用規約の同意のバリデーションエラーが表示されていません"
       end
       expect(page).to have_current_path('/register'), "バリデーションエラー発生時に、ページ遷移されています"
     end
@@ -72,6 +73,7 @@ RSpec.describe "ユーザー機能", type: :system do
         find("input[name='メールアドレス']", visible: :all).set(user.email)
         find("input[name='パスワード']", visible: :all).set("password")
         find("input[name='パスワード（確認）']", visible: :all).set("password")
+        find("input[name='利用規約']", visible: :all).set(true)
         click_on("登録")
       end
       expect(page).to have_content("このメールアドレスはすでに使われています"), "ユーザー登録失敗のアラートが表示されていません"

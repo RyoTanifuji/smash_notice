@@ -5,7 +5,7 @@
 
   <div class="my-6" />
 
-  <v-row>
+  <v-row id="login-form">
     <v-col 
       cols="12"
       sm="8"
@@ -13,10 +13,7 @@
       lg="6"
       xl="6"
     >
-      <form
-        id="login-form"
-        @submit.prevent
-      >
+      <form @submit.prevent>
         <v-text-field
           v-model="v$.user.email.$model"
           :error-messages="v$.user.email.$errors.map(e => e.$message)"

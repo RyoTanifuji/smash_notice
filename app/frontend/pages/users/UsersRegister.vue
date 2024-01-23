@@ -5,7 +5,7 @@
 
   <div class="my-6" />
 
-  <v-row>
+  <v-row id="register-form">
     <v-col
       cols="12"
       sm="8"
@@ -13,10 +13,7 @@
       lg="6"
       xl="6"
     >
-      <form
-        id="register-form"
-        @submit.prevent
-      >
+      <form @submit.prevent>
         <v-text-field
           v-model="v$.user.name.$model"
           :error-messages="v$.user.name.$errors.map(e => e.$message)"
@@ -69,6 +66,7 @@
           <div class="mx-auto mb-n6">
             <v-checkbox
               v-model="v$.termsAccepted.$model"
+              name="利用規約"
               label="利用規約に同意する"
             />
           </div>

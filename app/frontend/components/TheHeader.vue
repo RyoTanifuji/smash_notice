@@ -25,6 +25,7 @@
     <template #append>
       <template v-if="authUser">
         <v-btn
+          id="auth-user-icon"
           icon
           variant="plain"
           class="mr-2"
@@ -47,7 +48,7 @@
               </v-list-item>
               <v-list-item @click="handleLogout">
                 <v-list-item-title>
-                  <span class="text-error">
+                  <span id="logout-button" class="text-error">
                     ログアウト
                   </span>
                 </v-list-item-title>
