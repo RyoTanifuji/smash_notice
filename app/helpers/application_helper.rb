@@ -11,7 +11,7 @@ module ApplicationHelper
       noindex: ! Rails.env.production?,
       icon: [                    #favicon、apple用アイコンを指定する
         { href: image_url('favicon.ico') },
-        { href: image_url('icon.png'), rel: 'apple-touch-icon', sizes: '180x180', type: 'image/png' }
+        { href: image_url('icon.jpg'), rel: 'apple-touch-icon', sizes: '180x180', type: 'image/jpg' }
       ],
       og: {
         site_name: :site,
@@ -19,13 +19,13 @@ module ApplicationHelper
         description: :description, 
         type: 'website',
         url: request.original_url,
-        image: image_url('ogp.png'),
+        image: image_url('ogp.jpg'),
         locale: 'ja_JP'
       },
       twitter: {
         card: 'summary_large_image',
         site: '@SmashNotice',
-        image: image_url('ogp.png')
+        image: image_url('ogp.jpg')
       }
     }
   end
