@@ -2,6 +2,7 @@
   <v-navigation-drawer
     v-model="drawer"
     floating
+    touchless
     class="elevation-0 bg-blue-grey-lighten-5"
   >
     <TheSidebarList />
